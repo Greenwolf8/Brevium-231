@@ -54,7 +54,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not is_multiplayer_authority():
 		return
 		
-	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED and event.is_action_pressed("ui_cancel") and not Global.is_paused:
+	if event.is_action_pressed("ui_cancel") and not Global.is_paused:
 		get_tree().set_pause(true)
 		get_tree().current_scene.add_child(pause_menu.instantiate())
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -64,11 +64,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not in_console and not Global.in_ship_console:
 		if event.is_action_pressed("interact"):
 			interact_pressed()
-		
-		elif event.is_action_pressed("P"):
-			print(position)
-			print(global_position)
-			print(get_parent_node_3d())
 		
 		if event is InputEventMouseMotion:
 			camera.rotation_degrees.y -= event.relative.x * 0.5
