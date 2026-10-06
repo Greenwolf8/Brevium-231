@@ -3,11 +3,11 @@ extends CharacterBody3D
 @onready var down_cast: RayCast3D = %RayCast3D
 @onready var camera: Camera3D = %PlayerCamera
 @onready var front_cast: RayCast3D = %FrontCast
-@onready var climbing_label: Label = %IsClimbing
 @onready var task_label: Label = %TaskLabel
 @onready var task_title_label: Label = %TaskHeaderLabel
 @onready var kill_label: Label = %"Kill Label"
 @onready var points_label: Label = %PointsLabel
+@onready var ship_terminal_screen: CanvasLayer = %ShipTerminal
 @onready var chair = "Chair:<StaticBody3D#37094426288>"
 @onready var hangar = get_tree().get_first_node_in_group("Hangar Script")
 @onready var ship = get_tree().get_first_node_in_group("player_ship")
@@ -248,7 +248,7 @@ func ship_console_interact():
 		tween.parallel().tween_property(camera, "rotation", shortest_target, 0.25)
 		await tween.finished
 		
-		$Control.show()
+		ship_terminal_screen.visible = true
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		Global.in_ship_console = true
 		set_physics_process(false)
@@ -261,7 +261,7 @@ func ship_console_interact():
 		tween.tween_property(camera, "position", old_position, 0.5)
 		tween.parallel().tween_property(camera, "rotation", shortest_target, 0.5)
 		
-		$Control.hide()
+		ship_terminal_screen.visible = false
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		Global.in_ship_console = false 
 		set_physics_process(true)

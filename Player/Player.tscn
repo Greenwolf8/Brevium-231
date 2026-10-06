@@ -8,19 +8,6 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vx57b"]
 height = 2.2739258
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_61x8k"]
-
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hde6v"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-properties/2/path = NodePath(".:transform")
-properties/2/spawn = true
-properties/2/replication_mode = 1
-
 [sub_resource type="FontFile" id="FontFile_kpjcp"]
 subpixel_positioning = 0
 msdf_pixel_range = 14
@@ -36,18 +23,93 @@ cache/0/16/0/underline_position = 0.0
 cache/0/16/0/underline_thickness = 0.0
 cache/0/16/0/scale = 1.0
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_61x8k"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_hde6v"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath(".:transform")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
 [node name="Player" type="CharacterBody3D" groups=["Player"]]
 collision_mask = 271
 script = ExtResource("1_ddoul")
-
-[node name="Control" parent="." instance=ExtResource("2_8g4oa")]
-layer = 0
-visible = false
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(-3.4969112e-08, 0, 0.8, 0, 0.8, 0, -0.8, 0, -3.4969112e-08, 0.19623756, 2.253893, -57.480034)
 shape = SubResource("CapsuleShape3D_vx57b")
+
+[node name="ShipTerminal" parent="." instance=ExtResource("2_8g4oa")]
+unique_name_in_owner = true
+visible = false
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Task Container" type="VBoxContainer" parent="UI"]
+z_index = 200
+offset_left = 10.0
+offset_top = 110.0
+offset_right = 355.0
+offset_bottom = 189.0
+
+[node name="TaskHeaderLabel" type="Label" parent="UI/Task Container"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="TaskLabel" type="Label" parent="UI/Task Container"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+
+[node name="PointsLabel" type="Label" parent="UI/Task Container"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Ships Destroyed: 0"
+
+[node name="CrossHair" parent="UI" instance=ExtResource("3_6ysni")]
+unique_name_in_owner = true
+
+[node name="PressE" type="Label" parent="UI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.841
+anchor_right = 0.5
+anchor_bottom = 0.841
+offset_left = -83.0
+offset_top = -30.28003
+offset_right = 88.0
+offset_bottom = 38.71997
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 50
+text = "Press E"
+vertical_alignment = 2
+
+[node name="Kill Label" type="Label" parent="UI"]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -131.5
+offset_top = 124.0
+offset_right = 131.5
+offset_bottom = 171.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.8006259, 9.32052e-05, 0.0350002, 1)
+theme_override_fonts/font = SubResource("FontFile_kpjcp")
+theme_override_font_sizes/font_size = 35
+text = "Enemy Defeated!"
 
 [node name="PlayerCamera" type="Camera3D" parent="."]
 unique_name_in_owner = true
@@ -67,36 +129,6 @@ transform = Transform3D(-4.3711385e-08, 0, 1, 0, 1, 0, -0.9999999, 0, -4.371139e
 mesh = SubResource("CapsuleMesh_61x8k")
 skeleton = NodePath("")
 
-[node name="PressE" type="Label" parent="."]
-unique_name_in_owner = true
-visible = false
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.841
-anchor_right = 0.5
-anchor_bottom = 0.841
-offset_left = -83.0
-offset_top = -30.28003
-offset_right = 88.0
-offset_bottom = 38.71997
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 50
-text = "Press E"
-vertical_alignment = 2
-
-[node name="IsClimbing" type="Label" parent="."]
-unique_name_in_owner = true
-visible = false
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -11.5
-offset_right = 40.0
-offset_bottom = 11.5
-grow_vertical = 2
-
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_hde6v")
 
@@ -105,46 +137,7 @@ unique_name_in_owner = true
 transform = Transform3D(-4.3711385e-08, 0, 1, 0, 1, 0, -0.9999999, 0, -4.371139e-08, 0.19623756, 2.8219848, -57.480034)
 target_position = Vector3(0, -1.5, 0)
 
-[node name="Kill Label" type="Label" parent="."]
-unique_name_in_owner = true
-visible = false
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -66.0
-offset_top = 124.0
-offset_right = 66.0
-offset_bottom = 147.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.8006259, 9.32052e-05, 0.0350002, 1)
-theme_override_fonts/font = SubResource("FontFile_kpjcp")
-theme_override_font_sizes/font_size = 35
-text = "Enemy Defeated!"
-
-[node name="CrossHair" parent="." instance=ExtResource("3_6ysni")]
-unique_name_in_owner = true
-
-[node name="Task Container" type="VBoxContainer" parent="."]
-offset_left = 10.0
-offset_top = 110.0
-offset_right = 153.0
-offset_bottom = 189.0
-
-[node name="TaskHeaderLabel" type="Label" parent="Task Container"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 18
-
-[node name="TaskLabel" type="Label" parent="Task Container"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 15
-
-[node name="PointsLabel" type="Label" parent="Task Container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Ships Destroyed: 0"
-
 [node name="fade_transition" parent="." instance=ExtResource("4_vlldt")]
+visible = false
 offset_right = -0.00012207031
 mouse_filter = 2
