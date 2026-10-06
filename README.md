@@ -63,5 +63,5 @@ Dynamic damage system
 
 ## Install Instructions:
 
---- Download the windows file on the Itch.io page, and extract it in file explorer. Open the file and start the "Brevium-231.exe" file, it might take 30 seconds for it to load.
+Download the windows file on the Itch.io page, and extract it in file explorer. Open the file and start the "Brevium-231.exe" file, it might take 30 seconds for it to load.
 
