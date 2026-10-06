@@ -397,13 +397,15 @@ func next_task():
 			task_label.text = "Climb The Ship's Ladder Located In The Front Landing Gear"
 		elif current_task == 2:
 			task_title_label.text = "Current Task: Start Ship"
-			task_label.text = "Interact with the console in the rear of the cockpit.\nType HELP to see list of commands"
+			task_label.text = "Interact with the console in the rear of the cockpit.\nType 'HELP' to see list of commands"
 		elif current_task == 3:
 			task_title_label.text = "Current Task: Hunt Down The Enemy"
-			task_label.text = "Using Shift/Control For Throttle And WASD To Steer, Locate And Hunt Down The Enemy\n You Can See Your Distance To The Enemy At The Top Right Of Your Screen"
+			task_label.text = "Using Shift/Control For Throttle And WASD To Steer, Locate And Hunt Down The Enemy"
 		elif current_task == 4:
 			task_title_label.text = "Current Task: Eliminate Enemy"
 			task_label.text = "Press F Or Left Click To Fire The Cannon, Try To Dodge The Enemy's Cannons \nDo Not Underestimate The Enemy!"
+			await get_tree().create_timer(15).timeout
+			task_label.hide()
 
 func enemy_destroyed():
 	kill_label.show()
