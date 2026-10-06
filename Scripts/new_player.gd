@@ -7,7 +7,10 @@ extends CharacterBody3D
 @onready var task_title_label: Label = %TaskHeaderLabel
 @onready var kill_label: Label = %"Kill Label"
 @onready var points_label: Label = %PointsLabel
+@onready var press_e_label: Label = %PressE
 @onready var ship_terminal_screen: CanvasLayer = %ShipTerminal
+@onready var ui_container: CanvasLayer = %UI
+@onready var crosshair_node: Control = %CrossHair
 @onready var chair = "Chair:<StaticBody3D#37094426288>"
 @onready var hangar = get_tree().get_first_node_in_group("Hangar Script")
 @onready var ship = get_tree().get_first_node_in_group("player_ship")
@@ -214,6 +217,7 @@ func hangar_console_interact():
 		tween.parallel().tween_property(camera, "global_rotation", shortest_target, 0.25)
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		rpc("sync_open_hangar")
+		ui_container.hide()
 		in_console = true
 	elif in_console and not Global.in_ship_console:
 		rot_diff.x = wrapf(old_rotation.x - camera.global_rotation.x, -PI, PI)
@@ -222,6 +226,7 @@ func hangar_console_interact():
 		tween.tween_property(camera, "global_position", old_position, 0.5)
 		tween.parallel().tween_property(camera, "global_rotation", shortest_target, 0.5)
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		ui_container.show()
 		await get_tree().create_timer(0.5).timeout
 		in_console = false 
 
@@ -251,6 +256,8 @@ func ship_console_interact():
 		ship_terminal_screen.visible = true
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		Global.in_ship_console = true
+		press_e_label.jide()
+		crosshair_node.hide()
 		set_physics_process(false)
 	else:
 		rot_diff.x = wrapf(old_rotation.x - camera.rotation.x, -PI, PI)
@@ -264,6 +271,9 @@ func ship_console_interact():
 		ship_terminal_screen.visible = false
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		Global.in_ship_console = false 
+		press_e_label.show()
+		crosshair_node.show()
+		
 		set_physics_process(true)
 
 func enter_pilot_seat():
@@ -400,7 +410,7 @@ func next_task():
 			task_label.text = "Interact with the console in the rear of the cockpit.\nType 'HELP' to see list of commands"
 		elif current_task == 3:
 			task_title_label.text = "Current Task: Hunt Down The Enemy"
-			task_label.text = "Using Shift/Control For Throttle And WASD To Steer, Locate And Hunt Down The Enemy"
+			task_label.text = "Using Shift/Control For Throttle And WASD To Steer, \nLocate And Hunt Down The Enemy"
 		elif current_task == 4:
 			task_title_label.text = "Current Task: Eliminate Enemy"
 			task_label.text = "Press F Or Left Click To Fire The Cannon, Try To Dodge The Enemy's Cannons \nDo Not Underestimate The Enemy!"
