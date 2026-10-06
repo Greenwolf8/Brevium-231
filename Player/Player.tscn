@@ -9,12 +9,12 @@
 height = 2.2739258
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ddoul"]
-bg_color = Color(0, 0, 0, 0.23529412)
+bg_color = Color(0, 0, 0, 0.39215687)
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0, 0, 0, 0.23529412)
+border_color = Color(0, 0, 0, 0.39215687)
 border_blend = true
 corner_radius_top_left = 10
 corner_radius_top_right = 10
@@ -131,10 +131,15 @@ text = "Enemy Defeated!"
 
 [node name="PointsLabel" type="Label" parent="UI"]
 unique_name_in_owner = true
-offset_left = 10.0
-offset_top = 40.0
-offset_right = 332.0
-offset_bottom = 63.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = 62.5
+offset_right = 9.0
+offset_bottom = 62.5
+grow_horizontal = 2
+grow_vertical = 2
 text = "Ships Destroyed: 0"
 
 [node name="PlayerCamera" type="Camera3D" parent="."]

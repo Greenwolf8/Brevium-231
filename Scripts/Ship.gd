@@ -55,6 +55,9 @@ func _physics_process(_delta):
 	var pitch_input = Input.get_axis("move_back", "move_forward")
 	var forward_force: Vector3 = Vector3.ZERO
 	
+	if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
 	if not Camerafree:
 		pitch_input += mouse_input.y * 0.02
 		yaw_input = -mouse_input.x * 0.05

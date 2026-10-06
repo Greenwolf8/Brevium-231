@@ -112,7 +112,6 @@ omni_attenuation = 0.9
 [node name="Ship" parent="." instance=ExtResource("4_12kdf")]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.354458, 4.4596643, 0.19554138)
-visible = false
 
 [node name="Hangar3" parent="." instance=ExtResource("7_wlsky")]
 
