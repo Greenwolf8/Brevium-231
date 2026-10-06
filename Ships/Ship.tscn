@@ -457,7 +457,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_41uc2")
 size = Vector2i(550, 550)
 
 [node name="Control" parent="Ship/Console" instance=ExtResource("3_3r580")]
-layer = 0
 
 [node name="AVRO_VULCAN" parent="Ship" instance=ExtResource("4_hrad2")]
 
@@ -695,12 +694,10 @@ offset_bottom = 111.0
 [node name="HealthLabel" type="Label" parent="Ship/LabelContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 
 [node name="Throttle" type="Label" parent="Ship/LabelContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
 
 [node name="Label" type="Label" parent="Ship/LabelContainer"]
 layout_mode = 2

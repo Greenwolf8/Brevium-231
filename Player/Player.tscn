@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://07reg5c5xbsn"]
+[gd_scene load_steps=10 format=3 uid="uid://07reg5c5xbsn"]
 
 [ext_resource type="Script" uid="uid://cnakptn5mu1jb" path="res://Scripts/new_player.gd" id="1_ddoul"]
 [ext_resource type="PackedScene" uid="uid://bgr4mpswlth1q" path="res://Ships/ship_terminal.tscn" id="2_8g4oa"]
@@ -7,6 +7,19 @@
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vx57b"]
 height = 2.2739258
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ddoul"]
+bg_color = Color(0, 0, 0, 0.23529412)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color(0, 0, 0, 0.23529412)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [sub_resource type="FontFile" id="FontFile_kpjcp"]
 subpixel_positioning = 0
@@ -52,27 +65,31 @@ visible = false
 [node name="UI" type="CanvasLayer" parent="."]
 unique_name_in_owner = true
 
-[node name="Task Container" type="VBoxContainer" parent="UI"]
-z_index = 200
+[node name="TaskContainer" type="PanelContainer" parent="UI"]
 offset_left = 10.0
 offset_top = 110.0
-offset_right = 355.0
-offset_bottom = 189.0
+offset_right = 50.0
+offset_bottom = 150.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ddoul")
 
-[node name="TaskHeaderLabel" type="Label" parent="UI/Task Container"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/TaskContainer"]
+z_index = 200
+layout_mode = 2
+
+[node name="TaskHeaderLabel" type="Label" parent="UI/TaskContainer/VBoxContainer"]
 unique_name_in_owner = true
+modulate = Color(0.9078572, 0.5119737, 1.92523e-07, 1)
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
+text = "blahblahblah"
 
-[node name="TaskLabel" type="Label" parent="UI/Task Container"]
+[node name="TaskLabel" type="Label" parent="UI/TaskContainer/VBoxContainer"]
 unique_name_in_owner = true
+modulate = Color(0.6878378, 0.38241604, 9.62615e-08, 1)
 layout_mode = 2
 theme_override_font_sizes/font_size = 15
-
-[node name="PointsLabel" type="Label" parent="UI/Task Container"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Ships Destroyed: 0"
+text = "Blah balasdofvjpjafvjiknaskjfvnjnlkjndsajnfkj
+asdlkjkjafdsb"
 
 [node name="CrossHair" parent="UI" instance=ExtResource("3_6ysni")]
 unique_name_in_owner = true
@@ -111,6 +128,14 @@ theme_override_colors/font_color = Color(0.8006259, 9.32052e-05, 0.0350002, 1)
 theme_override_fonts/font = SubResource("FontFile_kpjcp")
 theme_override_font_sizes/font_size = 35
 text = "Enemy Defeated!"
+
+[node name="PointsLabel" type="Label" parent="UI"]
+unique_name_in_owner = true
+offset_left = 10.0
+offset_top = 40.0
+offset_right = 332.0
+offset_bottom = 63.0
+text = "Ships Destroyed: 0"
 
 [node name="PlayerCamera" type="Camera3D" parent="."]
 unique_name_in_owner = true

@@ -251,7 +251,7 @@ func ship_console_interact():
 		ship_terminal_screen.visible = true
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		Global.in_ship_console = true
-		press_e_label.jide()
+		press_e_label.hide()
 		crosshair_node.hide()
 		set_physics_process(false)
 	else:
