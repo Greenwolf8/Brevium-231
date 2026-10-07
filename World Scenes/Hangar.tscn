@@ -76,19 +76,19 @@ collision_layer = 4
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.115143, -0.55429447, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.115143, -0.43576515, 0)
 shape = SubResource("BoxShape3D_i5qic")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 12.700485, 29.987566, -79.86137)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 12.700485, 29.987566, -81.24876)
 shape = SubResource("BoxShape3D_12kdf")
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 1.5375671, 29.987566, 79.70856)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 1.5375671, 29.987566, 81.28456)
 shape = SubResource("BoxShape3D_12kdf")
 
 [node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 107.60446, 30, 0)
+transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 108.751175, 30, 0)
 shape = SubResource("BoxShape3D_12kdf")
 
 [node name="Console Centre" type="CollisionShape3D" parent="StaticBody3D"]
@@ -111,8 +111,8 @@ omni_attenuation = 0.9
 
 [node name="Ship" parent="." instance=ExtResource("4_12kdf")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.354458, 4.4596643, 0.19554138)
 visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.354458, 4.4992085, 0.19554138)
 
 [node name="Hangar3" parent="." instance=ExtResource("7_wlsky")]
 

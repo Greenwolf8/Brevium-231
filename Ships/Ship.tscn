@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dmt2egmpr1xr6" path="res://Scripts/Ship.gd" id="1_h6pg4"]
 [ext_resource type="PackedScene" uid="uid://dv22jiaawgv6j" path="res://Ships/Cannon.tscn" id="2_g6t2t"]
 [ext_resource type="PackedScene" uid="uid://bgr4mpswlth1q" path="res://Ships/ship_terminal.tscn" id="3_3r580"]
-[ext_resource type="PackedScene" uid="uid://cn6a4gvubxnxi" path="res://3D Models/AVRO.VULCAN.glb" id="4_hrad2"]
+[ext_resource type="PackedScene" uid="uid://dxlx6vfum47dc" path="res://3D Models/AVRO.VULCAN.glb" id="4_hrad2"]
 [ext_resource type="AudioStream" uid="uid://dgv4dhpltqoxj" path="res://Sounds/Bullet_Strike.mp3" id="5_j22ul"]
 [ext_resource type="AudioStream" uid="uid://ok7ri5dnvm0f" path="res://Sounds/bullet_strike_2.mp3" id="6_ujww6"]
 [ext_resource type="AudioStream" uid="uid://os60jo5ux613" path="res://Sounds/bullet_strike_3.mp3" id="7_8cat4"]
@@ -458,8 +458,6 @@ size = Vector2i(550, 550)
 
 [node name="Control" parent="Ship/Console" instance=ExtResource("3_3r580")]
 
-[node name="AVRO_VULCAN" parent="Ship" instance=ExtResource("4_hrad2")]
-
 [node name="Sound FX" type="Node3D" parent="Ship"]
 
 [node name="Computer_Boot" type="AudioStreamPlayer3D" parent="Ship/Sound FX"]
@@ -715,7 +713,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.745585, -1.0586858, 0.0046
 shape = SubResource("BoxShape3D_nmspu")
 
 [node name="Right Gear Bottom" type="CollisionShape3D" parent="Ship/Landing Gear Colliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.53548, -3.7866402, -13.04238)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.53548, -3.2726307, -13.04238)
 shape = SubResource("BoxShape3D_d8om2")
 
 [node name="Right Gear Top" type="CollisionShape3D" parent="Ship/Landing Gear Colliders"]
@@ -723,7 +721,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.238785, -1.1661267, -12.98
 shape = SubResource("BoxShape3D_dto61")
 
 [node name="Left Gear Bottom" type="CollisionShape3D" parent="Ship/Landing Gear Colliders"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.53548, -3.7866402, 12.957494)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 61.53548, -3.2892115, 12.957494)
 shape = SubResource("BoxShape3D_d8om2")
 
 [node name="Left Gear Top" type="CollisionShape3D" parent="Ship/Landing Gear Colliders"]
@@ -733,6 +731,8 @@ shape = SubResource("BoxShape3D_dto61")
 [node name="GearLadder" type="CollisionShape3D" parent="Ship/Landing Gear Colliders" groups=["Ladder Gear"]]
 transform = Transform3D(-0.90630776, -0.42261833, 0, 0.42261833, -0.90630776, 0, 0, 0, 1, 21.086, -1.9, 0.002)
 shape = SubResource("BoxShape3D_7jh6g")
+
+[node name="AVRO_VULCAN" parent="Ship" instance=ExtResource("4_hrad2")]
 
 [connection signal="body_entered" from="Ship/Exterior" to="Ship" method="_on_exterior_body_entered"]
 [connection signal="body_exited" from="Ship/Exterior" to="Ship" method="_on_exterior_body_exited"]

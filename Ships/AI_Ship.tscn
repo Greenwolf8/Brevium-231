@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dchqc2wuhpd8b" path="res://Scripts/ai_ship.gd" id="1_0jbod"]
 [ext_resource type="PackedScene" uid="uid://dv22jiaawgv6j" path="res://Ships/Cannon.tscn" id="3_pnxum"]
-[ext_resource type="PackedScene" uid="uid://cn6a4gvubxnxi" path="res://3D Models/AVRO.VULCAN.glb" id="4_dre73"]
+[ext_resource type="PackedScene" uid="uid://drx8oj1edtqui" path="res://3D Models/Enemy_AVRO.VULCAN.glb" id="4_dre73"]
 [ext_resource type="PackedScene" uid="uid://b1b3t0ixectso" path="res://Ships/explosion.tscn" id="4_grfkr"]
 [ext_resource type="PackedScene" uid="uid://dff5tv7jasl84" path="res://Ships/Afterburner.tscn" id="5_dre73"]
 

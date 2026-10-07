@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://blq0jj31nvc64"]
+
+[ext_resource type="PackedScene" uid="uid://dxlx6vfum47dc" path="res://3D Models/AVRO.VULCAN.glb" id="1_qlp05"]
+
+[node name="AVRO_VULCAN" instance=ExtResource("1_qlp05")]

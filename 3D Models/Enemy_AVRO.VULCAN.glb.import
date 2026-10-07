@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://d4a774t5aenkb"
-path="res://.godot/imported/AVRO.VULCAN_GAME.glb-e5ed9f3a96c279c6a63a423435f703ca.scn"
+uid="uid://drx8oj1edtqui"
+path="res://.godot/imported/Enemy_AVRO.VULCAN.glb-6eab36b7dad01544ec0d324ad1c13f0d.scn"
 
 [deps]
 
-source_file="res://3D Models/AVRO.VULCAN_GAME.glb"
-dest_files=["res://.godot/imported/AVRO.VULCAN_GAME.glb-e5ed9f3a96c279c6a63a423435f703ca.scn"]
+source_file="res://3D Models/Enemy_AVRO.VULCAN.glb"
+dest_files=["res://.godot/imported/Enemy_AVRO.VULCAN.glb-6eab36b7dad01544ec0d324ad1c13f0d.scn"]
 
 [params]
 
