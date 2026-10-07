@@ -250,6 +250,9 @@ func sync_system_start():
 	%RadarScreen.show()
 	%RadarScreenL.show()
 	%RWRScreen.show()
+	%RadarScreen_OFF.hide()
+	%RadarScreenL_OFF.hide()
+	%RWRScreen_OFF.hide()
 	%Engine_1.play()
 	$Avionics/GunSight.show()
 	await get_tree().create_timer(6.2).timeout

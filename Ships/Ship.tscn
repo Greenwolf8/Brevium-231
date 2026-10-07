@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=3 uid="uid://b3ovqfvf46vnf"]
+[gd_scene load_steps=76 format=3 uid="uid://b3ovqfvf46vnf"]
 
 [ext_resource type="Script" uid="uid://dmt2egmpr1xr6" path="res://Scripts/Ship.gd" id="1_h6pg4"]
 [ext_resource type="PackedScene" uid="uid://dv22jiaawgv6j" path="res://Ships/Cannon.tscn" id="2_g6t2t"]
@@ -113,6 +113,18 @@ albedo_texture = SubResource("ViewportTexture_oj4er")
 resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_ipukm")
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h6pg4"]
+albedo_color = Color(0.23753911, 0.23753914, 0.23753911, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_g6t2t"]
+material = SubResource("StandardMaterial3D_h6pg4")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g6t2t"]
+albedo_color = Color(0.23921569, 0.23921569, 0.23921569, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3r580"]
+material = SubResource("StandardMaterial3D_g6t2t")
+
 [sub_resource type="ViewportTexture" id="ViewportTexture_snmvu"]
 viewport_path = NodePath("Ship/Console")
 
@@ -130,6 +142,12 @@ viewport_path = NodePath("Ship/Avionics/RWRMesh")
 resource_local_to_scene = true
 shading_mode = 0
 albedo_texture = SubResource("ViewportTexture_rnkl5")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3r580"]
+albedo_color = Color(0.23921569, 0.23921569, 0.23921569, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_hrad2"]
+material = SubResource("StandardMaterial3D_3r580")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0ieyr"]
 shader = ExtResource("16_an61r")
@@ -593,11 +611,23 @@ visible = false
 mesh = SubResource("PlaneMesh_anqkt")
 skeleton = NodePath("../..")
 
+[node name="RadarScreen_OFF" type="MeshInstance3D" parent="Ship/Avionics"]
+unique_name_in_owner = true
+transform = Transform3D(-5.9010374e-09, 0.9238795, 0.05166228, 0, 0.38268355, -0.12472374, -0.135, -4.0384055e-08, -2.25823e-09, 0.028297424, -0.112044334, 0.0040001273)
+mesh = SubResource("PlaneMesh_g6t2t")
+skeleton = NodePath("../..")
+
 [node name="RadarScreenL" type="MeshInstance3D" parent="Ship/Avionics"]
 unique_name_in_owner = true
 transform = Transform3D(-5.9010374e-09, 0.9238795, 0.05166228, 0, 0.38268355, -0.12472374, -0.135, -4.0384055e-08, -2.25823e-09, 0.073667526, -0.18765831, 1.3764443)
 visible = false
 mesh = SubResource("PlaneMesh_anqkt")
+skeleton = NodePath("../..")
+
+[node name="RadarScreenL_OFF" type="MeshInstance3D" parent="Ship/Avionics"]
+unique_name_in_owner = true
+transform = Transform3D(-5.9010374e-09, 0.9238795, 0.05166228, 0, 0.38268355, -0.12472374, -0.135, -4.0384055e-08, -2.25823e-09, 0.073667526, -0.18765831, 1.3764443)
+mesh = SubResource("PlaneMesh_3r580")
 skeleton = NodePath("../..")
 
 [node name="RWRScreen" type="MeshInstance3D" parent="Ship/Avionics"]
@@ -607,6 +637,12 @@ visible = false
 mesh = SubResource("PlaneMesh_s83w2")
 skeleton = NodePath("../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_g0nn0")
+
+[node name="RWRScreen_OFF" type="MeshInstance3D" parent="Ship/Avionics"]
+unique_name_in_owner = true
+transform = Transform3D(-3.584334e-09, 0.9316912, 0.029786598, 0, 0.36325118, -0.076398686, -0.082, -4.0725517e-08, -1.3020135e-09, 0.0042324066, -0.016715527, 0.27258468)
+mesh = SubResource("PlaneMesh_hrad2")
+skeleton = NodePath("../..")
 
 [node name="RadarMesh" type="SubViewport" parent="Ship/Avionics"]
 disable_3d = true
