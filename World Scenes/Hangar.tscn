@@ -11,7 +11,7 @@
 size = Vector3(190.89954, 1, 159.70451)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_12kdf"]
-size = Vector3(251.57767, 0.51672363, 59.94363)
+size = Vector3(191.89954, 0.51672363, 59.94363)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xwd2w"]
 size = Vector3(7.522064, 1.2592773, 0.6950836)
@@ -75,19 +75,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.4724121, 0, 0)
 collision_layer = 4
 collision_mask = 0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="Floor" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.115143, -0.43576515, 0)
 shape = SubResource("BoxShape3D_i5qic")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 12.700485, 29.987566, -81.24876)
+[node name="Ceiling" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.115143, 60.23479, 0)
+shape = SubResource("BoxShape3D_i5qic")
+
+[node name="Right Wall" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 12.438011, 29.987566, -81.24876)
 shape = SubResource("BoxShape3D_12kdf")
 
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 1.5375671, 29.987566, 81.28456)
+[node name="Left Wall" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 12.48587, 29.987566, 81.28456)
 shape = SubResource("BoxShape3D_12kdf")
 
-[node name="CollisionShape3D4" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="Back Wall" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(-4.371139e-08, 1, -4.371139e-08, 0, -4.371139e-08, -1, -1, -4.371139e-08, 1.9106855e-15, 108.751175, 30, 0)
 shape = SubResource("BoxShape3D_12kdf")
 
@@ -111,8 +115,8 @@ omni_attenuation = 0.9
 
 [node name="Ship" parent="." instance=ExtResource("4_12kdf")]
 unique_name_in_owner = true
-visible = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -40.354458, 4.4992085, 0.19554138)
+visible = false
 
 [node name="Hangar3" parent="." instance=ExtResource("7_wlsky")]
 
