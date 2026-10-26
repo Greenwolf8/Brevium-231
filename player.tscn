@@ -7,8 +7,8 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_4flbx"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_4flbx"]
-top_radius = 0.1
-bottom_radius = 0.1
+top_radius = 0.05
+bottom_radius = 0.05
 height = 3.0
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_4flbx"]
@@ -19,12 +19,13 @@ properties/1/path = NodePath(".:rotation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
 
-[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera")]
+[node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "down_cast")]
 script = ExtResource("1_4flbx")
 camera = NodePath("Camera")
+down_cast = NodePath("down_cast")
 
 [node name="Body_Mesh" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.010556, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.7, 0, 1.010556, 0)
 mesh = SubResource("CapsuleMesh_sh265")
 
 [node name="Body_Collision" type="CollisionShape3D" parent="."]
@@ -40,3 +41,6 @@ mesh = SubResource("CylinderMesh_4flbx")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_4flbx")
+
+[node name="down_cast" type="RayCast3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

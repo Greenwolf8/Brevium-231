@@ -3,7 +3,9 @@ extends CharacterBody3D
 @export var walk_speed: float = 10
 @export var sprint_speed: float = 20
 @export var camera: Camera3D
+@export var down_cast: RayCast3D
 
+var gravity_strength: float = 9.8
 var bobbing_up: bool = true
 var bob_height_down: Vector3 = Vector3(-0.1, 1.69, -0.25)
 var bob_height_up: Vector3 = Vector3(0.1, 1.69, -0.25)
@@ -12,9 +14,11 @@ func _enter_tree():
 	set_multiplayer_authority(name.to_int())
 
 func _ready() -> void:
-	if is_multiplayer_authority():
-		camera.make_current()
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if !is_multiplayer_authority():
+		return
+	camera.make_current()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	down_cast.add_exception(self)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if !is_multiplayer_authority():
@@ -48,6 +52,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, walk_speed)
 		velocity.z = move_toward(velocity.z, 0, speed)
+	
+	# Gravity and Jump
+	if !down_cast.is_colliding():
+		velocity.y -= gravity_strength * delta
 	
 	# Head bobbing
 	if input_dir.y != 0.0:

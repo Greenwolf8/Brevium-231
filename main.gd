@@ -29,6 +29,7 @@ func initialize_player(player: CharacterBody3D):
 
 
 func _on_host_button_pressed() -> void:
+	$UI.hide()
 	Networking.host_lobby()
 
 
