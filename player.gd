@@ -4,6 +4,10 @@ extends CharacterBody3D
 @export var run_speed: float = 20
 @export var camera: Camera3D
 
+var bobbing_up: bool = true
+var bob_height_down: Vector3 = Vector3(-0.1, 1.69, -0.25)
+var bob_height_up: Vector3 = Vector3(0.1, 1.69, -0.25)
+
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
 
@@ -23,12 +27,27 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera.rotation_degrees.x, -80.0, 80.0
 		)
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
+	print(camera.position)
 	if !is_multiplayer_authority():
 		return
 	
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
 	var direction = (global_transform.basis.x * input_dir.x + -global_transform.basis.z * input_dir.y)
+	
+	
+	if input_dir.y != 0.0:
+		if bobbing_up == true:
+			camera.position.x = move_toward(camera.position.x, bob_height_up.x, delta * 0.4)
+			if camera.position == bob_height_up:
+				bobbing_up = false
+		elif bobbing_up == false:
+			camera.position.x = move_toward(camera.position.x, bob_height_down.x, delta * 0.4)
+			if camera.position == bob_height_down:
+				bobbing_up = true
+	else:
+		camera.position = lerp(camera.position, Vector3(0.0,1.69,-0.25), delta * 10)
+	
 	
 	if direction:
 		velocity.x = direction.x * walk_speed
