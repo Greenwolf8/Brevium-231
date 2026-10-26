@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 @export var walk_speed: float = 10
-@export var run_speed: float = 20
+@export var sprint_speed: float = 20
 @export var camera: Camera3D
 
 var bobbing_up: bool = true
@@ -35,13 +35,19 @@ func _physics_process(delta: float) -> void:
 	# Movement
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
 	var direction = (global_transform.basis.x * input_dir.x + -global_transform.basis.z * input_dir.y)
+	var speed: float = 0.0
+	
+	if Input.is_action_pressed("Sprint"):
+		speed = sprint_speed
+	else:
+		speed = walk_speed
 	
 	if direction:
 		velocity.x = direction.x * walk_speed
-		velocity.z = direction.z * walk_speed
+		velocity.z = direction.z * speed
 	else:
 		velocity.x = move_toward(velocity.x, 0, walk_speed)
-		velocity.z = move_toward(velocity.z, 0, walk_speed)
+		velocity.z = move_toward(velocity.z, 0, speed)
 	
 	# Head bobbing
 	if input_dir.y != 0.0:
