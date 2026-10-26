@@ -17,7 +17,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	
 	if event is InputEventMouseMotion:
-		camera.rotation_degrees.y -= event.relative.x * 0.5
+		rotation_degrees.y -= event.relative.x * 0.5
 		camera.rotation_degrees.x -= event.relative.y * 0.5
 		camera.rotation_degrees.x = clamp(
 		camera.rotation_degrees.x, -80.0, 80.0
@@ -27,17 +27,8 @@ func _physics_process(_delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
 	
-	var input_dir := Input.get_vector("move_left", "move_right", "move_back", "move_forward")
-	var cam_forward := -camera.global_transform.basis.z
-	var cam_right := camera.global_transform.basis.x
-	
-	
-	cam_forward.y = 0
-	cam_right.y = 0
-	cam_forward = cam_forward.normalized()
-	cam_right = cam_right.normalized()
-	
-	var direction = (cam_right * input_dir.x + cam_forward * input_dir.y).normalized()
+	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
+	var direction = (global_transform.basis.x * input_dir.x + -global_transform.basis.z * input_dir.y)
 	
 	if direction:
 		velocity.x = direction.x * walk_speed

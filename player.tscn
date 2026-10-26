@@ -33,7 +33,6 @@ shape = SubResource("CapsuleShape3D_4flbx")
 
 [node name="Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6296926, -0.46406746)
-current = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Camera"]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, -5.9604645e-08, 0.18360174, -0.9376863)
