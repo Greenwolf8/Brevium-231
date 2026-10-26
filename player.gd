@@ -20,6 +20,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if !is_multiplayer_authority():
 		return
 	
+	# Camera turning
 	if event is InputEventMouseMotion:
 		rotation_degrees.y -= event.relative.x * 0.5
 		camera.rotation_degrees.x -= event.relative.y * 0.5
@@ -28,14 +29,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		)
 
 func _physics_process(delta: float) -> void:
-	print(camera.position)
 	if !is_multiplayer_authority():
 		return
 	
+	# Movement
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
 	var direction = (global_transform.basis.x * input_dir.x + -global_transform.basis.z * input_dir.y)
 	
+	if direction:
+		velocity.x = direction.x * walk_speed
+		velocity.z = direction.z * walk_speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, walk_speed)
+		velocity.z = move_toward(velocity.z, 0, walk_speed)
 	
+	# Head bobbing
 	if input_dir.y != 0.0:
 		if bobbing_up == true:
 			camera.position.x = move_toward(camera.position.x, bob_height_up.x, delta * 0.4)
@@ -47,13 +55,5 @@ func _physics_process(delta: float) -> void:
 				bobbing_up = true
 	else:
 		camera.position = lerp(camera.position, Vector3(0.0,1.69,-0.25), delta * 10)
-	
-	
-	if direction:
-		velocity.x = direction.x * walk_speed
-		velocity.z = direction.z * walk_speed
-	else:
-		velocity.x = move_toward(velocity.x, 0, walk_speed)
-		velocity.z = move_toward(velocity.z, 0, walk_speed)
 	
 	move_and_slide()
