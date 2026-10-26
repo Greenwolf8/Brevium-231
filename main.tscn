@@ -1,22 +1,35 @@
-[gd_scene load_steps=4 format=3 uid="uid://c1lb74na7ibhj"]
+[gd_scene load_steps=8 format=3 uid="uid://c1lb74na7ibhj"]
 
 [ext_resource type="Script" uid="uid://detqqw76sit25" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="Texture2D" uid="uid://bfp61h1lik51f" path="res://Solarsystemscope_texture_8k_stars.jpg" id="2_0xm2m"]
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_0xm2m"]
-size = Vector2(25, 25)
+[sub_resource type="SphereMesh" id="SphereMesh_0xm2m"]
+radius = 173700.0
+height = 347400.0
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_h2yge"]
-size = Vector3(25.0457, 0.48291016, 25.04007)
+[sub_resource type="SphereShape3D" id="SphereShape3D_0xm2m"]
+radius = 173700.0
 
-[node name="Main" type="Node3D"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_h2yge"]
+panorama = ExtResource("2_0xm2m")
+
+[sub_resource type="Sky" id="Sky_1bvp3"]
+sky_material = SubResource("PanoramaSkyMaterial_h2yge")
+
+[sub_resource type="Environment" id="Environment_lquwl"]
+background_mode = 2
+sky = SubResource("Sky_1bvp3")
+
+[node name="Main" type="Node3D" node_paths=PackedStringArray("spawn_point")]
 script = ExtResource("1_ig7tw")
+spawn_point = NodePath("spawn point")
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://cqdww5lg0i5lm")
 spawn_path = NodePath("..")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("PlaneMesh_0xm2m")
+mesh = SubResource("SphereMesh_0xm2m")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
@@ -25,7 +38,7 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.013313293, -0.25854492, 0.09309387)
-shape = SubResource("BoxShape3D_h2yge")
+shape = SubResource("SphereShape3D_0xm2m")
 
 [node name="UI" type="CanvasLayer" parent="."]
 
@@ -35,6 +48,13 @@ offset_top = 148.0
 offset_right = 463.0
 offset_bottom = 180.0
 text = "Host"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lquwl")
+
+[node name="spawn point" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 173702, 0)
+gizmo_extents = 0.5
 
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
 [connection signal="pressed" from="UI/host_button" to="." method="_on_host_button_pressed"]

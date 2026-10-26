@@ -3,6 +3,7 @@ extends Node3D
 const PLAYER = preload("uid://cqdww5lg0i5lm")
 
 var players: Array[CharacterBody3D]
+@export var spawn_point: Marker3D
 
 func _ready() -> void:
 	Networking.host_created.connect(on_host_created)
@@ -21,7 +22,7 @@ func spawn_player(peer_id: int):
 func initialize_player(player: CharacterBody3D):
 	
 	# include once you have a spawn point
-	#player.location = spawn_point
+	player.position = spawn_point.position
 	
 	for other in players:
 		player.add_collision_exception_with(other)
