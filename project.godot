@@ -11,5 +11,19 @@ config_version=5
 [application]
 
 config/name="Brevium-231 V2"
+run/main_scene="uid://c1lb74na7ibhj"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Networking="*res://networking.gd"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
+
+[steam]
+
+initialization/app_id=480
+initialization/initialize_on_startup=true
