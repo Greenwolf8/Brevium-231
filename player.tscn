@@ -21,6 +21,9 @@ properties/1/replication_mode = 1
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "down_cast")]
 script = ExtResource("1_4flbx")
+walk_speed = 10.0
+sprint_speed = 20.0
+jump_speed = 5.0
 camera = NodePath("Camera")
 down_cast = NodePath("down_cast")
 

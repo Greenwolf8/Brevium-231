@@ -1,7 +1,8 @@
 extends CharacterBody3D
 
-@export var walk_speed: float = 10
-@export var sprint_speed: float = 20
+@export var walk_speed: float
+@export var sprint_speed: float
+@export var jump_speed: float
 @export var camera: Camera3D
 @export var down_cast: RayCast3D
 
@@ -36,15 +37,16 @@ func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
 	
-	# Movement
-	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
-	var direction = (global_transform.basis.x * input_dir.x + -global_transform.basis.z * input_dir.y)
-	var speed: float = 0.0
-	
+	# Sprint 
+	var speed: float
 	if Input.is_action_pressed("Sprint"):
 		speed = sprint_speed
 	else:
 		speed = walk_speed
+	
+	# Movement
+	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
+	var direction = (global_transform.basis.x * input_dir.x + -global_transform.basis.z * input_dir.y)
 	
 	if direction:
 		velocity.x = direction.x * walk_speed
@@ -56,6 +58,9 @@ func _physics_process(delta: float) -> void:
 	# Gravity and Jump
 	if !down_cast.is_colliding():
 		velocity.y -= gravity_strength * delta
+	else:
+		if Input.is_action_just_pressed("jump"):
+			velocity.y = jump_speed
 	
 	# Head bobbing
 	if input_dir.y != 0.0:
