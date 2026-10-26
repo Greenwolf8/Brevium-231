@@ -1,14 +1,21 @@
 extends CharacterBody3D
 
 @export var walk_speed: float = 10
+@export var run_speed: float = 20
 @export var camera: Camera3D
 
+func _enter_tree():
+	set_multiplayer_authority(name.to_int())
 
 func _ready() -> void:
-	camera.current = true
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if is_multiplayer_authority():
+		camera.make_current()
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _unhandled_input(event: InputEvent) -> void:
+	if !is_multiplayer_authority():
+		return
+	
 	if event is InputEventMouseMotion:
 		camera.rotation_degrees.y -= event.relative.x * 0.5
 		camera.rotation_degrees.x -= event.relative.y * 0.5
@@ -16,7 +23,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera.rotation_degrees.x, -80.0, 80.0
 		)
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
+	if !is_multiplayer_authority():
+		return
 	
 	var input_dir := Input.get_vector("move_left", "move_right", "move_back", "move_forward")
 	var cam_forward := -camera.global_transform.basis.z
