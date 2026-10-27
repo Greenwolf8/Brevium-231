@@ -47,30 +47,32 @@ func _physics_process(delta: float) -> void:
 	# Movement
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
 	var direction = (global_transform.basis.x * input_dir.x * walk_speed + -global_transform.basis.z * input_dir.y * speed)
-	
 	if direction:
-		velocity.x = direction.x
-		velocity.z = direction.z
+		velocity.x = move_toward(velocity.x, direction.x, delta * 40)
+		velocity.z = move_toward(velocity.z, direction.z, delta * 40)
 	else:
-		velocity.x = move_toward(velocity.x, 0, delta * 35)
-		velocity.z = move_toward(velocity.z, 0, delta * 35)
+		velocity.x = move_toward(velocity.x, 0, delta * 100)
+		velocity.z = move_toward(velocity.z, 0, delta * 100)
 	
-	# Gravity and Jump
+	# Gravity
 	if down_cast.is_colliding():
-		velocity.y = 0.0
-
+		velocity.y = 0.01
 	else:
 		velocity.y -= gravity_strength * delta
+	
+	# Jump
+	if Input.is_action_just_pressed("jump") and down_cast.is_colliding():
+		velocity.y = jump_speed
 	
 	# Head bobbing
 	if input_dir.y != 0.0:
 		if bobbing_up == true:
-			camera.position.x = move_toward(camera.position.x, bob_height_up.x, delta * 0.4)
-			if camera.position == bob_height_up:
+			camera.position.x = move_toward(camera.position.x, bob_height_up.x, delta * 0.9)
+			if camera.position.x == bob_height_up.x:
 				bobbing_up = false
 		elif bobbing_up == false:
-			camera.position.x = move_toward(camera.position.x, bob_height_down.x, delta * 0.4)
-			if camera.position == bob_height_down:
+			camera.position.x = move_toward(camera.position.x, bob_height_down.x, delta * 0.9)
+			if camera.position.x == bob_height_down.x:
 				bobbing_up = true
 	else:
 		camera.position = lerp(camera.position, Vector3(0.0,1.69,-0.25), delta * 10)
