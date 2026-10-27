@@ -1,14 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://c1lb74na7ibhj"]
+[gd_scene load_steps=9 format=3 uid="uid://c1lb74na7ibhj"]
 
 [ext_resource type="Script" uid="uid://detqqw76sit25" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://bfp61h1lik51f" path="res://Solarsystemscope_texture_8k_stars.jpg" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://co82n5qrmdjca" path="res://hangar.tscn" id="3_h2yge"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_0xm2m"]
-radius = 173700.0
-height = 347400.0
+radius = 17370.0
+height = 34740.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0xm2m"]
-radius = 173700.0
+radius = 17370.0
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_h2yge"]
 panorama = ExtResource("2_0xm2m")
@@ -36,7 +37,7 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="Planet" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.013313293, -0.25854492, 0.09309387)
 shape = SubResource("SphereShape3D_0xm2m")
 
@@ -53,8 +54,11 @@ text = "Host"
 environment = SubResource("Environment_lquwl")
 
 [node name="spawn point" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 173702, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.738415, 17493.35, -64.486496)
 gizmo_extents = 0.5
+
+[node name="Hangar" parent="." instance=ExtResource("3_h2yge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17490.172, 0)
 
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
 [connection signal="pressed" from="UI/host_button" to="." method="_on_host_button_pressed"]

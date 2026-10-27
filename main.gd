@@ -20,8 +20,6 @@ func spawn_player(peer_id: int):
 	initialize_player(new_player)
 
 func initialize_player(player: CharacterBody3D):
-	
-	# include once you have a spawn point
 	player.position = spawn_point.position
 	
 	for other in players:
