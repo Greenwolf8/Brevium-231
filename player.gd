@@ -8,8 +8,8 @@ extends CharacterBody3D
 
 var gravity_strength: float = 9.8
 var bobbing_up: bool = true
-var bob_height_down: Vector3 = Vector3(-0.1, 1.69, -0.25)
-var bob_height_up: Vector3 = Vector3(0.1, 1.69, -0.25)
+var bob_height_down: Vector3 = Vector3(-0.05, 1.69, -0.25)
+var bob_height_up: Vector3 = Vector3(0.05, 1.69, -0.25)
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
@@ -67,11 +67,11 @@ func _physics_process(delta: float) -> void:
 	# Head bobbing
 	if input_dir.y != 0.0:
 		if bobbing_up == true:
-			camera.position.x = move_toward(camera.position.x, bob_height_up.x, delta * 0.9)
+			camera.position.x = move_toward(camera.position.x, bob_height_up.x, delta * 0.3)
 			if camera.position.x == bob_height_up.x:
 				bobbing_up = false
 		elif bobbing_up == false:
-			camera.position.x = move_toward(camera.position.x, bob_height_down.x, delta * 0.9)
+			camera.position.x = move_toward(camera.position.x, bob_height_down.x, delta * 0.3)
 			if camera.position.x == bob_height_down.x:
 				bobbing_up = true
 	else:
