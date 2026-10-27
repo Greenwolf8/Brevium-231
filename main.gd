@@ -41,9 +41,8 @@ func _on_multiplayer_spawner_spawned(node: Node) -> void:
 
 func _process(_delta: float) -> void:
 	
-	var ship_global_pos: Vector3 = player_ship.position
-	var ship_local_pos: Vector3 = world_container.position - ship_global_pos
+	var ship_local_pos: Vector3 = world_container.position - player_ship.position
 	var dist_to_ship: float = abs(ship_local_pos.x + ship_local_pos.y + ship_local_pos.z)
 	
-	if dist_to_ship >= 20:
+	if dist_to_ship >= 1000:
 		world_container.position -= ship_local_pos

@@ -16,11 +16,11 @@ background_mode = 2
 sky = SubResource("Sky_1bvp3")
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_0xm2m"]
-radius = 17370.0
+radius = 1737000.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_0xm2m"]
-radius = 17370.0
-height = 34740.0
+[sub_resource type="SphereMesh" id="SphereMesh_1bvp3"]
+radius = 1737000.0
+height = 3474000.0
 
 [node name="Main" type="Node3D" node_paths=PackedStringArray("spawn_point")]
 script = ExtResource("1_ig7tw")
@@ -47,29 +47,27 @@ environment = SubResource("Environment_lquwl")
 
 [node name="world container" type="Node3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 17500, 0)
 
 [node name="Astro Vulcan" parent="world container" instance=ExtResource("3_1bvp3")]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 140, 0)
 
 [node name="Hangar" parent="world container" instance=ExtResource("3_h2yge")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.828125, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 121, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="world container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -17500, 0)
 
 [node name="Planet" type="CollisionShape3D" parent="world container/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.013313293, -0.25854492, 0.09309387)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1737000, 0)
 shape = SubResource("SphereShape3D_0xm2m")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="world container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -17500, 0)
-mesh = SubResource("SphereMesh_0xm2m")
-skeleton = NodePath("../..")
-
 [node name="spawn point" type="Marker3D" parent="world container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.738415, -6.6503906, -64.486496)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.738, 124.36207, -64.486)
 gizmo_extents = 0.5
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="world container"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1737000, 0)
+mesh = SubResource("SphereMesh_1bvp3")
 
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
 [connection signal="pressed" from="UI/host_button" to="." method="_on_host_button_pressed"]
