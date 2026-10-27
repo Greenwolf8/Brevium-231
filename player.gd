@@ -46,21 +46,21 @@ func _physics_process(delta: float) -> void:
 	
 	# Movement
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
-	var direction = (global_transform.basis.x * input_dir.x + -global_transform.basis.z * input_dir.y)
+	var direction = (global_transform.basis.x * input_dir.x * walk_speed + -global_transform.basis.z * input_dir.y * speed)
 	
 	if direction:
-		velocity.x = direction.x * walk_speed
-		velocity.z = direction.z * speed
+		velocity.x = direction.x
+		velocity.z = direction.z
 	else:
-		velocity.x = move_toward(velocity.x, 0, walk_speed)
-		velocity.z = move_toward(velocity.z, 0, speed)
+		velocity.x = move_toward(velocity.x, 0, delta * 35)
+		velocity.z = move_toward(velocity.z, 0, delta * 35)
 	
 	# Gravity and Jump
-	if !down_cast.is_colliding():
-		velocity.y -= gravity_strength * delta
+	if down_cast.is_colliding():
+		velocity.y = 0.0
+
 	else:
-		if Input.is_action_just_pressed("jump"):
-			velocity.y = jump_speed
+		velocity.y -= gravity_strength * delta
 	
 	# Head bobbing
 	if input_dir.y != 0.0:
