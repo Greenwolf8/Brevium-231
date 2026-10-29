@@ -1,0 +1,63 @@
+[gd_scene load_steps=3 format=3 uid="uid://c0ddv37isxdrk"]
+
+[ext_resource type="PackedScene" uid="uid://4b26odk7yy20" path="res://AVRO.VULCAN.glb" id="1_wyqec"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wyqec"]
+albedo_color = Color(0.41981313, 0.41981313, 0.4198131, 1)
+
+[node name="AVRO_VULCAN" instance=ExtResource("1_wyqec")]
+
+[node name="Thrust Reversal Top L" parent="." index="44"]
+transform = Transform3D(1, 0, 0, 0, 0.8964864, -0.44307122, 0, 0.44307122, 0.8964864, 67.39659, 5.4403205, 1.3036287)
+
+[node name="Thrust Reversal Top R" parent="." index="45"]
+transform = Transform3D(1, 0, 0, 0, 0.8964864, 0.44307122, 0, -0.44307122, 0.8964864, 67.39658, 5.4200835, -1.3346621)
+
+[node name="Docking Port Door L" parent="." index="101"]
+transform = Transform3D(1, -8.742278e-08, 0, 6.935715e-08, 0.7933533, 0.6087615, 5.321962e-08, 0.6087615, -0.7933533, 26.63875, 7.967577, 0.34620506)
+
+[node name="Docking arm L" parent="Docking Port Section 2/Docking Port Section 3/Docking Port External Frame" index="1"]
+transform = Transform3D(-0.43301275, -0.25000003, 0.8660254, -0.5, 0.8660254, 1.4901161e-08, -0.75, -0.4330127, -0.50000006, 0.15390968, 0.08755779, 0.2714101)
+
+[node name="Docking arm R" parent="Docking Port Section 2/Docking Port Section 3/Docking Port External Frame" index="2"]
+transform = Transform3D(-0.43301287, -0.24999997, -0.8660255, -0.5, 0.86602545, 4.470349e-08, 0.7500001, 0.4330127, -0.5000001, 0.15310287, 0.08755779, -0.30138952)
+
+[node name="Walkway Lines" parent="." index="106"]
+surface_material_override/0 = SubResource("StandardMaterial3D_wyqec")
+
+[node name="Skeleton3D" parent="Ladder Armature" index="0"]
+bones/1/rotation = Quaternion(0.13631752, 0.00039102868, 0.9693005, -0.20463103)
+bones/2/position = Vector3(0.0041773045, 0.276367, 0.0066176937)
+
+[node name="Bottom Ladder Bone" parent="Ladder Armature/Skeleton3D" index="0"]
+transform = Transform3D(0.9883085, 0.03413912, -0.14859569, -0.033759475, 0.9994171, 0.005076039, 0.14868246, -1.8742867e-07, 0.9888847, -0.67498535, 1.1285008, 0.23018086)
+
+[node name="Top Ladder Bone" parent="Ladder Armature/Skeleton3D" index="1"]
+transform = Transform3D(0.9901846, 0.0129106585, -0.13916808, -0.01278483, 0.9999168, 0.0017969273, 0.13917977, -5.9604645e-08, 0.99026704, -0.6817688, 0.85219836, 0.2230462)
+
+[node name="Skeleton3D" parent="Armature_006" index="0"]
+bones/1/rotation = Quaternion(0.32373282, 0.0002982253, -0.00083897926, 0.94614816)
+
+[node name="Skeleton3D" parent="Left Door_R" index="0"]
+bones/0/rotation = Quaternion(0.44227234, 0.55300087, -0.54548335, -0.44836745)
+
+[node name="Left Door_R" parent="Left Door_R/Skeleton3D" index="0"]
+transform = Transform3D(-0.20672242, 1.8626451e-09, -0.97839946, 0.9782952, -0.014594372, -0.20670044, -0.014279126, -0.9998932, 0.003016976, 1.3853856e-06, 0.025546044, -0.66080856)
+
+[node name="Skeleton3D" parent="Small Door_R" index="0"]
+bones/1/rotation = Quaternion(-0.01910839, -0.012221612, 0.0046444493, 0.99973196)
+
+[node name="Small Door_R" parent="Small Door_R/Skeleton3D" index="0"]
+transform = Transform3D(0.968749, 3.7252903e-09, -0.24804235, -0.24804217, -2.6077032e-08, -0.9687499, -2.1595042e-08, 0.9999999, -1.4156103e-07, 1.0488574e-05, -0.024993636, 0.38389874)
+
+[node name="Skeleton3D" parent="Gear Door L_001" index="0"]
+bones/0/rotation = Quaternion(0.44227234, 0.55300087, -0.54548335, -0.44836745)
+
+[node name="Bone_001" parent="Gear Door L_001/Skeleton3D" index="0"]
+transform = Transform3D(-0.20672242, 1.8626451e-09, -0.97839946, 0.9782952, -0.014594372, -0.20670044, -0.014279126, -0.9998932, 0.003016976, 1.5919167e-06, 0.025545664, -0.66081)
+
+[node name="Skeleton3D" parent="Gear Door S_001" index="0"]
+bones/1/rotation = Quaternion(-0.01910839, -0.01222161, 0.0046444493, 0.99973196)
+
+[node name="Bone_001" parent="Gear Door S_001/Skeleton3D" index="0"]
+transform = Transform3D(0.968749, 3.7252903e-09, -0.24804235, -0.24804217, -2.6077032e-08, -0.9687499, -2.142042e-08, 0.9999999, -1.4156103e-07, -3.780157, 0.023072243, 1.9986184)

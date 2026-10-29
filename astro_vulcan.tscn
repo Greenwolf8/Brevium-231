@@ -1,3 +1,9 @@
-[gd_scene format=3 uid="uid://cw5tbla37typy"]
+[gd_scene load_steps=2 format=3 uid="uid://cw5tbla37typy"]
+
+[ext_resource type="PackedScene" uid="uid://c0ddv37isxdrk" path="res://astro_vulcan_mesh.tscn" id="1_30her"]
 
 [node name="Astro Vulcan" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18406773, 0)
+
+[node name="AVRO_VULCAN" parent="." instance=ExtResource("1_30her")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, -1.9510746, -55.280464)
