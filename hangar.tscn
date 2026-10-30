@@ -1,16 +1,74 @@
-[gd_scene load_steps=3 format=3 uid="uid://co82n5qrmdjca"]
+[gd_scene load_steps=10 format=3 uid="uid://co82n5qrmdjca"]
 
 [ext_resource type="PackedScene" uid="uid://1qs0o7yp2atm" path="res://hangar_mesh.tscn" id="1_2d16u"]
+[ext_resource type="Script" uid="uid://4wv4wfwvdhjy" path="res://hangar.gd" id="1_fpkqt"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2d16u"]
 size = Vector3(192.41882, 1, 162.84656)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_fpkqt"]
+size = Vector3(7.475708, 1.0880127, 0.9180298)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fqqng"]
+size = Vector3(1.7718506, 1.1407471, 0.71276855)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_34qk5"]
+size = Vector3(191.82568, 61.83188, 1.1773682)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_afel3"]
+size = Vector3(1.0892029, 62.2351, 162.32664)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lmc8s"]
+size = Vector3(1.1159058, 62.070084, 22.865417)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g2g6c"]
+size = Vector3(192.5574, 1.1186829, 161.91505)
+
 [node name="Hangar" type="Node3D"]
+script = ExtResource("1_fpkqt")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+collision_layer = 2
+collision_mask = 0
 
-[node name="floor collision" type="CollisionShape3D" parent="StaticBody3D"]
+[node name="floor" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.076851, -0.38022804, 0.2929077)
 shape = SubResource("BoxShape3D_2d16u")
+
+[node name="console_mid" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.3808174, 0.65590596, -53.294113)
+shape = SubResource("BoxShape3D_fpkqt")
+
+[node name="console_l" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(0.70710677, 0, 0.70710677, 0, 1, 0, -0.70710677, 0, 0.70710677, 9.557988, 0.65313256, -53.68905)
+shape = SubResource("BoxShape3D_fqqng")
+
+[node name="console_r" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(0.7071067, 0, -0.7071067, 0, 1, 0, 0.7071067, 0, 0.7071067, 1.2480901, 0.6531323, -53.730083)
+shape = SubResource("BoxShape3D_fqqng")
+
+[node name="wall_r" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.820557, 29.08284, -80.43225)
+shape = SubResource("BoxShape3D_34qk5")
+
+[node name="wall_l" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.820557, 29.08284, 80.45426)
+shape = SubResource("BoxShape3D_34qk5")
+
+[node name="wall_b" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106.47915, 28.785511, 0.037330627)
+shape = SubResource("BoxShape3D_afel3")
+
+[node name="wall_fl" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -84.531525, 29.003914, 69.581795)
+shape = SubResource("BoxShape3D_lmc8s")
+
+[node name="wall_fr" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -84.531525, 29.003914, -69.51655)
+shape = SubResource("BoxShape3D_lmc8s")
+
+[node name="roof" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11.292755, 59.50949, 0.28401184)
+shape = SubResource("BoxShape3D_g2g6c")
 
 [node name="Hangar2" parent="." instance=ExtResource("1_2d16u")]
