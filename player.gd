@@ -140,26 +140,14 @@ func ship_movement(_ship: Node3D, delta):
 	else:
 		speed = walk_speed
 	
-	
-	# Movement
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
-	var direction = (global_transform.basis.x * input_dir.x * walk_speed + -global_transform.basis.z * input_dir.y * speed)
+	var direction: Vector3 = (-transform.basis.x * input_dir.y * walk_speed + -transform.basis.z * input_dir.x * speed)
 	if direction:
 		velocity.x = move_toward(velocity.x, direction.x, delta * 40)
 		velocity.z = move_toward(velocity.z, direction.z, delta * 40)
 	else:
 		velocity.x = move_toward(velocity.x, 0, delta * 100)
 		velocity.z = move_toward(velocity.z, 0, delta * 100)
-	
-	# Gravity
-	if down_cast.is_colliding():
-		velocity.y = 0.01
-	else:
-		velocity.y -= gravity_strength * delta
-	
-	# Jump
-	if Input.is_action_pressed("jump") and down_cast.is_colliding():
-		velocity.y = jump_speed
 	
 	# Head bobbing
 	if input_dir.y != 0.0:
@@ -174,27 +162,56 @@ func ship_movement(_ship: Node3D, delta):
 	else:
 		camera.position = lerp(camera.position, Vector3(0.0,1.69,-0.25), delta * 10)
 	
+	# Gravity
+	if down_cast.is_colliding():
+		velocity.y = 0.01
+	else:
+		velocity.y -= gravity_strength * delta
+	
+	# Jump
+	if Input.is_action_pressed("jump") and down_cast.is_colliding():
+		velocity.y = jump_speed
+	
 	move_and_slide()
 
-func ladder_movement(ladder: String):
-	if !tween_timer.is_stopped(): # Makes sure not moving during tween
-		return
+func ground_movement(delta):
+	# Sprint 
+	var speed: float
+	if Input.is_action_pressed("Sprint"):
+		speed = sprint_speed
+	else:
+		speed = walk_speed
+	# Movement
+	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
+	var direction: Vector3 = (transform.basis.x * input_dir.x * walk_speed + -transform.basis.z * input_dir.y * speed)
+	if direction:
+		velocity.x = move_toward(velocity.x, direction.x, delta * 40)
+		velocity.z = move_toward(velocity.z, direction.z, delta * 40)
+	else:
+		velocity.x = move_toward(velocity.x, 0, delta * 100)
+		velocity.z = move_toward(velocity.z, 0, delta * 100)
 	
-	var tween = create_tween()
-	if ladder == "Gear Ladder": # Handles climbing the landing gear ladder
-		var local_ladder_dir: Vector3 = Vector3(0.4663, 1.0, 0.0).normalized()
-		var climb_input: float = Input.get_axis("move_back", "move_forward")
-		if position.y <= -6.33:
-			on_gear_ladder = false
-			reparent(main_scene)
-			tween.tween_property(self, "rotation_degrees", Vector3(0.0, -90.0, 0.0), 0.25)
-			return
-		elif position.y >= -0.69:
-			on_gear_ladder = false
-			tween.tween_property(self, "rotation_degrees", Vector3(0.0, -180.0, 0.0), 0.25)
-			return
-		else:
-			velocity = local_ladder_dir * climb_input * climb_speed
+	# Head bobbing
+	if input_dir.y != 0.0:
+		if bobbing_up == true:
+			camera.position.x = move_toward(camera.position.x, bob_height_up.x, delta * 0.3)
+			if camera.position.x == bob_height_up.x:
+				bobbing_up = false
+		elif bobbing_up == false:
+			camera.position.x = move_toward(camera.position.x, bob_height_down.x, delta * 0.3)
+			if camera.position.x == bob_height_down.x:
+				bobbing_up = true
+	else:
+		camera.position = lerp(camera.position, Vector3(0.0,1.69,-0.25), delta * 10)
 	
+	# Gravity
+	if down_cast.is_colliding():
+		velocity.y = 0.01
+	else:
+		velocity.y -= gravity_strength * delta
+	
+	# Jump
+	if Input.is_action_pressed("jump") and down_cast.is_colliding():
+		velocity.y = jump_speed
 	
 	move_and_slide()
