@@ -2,7 +2,7 @@ extends Node3D
 
 @export var spawn_point: Marker3D
 
-@onready var player_ship: Node3D = %"Astro Vulcan"
+@onready var player_ship: Node3D = $"world container/Hangar/Hangar2/Turn Table/Astro Vulcan"
 @onready var world_container: Node3D = %"world container"
 
 var players: Array[CharacterBody3D]
@@ -16,6 +16,7 @@ func _ready() -> void:
 func on_host_created():
 	spawn_player(multiplayer.get_unique_id())
 	multiplayer.peer_connected.connect(spawn_player)
+	set_process(true)
 
 func spawn_player(peer_id: int):
 	var new_player = PLAYER.instantiate() as CharacterBody3D
@@ -33,7 +34,6 @@ func initialize_player(player: CharacterBody3D):
 func _on_host_button_pressed() -> void:
 	$UI.hide()
 	Networking.host_lobby()
-	set_process(true)
 
 func _on_multiplayer_spawner_spawned(node: Node) -> void:
 	if node is CharacterBody3D:

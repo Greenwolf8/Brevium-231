@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://c1lb74na7ibhj"]
+[gd_scene load_steps=9 format=3 uid="uid://c1lb74na7ibhj"]
 
 [ext_resource type="Script" uid="uid://detqqw76sit25" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://bfp61h1lik51f" path="res://Solarsystemscope_texture_8k_stars.jpg" id="2_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://cw5tbla37typy" path="res://astro_vulcan.tscn" id="3_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://co82n5qrmdjca" path="res://hangar.tscn" id="3_h2yge"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_h2yge"]
@@ -48,21 +47,19 @@ environment = SubResource("Environment_lquwl")
 [node name="world container" type="Node3D" parent="."]
 unique_name_in_owner = true
 
-[node name="Astro Vulcan" parent="world container" instance=ExtResource("3_1bvp3")]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 140, 0)
-
 [node name="Hangar" parent="world container" instance=ExtResource("3_h2yge")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 121, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="world container"]
+collision_layer = 2
+collision_mask = 0
 
 [node name="Planet" type="CollisionShape3D" parent="world container/StaticBody3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1737000, 0)
 shape = SubResource("SphereShape3D_0xm2m")
 
 [node name="spawn point" type="Marker3D" parent="world container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.738, 124.36207, -64.486)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.738, 128.54025, -64.486)
 gizmo_extents = 0.5
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="world container"]
