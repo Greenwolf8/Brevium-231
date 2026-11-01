@@ -16,15 +16,15 @@ extends CharacterBody3D
 
 var gravity_strength: float = 9.8
 var bobbing_up: bool = true
-var bob_height_down: Vector3 = Vector3(-0.05, 1.69, -0.25)
-var bob_height_up: Vector3 = Vector3(0.05, 1.69, -0.25)
+var bob_height_down: Vector3 = Vector3(-0.05, 1.6, -0.35)
+var bob_height_up: Vector3 = Vector3(0.05, 1.6, -0.35)
 
 var on_gear_ladder: bool = false
-var gear_ladder_bottom_pos: Vector3 = Vector3(0.0, -6.3, -36.0)
-var gear_ladder_top_pos: Vector3 = Vector3(0.0, -2.44, -34.1)
+var gear_ladder_bottom_pos: Vector3 = Vector3(0.0, -6.3, -36.1)
+var gear_ladder_top_pos: Vector3 = Vector3(0.0, -2.44, -34.2)
 var on_interior_ladder: bool = false
-var interior_ladder_bottom_pos: Vector3 = Vector3(-1.91, -0.8, -31.5)
-var interior_ladder_top_pos: Vector3 = Vector3(-1.91, 2.0, -31.5)
+var interior_ladder_bottom_pos: Vector3 = Vector3(-1.91, -0.8, -32.1)
+var interior_ladder_top_pos: Vector3 = Vector3(-1.91, 2.0, -32.1)
 var current_ladder_pos: Vector3
 var tween_time: float = 0.25
 
@@ -44,7 +44,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		rotation_degrees.y -= event.relative.x * 0.5
 		camera.rotation_degrees.x -= event.relative.y * 0.5
-		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -80.0, 80.0)
+		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -70.0, 70.0)
 	
 	elif event.is_action_pressed("Interact") and front_cast.is_colliding():
 		if front_cast.get_collider().name == "Gear Ladder Interact":
@@ -62,7 +62,6 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 		elif front_cast.get_collider().name == "Interior Ladder Interact":
 			var tween = create_tween()
-			var tween_2 = create_tween()
 			if position.y >= 0.0:
 				current_ladder_pos = interior_ladder_top_pos
 			else:
@@ -70,7 +69,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			body_collision.disabled = true
 			on_interior_ladder = true
 			tween.tween_property(self, "position", current_ladder_pos, tween_time)
-			tween_2.tween_property(self, "rotation_degrees", Vector3(-25.0, 0.0, 0.0), tween_time)
 			tween_timer.start()
 	
 	elif event.is_action_pressed("P"):
@@ -79,7 +77,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
-	
+	print(rotation_degrees)
 	if on_gear_ladder:
 		ladder_movement("Gear Ladder")
 		return
@@ -106,12 +104,12 @@ func ladder_movement(ladder: String):
 			var tween = create_tween()
 			on_gear_ladder = false
 			reparent(main_scene)
-			tween.tween_property(self, "rotation_degrees", Vector3(0.0, -90.0, 0.0), tween_time)
+			tween.tween_property(self, "rotation_degrees", Vector3(0.0, rotation_degrees.y, rotation_degrees.z), tween_time)
 			return
 		elif position.y >= -0.69:
 			var tween = create_tween()
 			on_gear_ladder = false
-			tween.tween_property(self, "rotation_degrees", Vector3(0.0, -180.0, 0.0), tween_time)
+			tween.tween_property(self, "rotation_degrees", Vector3(0.0, rotation_degrees.y, rotation_degrees.z), tween_time)
 			return
 		else:
 			velocity = local_ladder_dir * climb_input_v3 * climb_speed
@@ -123,7 +121,7 @@ func ladder_movement(ladder: String):
 			on_interior_ladder = false
 			body_collision.disabled = false
 			return
-		elif position.y >= 3:
+		elif position.y >= 2.75:
 			on_interior_ladder = false
 			body_collision.disabled = false
 			return
@@ -141,7 +139,7 @@ func ship_movement(_ship: Node3D, delta):
 		speed = walk_speed
 	
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
-	var direction: Vector3 = (-transform.basis.x * input_dir.y * walk_speed + -transform.basis.z * input_dir.x * speed)
+	var direction: Vector3 = (-transform.basis.x * input_dir.y * speed + -transform.basis.z * input_dir.x * walk_speed)
 	if direction:
 		velocity.x = move_toward(velocity.x, direction.x, delta * 40)
 		velocity.z = move_toward(velocity.z, direction.z, delta * 40)
@@ -160,7 +158,7 @@ func ship_movement(_ship: Node3D, delta):
 			if camera.position.x == bob_height_down.x:
 				bobbing_up = true
 	else:
-		camera.position = lerp(camera.position, Vector3(0.0,1.69,-0.25), delta * 10)
+		camera.position = lerp(camera.position, Vector3(0.0,1.6,-0.35), delta * 10)
 	
 	# Gravity
 	if down_cast.is_colliding():
@@ -202,7 +200,7 @@ func ground_movement(delta):
 			if camera.position.x == bob_height_down.x:
 				bobbing_up = true
 	else:
-		camera.position = lerp(camera.position, Vector3(0.0,1.69,-0.25), delta * 10)
+		camera.position = lerp(camera.position, Vector3(0.0,1.6,-0.35), delta * 10)
 	
 	# Gravity
 	if down_cast.is_colliding():
