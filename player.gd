@@ -77,7 +77,6 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
-	print(rotation_degrees)
 	if on_gear_ladder:
 		ladder_movement("Gear Ladder")
 		return

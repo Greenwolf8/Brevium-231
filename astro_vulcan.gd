@@ -2,8 +2,20 @@ extends RigidBody3D
 
 @onready var animation_player_gear: AnimationPlayer = $"AVRO_VULCAN/AnimationPlayer"
 @onready var animation_player_ladder: AnimationPlayer = $"AVRO_VULCAN/AnimationPlayer_ladder"
+@onready var elec: Node = $"Electrical Systems"
+
+# Systems powered on
+var radar_engaged: bool = true
+var rwr_engaged: bool = true
+var r_gun_firing: bool = true
+var l_gun_firing: bool = true
+var targeting_pod_engaged: bool = true
+var radio_in_use: bool = true
+var lights_on: int = 25
+var hydraulics_usage: float = 100.0
 
 func _ready() -> void:
+	# Make animations start with gear open and ladder deployed
 	animation_player_gear.play("Landing Gear")
 	animation_player_gear.seek(14, true)
 	animation_player_ladder.play("ladder/Ladder Deploy")
