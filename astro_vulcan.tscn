@@ -1,10 +1,11 @@
-[gd_scene load_steps=36 format=3 uid="uid://cw5tbla37typy"]
+[gd_scene load_steps=38 format=3 uid="uid://cw5tbla37typy"]
 
 [ext_resource type="PackedScene" uid="uid://c0ddv37isxdrk" path="res://astro_vulcan_mesh.tscn" id="1_30her"]
 [ext_resource type="Script" uid="uid://mstiibqn70fk" path="res://astro_vulcan.gd" id="1_vu8vp"]
 [ext_resource type="Script" uid="uid://dd5cbigua17hh" path="res://electrical_systems.gd" id="3_ka41p"]
 [ext_resource type="Script" uid="uid://dbnin6euja55w" path="res://fuel_systems.gd" id="3_mqub3"]
 [ext_resource type="Script" uid="uid://ci2o2j61x20tt" path="res://engines.gd" id="5_3rtg3"]
+[ext_resource type="Script" uid="uid://bjgdxpb06xvli" path="res://bat_1_switch.gd" id="6_mtfeg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aa1ae"]
 size = Vector3(0.43401337, 5.064728, 1.1061707)
@@ -17,6 +18,9 @@ size = Vector3(0.83532715, 3.748783, 0.2619629)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xlu6k"]
 size = Vector3(1.0671387, 1.3156738, 0.98291016)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tyaxh"]
+size = Vector3(1.9499841, 1.9599609, 0.6552253)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_30her"]
 size = Vector3(10.176788, 0.14135742, 7.6919556)
@@ -81,11 +85,8 @@ size = Vector3(0.052612305, 4.2852173, 3.5485458)
 [sub_resource type="BoxShape3D" id="BoxShape3D_sj507"]
 size = Vector3(2.5011292, 1.041748, 2.00766)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_tyaxh"]
-size = Vector3(1.7612963, 1.7126465, 0.51592064)
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_jhe8g"]
-size = Vector3(5.3431726, 3.0528564, 0.07744408)
+size = Vector3(5.3431726, 3.0528564, 0.07307196)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_i6doi"]
 size = Vector3(2.076294, 1.876709, 4.2681274)
@@ -96,7 +97,10 @@ size = Vector3(4.47583, 2.249878, 6.6708984)
 [sub_resource type="BoxShape3D" id="BoxShape3D_n7j08"]
 size = Vector3(4.47583, 2.249878, 6.6708984)
 
-[node name="Astro Vulcan" type="RigidBody3D"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_nes6b"]
+size = Vector3(0.02041626, 0.022888184, 0.013759613)
+
+[node name="Astro Vulcan" type="RigidBody3D" groups=["player_ship"]]
 collision_layer = 2
 collision_mask = 2
 mass = 600000.0
@@ -105,7 +109,7 @@ script = ExtResource("1_vu8vp")
 [node name="AVRO_VULCAN" parent="." instance=ExtResource("1_30her")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, -1.951, -55.28)
 
-[node name="Gear Ladder Interact" type="StaticBody3D" parent="." groups=["player_ship"]]
+[node name="Gear Ladder Interact" type="StaticBody3D" parent="."]
 collision_layer = 4
 collision_mask = 0
 
@@ -128,6 +132,12 @@ shape = SubResource("BoxShape3D_2j7jb")
 [node name="interior_ladder_box" type="CollisionShape3D" parent="Interior Ladder Interact"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8947108, 2.8511963, -32.192238)
 shape = SubResource("BoxShape3D_xlu6k")
+
+[node name="Engineer Terminal Interact" type="StaticBody3D" parent="."]
+
+[node name="Engineer Terminal" type="CollisionShape3D" parent="Engineer Terminal Interact"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7224891, 3.7740536, -25.109226)
+shape = SubResource("BoxShape3D_tyaxh")
 
 [node name="Interior collisions" type="StaticBody3D" parent="."]
 collision_layer = 2
@@ -240,11 +250,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.008834839, 3.3149471, -35.9
 shape = SubResource("BoxShape3D_sj507")
 
 [node name="engineer_terminal" type="CollisionShape3D" parent="Interior collisions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.816833, 3.6503963, -25.079418)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7224891, 3.7740536, -25.109226)
 shape = SubResource("BoxShape3D_tyaxh")
 
 [node name="top_wall_b" type="CollisionShape3D" parent="Interior collisions"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.009138346, 4.3205013, -24.793793)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.009138346, 4.3205013, -24.765276)
 shape = SubResource("BoxShape3D_jhe8g")
 
 [node name="gear_f" type="CollisionShape3D" parent="."]
@@ -276,3 +286,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1872196, 0.060631752, 17.96
 
 [node name="eng_3_exit" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.041, 0, 16.586657)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.7686691, 4.1640463, -25.715748)
+
+[node name="BAT 1 Switch" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("6_mtfeg")
+
+[node name="BAT 1 Switch" type="CollisionShape3D" parent="BAT 1 Switch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3376677, 3.7806914, -24.879673)
+shape = SubResource("BoxShape3D_nes6b")

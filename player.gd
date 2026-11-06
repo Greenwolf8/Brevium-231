@@ -96,9 +96,10 @@ func ladder_movement(ladder: String):
 		return
 	
 	if ladder == "Gear Ladder": # Handles climbing the landing gear ladder
-		var local_ladder_dir: Vector3 = ship.transform.basis * Vector3(0.4663, 1.0, 0.0)
+		var local_ladder_dir: Vector3 = ship.transform.basis * Vector3(0.0, 1.0, 0.4663)
 		var climb_input: float = Input.get_axis("move_back", "move_forward")
 		var climb_input_v3: Vector3 = Vector3(climb_input, climb_input, 0.0)
+		print(ship.transform.basis)
 		if position.y <= -6.33:
 			var tween = create_tween()
 			on_gear_ladder = false
@@ -126,7 +127,6 @@ func ladder_movement(ladder: String):
 			return
 		else:
 			velocity = local_ladder_dir * climb_input * climb_speed
-	
 	move_and_slide()
 
 func ship_movement(_ship: Node3D, delta):

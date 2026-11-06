@@ -1,10 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://1qs0o7yp2atm"]
+[gd_scene load_steps=5 format=3 uid="uid://1qs0o7yp2atm"]
 
 [ext_resource type="PackedScene" uid="uid://kouqgbwe4uqf" path="res://Hangar2.glb" id="1_cklji"]
-[ext_resource type="PackedScene" uid="uid://cw5tbla37typy" path="res://astro_vulcan.tscn" id="2_y1xvv"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_y1xvv"]
-size = Vector3(1.0464172, 28.53003, 116.18021)
 
 [sub_resource type="Animation" id="Animation_cklji"]
 resource_name = "Call Ship"
@@ -70,44 +66,22 @@ _data = {
 
 [node name="Hangar" instance=ExtResource("1_cklji")]
 
-[node name="Exterior" parent="Turn Table" index="0"]
-transform = Transform3D(-0.010526315, 0, -1.0927846e-09, 0, 1, 0, 9.202397e-10, 0, -0.012499999, -0.015972257, 8.010704, 0)
+[node name="Elevator" parent="." index="4"]
+transform = Transform3D(95, 0, 0, 0, 1, 0, 0, 0, 80, 0, -1.0379941, 0)
+
+[node name="Elevator Door L" parent="." index="5"]
+transform = Transform3D(95, 0, 0, 0, 1, 0, 0, 0, 80, 0, -4.52372, 49)
+
+[node name="Elevator Door R" parent="." index="6"]
+transform = Transform3D(95, 0, 0, 0, 1, 0, 0, 0, 80, 0, -4.52372, -49)
+
+[node name="Turn Table" parent="." index="11"]
+transform = Transform3D(-1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, -1, 5.476622, -1.0379941, -1.2392796e-07)
+
+[node name="Avro Vulcan_001" parent="Turn Table" index="0"]
 visible = false
 
-[node name="Astro Vulcan" parent="Turn Table" index="1" instance=ExtResource("2_y1xvv")]
-transform = Transform3D(-1.1293095e-09, 0, -0.010526314, 0, 0.9999999, 0, 0.012499998, 0, -1.341055e-09, -0.097267084, 7.9454937, -0.0013357829)
-
-[node name="Skeleton3D" parent="Door Lower Armature" index="0"]
-bones/1/rotation = Quaternion(-9.9221396e-09, 8.135871e-08, -0.008726598, 0.999962)
-
-[node name="Lower Door" parent="Door Lower Armature/Skeleton3D" index="0"]
-transform = Transform3D(0.01745253, -0.9998477, 4.1609862e-09, 0.9998477, 0.01745253, 2.3838231e-07, -2.3841864e-07, -2.3092639e-14, 1, -7.6293945e-06, 7.130753e-14, 9.536744e-07)
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Door Lower Armature/Skeleton3D/Lower Door" index="0"]
-transform = Transform3D(0.01745253, 0.9998477, -2.3841864e-07, -0.9998477, 0.01745253, -2.220446e-14, 4.1609853e-09, 2.3838233e-07, 1, 1.1920929e-07, -7.6293945e-06, -9.536744e-07)
-collision_layer = 2
-collision_mask = 0
-
-[node name="Door Lower Collision" type="CollisionShape3D" parent="Door Lower Armature/Skeleton3D/Lower Door/StaticBody3D" index="0"]
-transform = Transform3D(0.01745253, -0.9998477, -2.0872193e-14, 0.9998477, 0.01745253, 4.2632564e-14, -7.1054274e-14, -2.3092639e-14, 1, -15.265282, -0.2489472, -0.018115997)
-shape = SubResource("BoxShape3D_y1xvv")
-
-[node name="Skeleton3D" parent="Door Upper Armature" index="0"]
-bones/1/rotation = Quaternion(-9.910458e-09, 8.00177e-08, -0.008726479, 0.999962)
-
-[node name="Upper Door" parent="Door Upper Armature/Skeleton3D" index="0"]
-transform = Transform3D(0.01745229, -0.99984765, 4.1609223e-09, 0.99984765, 0.01745229, 2.3570018e-07, -2.3573689e-07, 4.6782134e-11, 1, -7.6293945e-06, 2.1316281e-13, 9.536744e-07)
-
-[node name="StaticBody3D2" type="StaticBody3D" parent="Door Upper Armature/Skeleton3D/Upper Door" index="1"]
-transform = Transform3D(0.017452292, -0.99984777, 8.47641e-08, -0.99984777, -0.017452292, -2.6820033e-09, 4.160924e-09, -8.470438e-08, -1, 58.476234, 1.0206909, 4.0002733e-06)
-collision_layer = 2
-collision_mask = 0
-
-[node name="Door Upper Collision" type="CollisionShape3D" parent="Door Upper Armature/Skeleton3D/Upper Door/StaticBody3D2" index="0"]
-transform = Transform3D(-0.017452352, -0.9998477, 0, 0.9998477, -0.017452352, 0, 0, 0, 1, -15.265282, 58.724743, -0.018115997)
-shape = SubResource("BoxShape3D_y1xvv")
-
-[node name="AnimationPlayer" parent="." index="15"]
+[node name="AnimationPlayer" parent="." index="13"]
 libraries = {
 &"": SubResource("AnimationLibrary_s8043")
 }

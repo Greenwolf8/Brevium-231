@@ -2,7 +2,7 @@ extends Node3D
 
 @export var spawn_point: Marker3D
 
-@onready var player_ship: Node3D = $"world container/Hangar/Hangar2/Turn Table/Astro Vulcan"
+@onready var player_ship: Node3D = $"world container/Astro Vulcan"
 @onready var world_container: Node3D = %"world container"
 
 var players: Array[CharacterBody3D]

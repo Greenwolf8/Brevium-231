@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://c1lb74na7ibhj"]
+[gd_scene load_steps=10 format=3 uid="uid://c1lb74na7ibhj"]
 
 [ext_resource type="Script" uid="uid://detqqw76sit25" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://bfp61h1lik51f" path="res://Solarsystemscope_texture_8k_stars.jpg" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://co82n5qrmdjca" path="res://hangar.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cw5tbla37typy" path="res://astro_vulcan.tscn" id="4_1bvp3"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_h2yge"]
 panorama = ExtResource("2_0xm2m")
@@ -65,6 +66,9 @@ gizmo_extents = 0.5
 [node name="MeshInstance3D" type="MeshInstance3D" parent="world container"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1737000, 0)
 mesh = SubResource("SphereMesh_1bvp3")
+
+[node name="Astro Vulcan" parent="world container" instance=ExtResource("4_1bvp3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15.832019, 127.776, 0)
 
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
 [connection signal="pressed" from="UI/host_button" to="." method="_on_host_button_pressed"]
