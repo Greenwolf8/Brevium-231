@@ -12,21 +12,26 @@ extends CharacterBody3D
 @onready var ship: Node3D = get_tree().get_first_node_in_group("player_ship")
 @onready var main_scene = get_tree().root
 @onready var body_collision: CollisionShape3D = $Body_Collision
-
-
+@onready var engineer_camera: Camera3D = $"/root/Main/world container/Astro Vulcan/Engineer Camera"
 var gravity_strength: float = 9.8
 var bobbing_up: bool = true
 var bob_height_down: Vector3 = Vector3(-0.05, 1.6, -0.35)
 var bob_height_up: Vector3 = Vector3(0.05, 1.6, -0.35)
+var tween_time: float = 0.25
 
+# Vars for being in an interaction
 var on_gear_ladder: bool = false
+var on_interior_ladder: bool = false
+var in_engineer_terminal: bool = false
+
+# Positions of places to move
+var engineer_terminal_pos: Vector3 = Vector3(1.76, 2.6, -26.1)
+var engineer_terminal_rot: Vector3 = Vector3(0.0, -180.0, 0.0)
+var current_ladder_pos: Vector3
 var gear_ladder_bottom_pos: Vector3 = Vector3(0.0, -6.3, -36.1)
 var gear_ladder_top_pos: Vector3 = Vector3(0.0, -2.44, -34.2)
-var on_interior_ladder: bool = false
 var interior_ladder_bottom_pos: Vector3 = Vector3(-1.91, -0.8, -32.1)
 var interior_ladder_top_pos: Vector3 = Vector3(-1.91, 2.0, -32.1)
-var current_ladder_pos: Vector3
-var tween_time: float = 0.25
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
@@ -46,6 +51,16 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera.rotation_degrees.x -= event.relative.y * 0.5
 		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -70.0, 70.0)
 	
+	elif event.is_action_pressed("Interact") and in_engineer_terminal:
+		var tween = create_tween()
+		in_engineer_terminal = true
+		tween.tween_property(self, "position", Vector3(position.x, position.y, position.z + 0.4), tween_time)
+		await tween.finished
+		engineer_camera.clear_current()
+		camera.make_current()
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		return
+	
 	elif event.is_action_pressed("Interact") and front_cast.is_colliding():
 		if front_cast.get_collider().name == "Gear Ladder Interact":
 			var tween = create_tween()
@@ -59,7 +74,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			tween.tween_property(self, "position", current_ladder_pos, tween_time)
 			tween_2.tween_property(self, "rotation_degrees", Vector3(-25.0, 180.0, 0.0), tween_time)
 			tween_timer.start()
-		
 		elif front_cast.get_collider().name == "Interior Ladder Interact":
 			var tween = create_tween()
 			if position.y >= 0.0:
@@ -70,12 +84,25 @@ func _unhandled_input(event: InputEvent) -> void:
 			on_interior_ladder = true
 			tween.tween_property(self, "position", current_ladder_pos, tween_time)
 			tween_timer.start()
+		elif front_cast.get_collider().name == "Engineer Terminal Interact":
+			var tween = create_tween()
+			var tween_2 = create_tween()
+			in_engineer_terminal = true
+			tween.tween_property(self, "position", engineer_terminal_pos, tween_time)
+			tween_2.tween_property(self, "rotation_degrees", engineer_terminal_rot, tween_time)
+			await tween_2.finished
+			camera.clear_current()
+			engineer_camera.make_current()
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	
 	
 	elif event.is_action_pressed("P"):
 		print("Position: ", position, "\nRotation: ", rotation_degrees)
 
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
+		return
+	if in_engineer_terminal:
 		return
 	if on_gear_ladder:
 		ladder_movement("Gear Ladder")

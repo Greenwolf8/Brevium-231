@@ -25,7 +25,6 @@ enabled=PackedStringArray("res://addons/godot_super-wakatime/plugin.cfg")
 
 [global_group]
 
-ladder=""
 player_ship=""
 
 [input]
@@ -111,6 +110,7 @@ throttle_down={
 3d_physics/layer_1="Player"
 3d_physics/layer_2="Player Physics Objects"
 3d_physics/layer_3="Interactable"
+3d_physics/layer_4="Cockpit Interaction"
 
 [steam]
 

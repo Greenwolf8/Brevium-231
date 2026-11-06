@@ -29,7 +29,7 @@ jump_speed = 5.0
 climb_speed = 2.0
 camera = NodePath("Camera")
 down_cast = NodePath("down_cast")
-front_cast = NodePath("Camera/RayCast3D")
+front_cast = NodePath("Camera/front_cast")
 tween_timer = NodePath("tween_timer")
 
 [node name="Body_Mesh" type="MeshInstance3D" parent="."]
@@ -44,9 +44,11 @@ shape = SubResource("CapsuleShape3D_4flbx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, -0.35)
 far = 10000.0
 
-[node name="RayCast3D" type="RayCast3D" parent="Camera"]
+[node name="front_cast" type="RayCast3D" parent="Camera"]
 target_position = Vector3(0, 0, -3)
 collision_mask = 4
+
+[node name="cockpit_switches_cast" type="RayCast3D" parent="Camera"]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_4flbx")
