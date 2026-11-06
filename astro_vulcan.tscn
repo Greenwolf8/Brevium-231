@@ -1,10 +1,11 @@
-[gd_scene load_steps=38 format=3 uid="uid://cw5tbla37typy"]
+[gd_scene load_steps=39 format=3 uid="uid://cw5tbla37typy"]
 
 [ext_resource type="PackedScene" uid="uid://c0ddv37isxdrk" path="res://astro_vulcan_mesh.tscn" id="1_30her"]
 [ext_resource type="Script" uid="uid://mstiibqn70fk" path="res://astro_vulcan.gd" id="1_vu8vp"]
 [ext_resource type="Script" uid="uid://dd5cbigua17hh" path="res://electrical_systems.gd" id="3_ka41p"]
 [ext_resource type="Script" uid="uid://dbnin6euja55w" path="res://fuel_systems.gd" id="3_mqub3"]
 [ext_resource type="Script" uid="uid://ci2o2j61x20tt" path="res://engines.gd" id="5_3rtg3"]
+[ext_resource type="Script" uid="uid://d0h4xrqcaxdht" path="res://engineer_camera.gd" id="6_eg1o6"]
 [ext_resource type="Script" uid="uid://bjgdxpb06xvli" path="res://bat_1_switch.gd" id="6_mtfeg"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aa1ae"]
@@ -98,7 +99,7 @@ size = Vector3(4.47583, 2.249878, 6.6708984)
 size = Vector3(4.47583, 2.249878, 6.6708984)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nes6b"]
-size = Vector3(0.02041626, 0.022888184, 0.013759613)
+size = Vector3(0.020396829, 0.023815429, 0.013759613)
 
 [node name="Astro Vulcan" type="RigidBody3D" groups=["player_ship"]]
 collision_layer = 2
@@ -134,6 +135,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.8947108, 2.8511963, -32.19
 shape = SubResource("BoxShape3D_xlu6k")
 
 [node name="Engineer Terminal Interact" type="StaticBody3D" parent="."]
+collision_layer = 4
+collision_mask = 0
 
 [node name="Engineer Terminal" type="CollisionShape3D" parent="Engineer Terminal Interact"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7224891, 3.7740536, -25.109226)
@@ -287,14 +290,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1872196, 0.060631752, 17.96
 [node name="eng_3_exit" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.041, 0, 16.586657)
 
-[node name="Camera3D" type="Camera3D" parent="."]
+[node name="Engineer Camera" type="Camera3D" parent="."]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.7686691, 4.1640463, -25.715748)
+script = ExtResource("6_eg1o6")
 
-[node name="BAT 1 Switch" type="Area3D" parent="."]
+[node name="BAT 1 Switch" type="StaticBody3D" parent="."]
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("6_mtfeg")
 
 [node name="BAT 1 Switch" type="CollisionShape3D" parent="BAT 1 Switch"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3376677, 3.7806914, -24.879673)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3367903, 3.7811549, -24.879673)
 shape = SubResource("BoxShape3D_nes6b")
