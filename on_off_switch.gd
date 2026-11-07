@@ -1,6 +1,6 @@
 extends StaticBody3D
 
-@onready var switch_mesh: MeshInstance3D = $"/root/Main/world container/Astro Vulcan/AVRO_VULCAN/ELEC Panel/BAT 1"
+@export var switch_mesh: MeshInstance3D
 
 var on: bool = false
 

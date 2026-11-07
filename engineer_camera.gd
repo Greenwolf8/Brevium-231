@@ -7,7 +7,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if !self.is_current():
 		return
 	
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+	if event.is_action_pressed("L Click"):
 		cockpit_raycast()
 
 func cockpit_raycast():
@@ -24,8 +24,6 @@ func cockpit_raycast():
 	var result = space_state.intersect_ray(query)
 	print(result)
 	if not result.is_empty():
-		print("something 1")
 		var hit_object = result.collider
 		if hit_object.has_method("interact"):
-			print("something 2")
 			hit_object.interact()

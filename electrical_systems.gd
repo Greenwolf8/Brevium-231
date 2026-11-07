@@ -48,7 +48,6 @@ func calculate_power_generation():
 	
 	#Calculate the total power draw
 	power_demand = calculate_power_draw()
-	print("Demand: ", power_demand, " Generation: ", total_availible_power)
 	
 	#See if generators cover the demand
 	var generators_online = power_demand <= total_availible_power

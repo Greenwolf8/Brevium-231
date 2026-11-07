@@ -36,7 +36,6 @@ func _unhandled_input(event: InputEvent) -> void:
 			switch_eng_1_on = false
 
 func _process(delta: float) -> void:
-	print("Thrust: ", eng_1_thrust, ", Throttle: ", get_parent().throttle)
 	if eng_1_running:
 		# If engine 1 is running and the player turns off engine 1, it kills it
 		if !switch_eng_1_on:

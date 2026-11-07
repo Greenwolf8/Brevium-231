@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://dbnin6euja55w" path="res://fuel_systems.gd" id="3_mqub3"]
 [ext_resource type="Script" uid="uid://ci2o2j61x20tt" path="res://engines.gd" id="5_3rtg3"]
 [ext_resource type="Script" uid="uid://d0h4xrqcaxdht" path="res://engineer_camera.gd" id="6_eg1o6"]
-[ext_resource type="Script" uid="uid://bjgdxpb06xvli" path="res://bat_1_switch.gd" id="6_mtfeg"]
+[ext_resource type="Script" uid="uid://cmyfq8ng43dm8" path="res://on_off_switch.gd" id="7_eg1o6"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aa1ae"]
 size = Vector3(0.43401337, 5.064728, 1.1061707)
@@ -294,11 +294,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.041, 0, 16.586657)
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.7686691, 4.1640463, -25.715748)
 script = ExtResource("6_eg1o6")
 
-[node name="BAT 1 Switch" type="StaticBody3D" parent="."]
+[node name="BAT 1 Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("switch_mesh")]
 collision_layer = 8
 collision_mask = 0
-script = ExtResource("6_mtfeg")
+script = ExtResource("7_eg1o6")
+switch_mesh = NodePath("../AVRO_VULCAN/ELEC Panel/BAT 1")
 
 [node name="BAT 1 Switch" type="CollisionShape3D" parent="BAT 1 Switch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3367903, 3.7811549, -24.879673)
 shape = SubResource("BoxShape3D_nes6b")
+
+[editable path="AVRO_VULCAN"]
