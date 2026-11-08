@@ -54,56 +54,17 @@ func _unhandled_input(event: InputEvent) -> void:
 		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -70.0, 70.0)
 	
 	elif event.is_action_pressed("Interact") and in_engineer_terminal:
-		var tween = create_tween()
-		tween.set_trans(Tween.TRANS_SINE)
-		tween.tween_property(self, "position", engineer_terminal_exit_pos, tween_time)
-		camera.make_current()
-		engineer_camera.clear_current()
-		await tween.finished
-		in_engineer_terminal = false
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		engineer_camera.reset_pos()
-		return
+		exit_engineer_terminal()
 	
 	elif event.is_action_pressed("Interact") and front_cast.is_colliding():
 		if front_cast.get_collider().name == "Gear Ladder Interact":
-			var tween_pos = create_tween()
-			var tween_rot = create_tween()
-			if get_parent() == ship:
-				current_ladder_pos = gear_ladder_top_pos
-			else:
-				current_ladder_pos = gear_ladder_bottom_pos
-			on_gear_ladder = true
-			reparent(ship, true)
-			tween_pos.tween_property(self, "position", current_ladder_pos, tween_time)
-			tween_rot.tween_property(self, "rotation_degrees", Vector3(-25.0, 180.0, 0.0), tween_time)
-			tween_timer.start()
+			enter_gear_ladder()
+		
 		elif front_cast.get_collider().name == "Interior Ladder Interact":
-			var tween = create_tween()
-			if position.y >= 0.0:
-				current_ladder_pos = interior_ladder_top_pos
-			else:
-				current_ladder_pos = interior_ladder_bottom_pos
-			body_collision.disabled = true
-			on_interior_ladder = true
-			tween.tween_property(self, "position", current_ladder_pos, tween_time)
-			tween_timer.start()
+			enter_interior_ladder()
+		
 		elif front_cast.get_collider().name == "Engineer Terminal Interact":
-			var tween_pos = create_tween()
-			var tween_rot = create_tween()
-			var tween_cam_rot = create_tween()
-			tween_pos.set_trans(Tween.TRANS_SINE)
-			tween_rot.set_trans(Tween.TRANS_SINE)
-			tween_cam_rot.set_trans(Tween.TRANS_SINE)
-			tween_pos.tween_property(self, "position", engineer_terminal_pos, tween_time)
-			tween_rot.tween_property(self, "rotation_degrees", engineer_terminal_rot, tween_time)
-			tween_cam_rot.tween_property(camera,"rotation_degrees", Vector3.ZERO, tween_time)
-			await tween_rot.finished
-			in_engineer_terminal = true
-			camera.clear_current()
-			engineer_camera.make_current()
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	
+			enter_engineer_terminal()
 	
 	elif event.is_action_pressed("P"):
 		print("Position: ", position, "\nRotation: ", rotation_degrees)
@@ -247,3 +208,53 @@ func ground_movement(delta):
 		velocity.y = jump_speed
 	
 	move_and_slide()
+
+func enter_interior_ladder():
+	var tween = create_tween()
+	if position.y >= 0.0:
+		current_ladder_pos = interior_ladder_top_pos
+	else:
+		current_ladder_pos = interior_ladder_bottom_pos
+		body_collision.disabled = true
+		on_interior_ladder = true
+		tween.tween_property(self, "position", current_ladder_pos, tween_time)
+		tween_timer.start()
+
+func enter_gear_ladder():
+	var tween_pos = create_tween()
+	if get_parent() == ship:
+		current_ladder_pos = gear_ladder_top_pos
+	else:
+		current_ladder_pos = gear_ladder_bottom_pos
+		on_gear_ladder = true
+		reparent(ship, true)
+		tween_pos.tween_property(self, "position", current_ladder_pos, tween_time)
+		tween_timer.start()
+
+func enter_engineer_terminal():
+		var tween_pos = create_tween()
+		var tween_rot = create_tween()
+		var tween_cam_rot = create_tween()
+		tween_pos.set_trans(Tween.TRANS_SINE)
+		tween_rot.set_trans(Tween.TRANS_SINE)
+		tween_cam_rot.set_trans(Tween.TRANS_SINE)
+		tween_pos.tween_property(self, "position", engineer_terminal_pos, tween_time)
+		tween_rot.tween_property(self, "rotation_degrees", engineer_terminal_rot, tween_time)
+		tween_cam_rot.tween_property(camera,"rotation_degrees", Vector3.ZERO, tween_time)
+		await tween_rot.finished
+		in_engineer_terminal = true
+		camera.clear_current()
+		engineer_camera.make_current()
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func exit_engineer_terminal():
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self, "position", engineer_terminal_exit_pos, tween_time)
+	camera.make_current()
+	engineer_camera.clear_current()
+	await tween.finished
+	in_engineer_terminal = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	engineer_camera.reset_pos()
+	return
