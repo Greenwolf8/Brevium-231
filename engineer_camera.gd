@@ -29,13 +29,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		interaction_layer = 8
 		cockpit_raycast()
 	elif event.is_action_pressed("R Click") and zoomed_in:
-		var tween_pos = create_tween()
-		var tween_rot = create_tween()
-		var tween_fov = create_tween()
-		tween_pos.tween_property(self, "position", starting_pos, tween_time)
-		tween_rot.tween_property(self, "rotation_degrees", starting_rot, tween_time)
-		tween_fov.tween_property(self,"fov", 75.0, tween_time)
-		zoomed_in = false
+		reset_pos()
 
 func cockpit_raycast():
 	var space_state = get_world_3d().direct_space_state
@@ -60,7 +54,22 @@ func cockpit_raycast():
 				var tween_pos = create_tween()
 				var tween_rot = create_tween()
 				var tween_fov = create_tween()
+				tween_pos.set_trans(Tween.TRANS_SINE)
+				tween_rot.set_trans(Tween.TRANS_SINE)
+				tween_fov.set_trans(Tween.TRANS_SINE)
 				tween_pos.tween_property(self, "position", fuel_elec_pos, tween_time)
 				tween_rot.tween_property(self, "rotation_degrees", fuel_elec_rot, tween_time)
 				tween_fov.tween_property(self,"fov", 50.0, tween_time)
 				zoomed_in = true
+
+func reset_pos():
+	var tween_pos = create_tween()
+	var tween_rot = create_tween()
+	var tween_fov = create_tween()
+	tween_pos.set_trans(Tween.TRANS_SINE)
+	tween_rot.set_trans(Tween.TRANS_SINE)
+	tween_fov.set_trans(Tween.TRANS_SINE)
+	tween_pos.tween_property(self, "position", starting_pos, tween_time)
+	tween_rot.tween_property(self, "rotation_degrees", starting_rot, tween_time)
+	tween_fov.tween_property(self,"fov", 75.0, tween_time)
+	zoomed_in = false
