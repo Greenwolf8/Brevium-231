@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://cw5tbla37typy"]
+[gd_scene load_steps=40 format=3 uid="uid://cw5tbla37typy"]
 
 [ext_resource type="PackedScene" uid="uid://c0ddv37isxdrk" path="res://astro_vulcan_mesh.tscn" id="1_30her"]
 [ext_resource type="Script" uid="uid://mstiibqn70fk" path="res://astro_vulcan.gd" id="1_vu8vp"]
@@ -100,6 +100,9 @@ size = Vector3(4.47583, 2.249878, 6.6708984)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nes6b"]
 size = Vector3(0.020396829, 0.023815429, 0.013759613)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1jl21"]
+size = Vector3(0.5956282, 0.37071818, 0.013759613)
 
 [node name="Astro Vulcan" type="RigidBody3D" groups=["player_ship"]]
 collision_layer = 2
@@ -291,7 +294,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1872196, 0.060631752, 17.96
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.041, 0, 16.586657)
 
 [node name="Engineer Camera" type="Camera3D" parent="."]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.7686691, 4.1640463, -25.715748)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.77, 4.16, -25.72)
+script = ExtResource("6_eg1o6")
+
+[node name="Engineer Camera2" type="Camera3D" parent="."]
+transform = Transform3D(-1, -3.0473135e-08, 8.1939795e-08, 0, 0.93728197, 0.34857205, -8.742278e-08, 0.34857205, -0.93728197, 2.080417, 3.9352956, -25.121496)
 script = ExtResource("6_eg1o6")
 
 [node name="BAT 1 Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("switch_mesh")]
@@ -300,8 +307,38 @@ collision_mask = 0
 script = ExtResource("7_eg1o6")
 switch_mesh = NodePath("../AVRO_VULCAN/ELEC Panel/BAT 1")
 
-[node name="BAT 1 Switch" type="CollisionShape3D" parent="BAT 1 Switch"]
+[node name="Switch" type="CollisionShape3D" parent="BAT 1 Switch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3367903, 3.7811549, -24.879673)
+shape = SubResource("BoxShape3D_nes6b")
+
+[node name="ESS BAT Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("switch_mesh")]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("7_eg1o6")
+switch_mesh = NodePath("../AVRO_VULCAN/ELEC Panel/ESS BAT")
+
+[node name="Switch" type="CollisionShape3D" parent="ESS BAT Switch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.311841, 3.7811549, -24.879673)
+shape = SubResource("BoxShape3D_nes6b")
+
+[node name="BAT 2 Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("switch_mesh")]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("7_eg1o6")
+switch_mesh = NodePath("../AVRO_VULCAN/ELEC Panel/BAT 2")
+
+[node name="Switch" type="CollisionShape3D" parent="BAT 2 Switch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2818842, 3.7811549, -24.879673)
+shape = SubResource("BoxShape3D_nes6b")
+
+[node name="APU BAT Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("switch_mesh")]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("7_eg1o6")
+switch_mesh = NodePath("../AVRO_VULCAN/ELEC Panel/APU BAT")
+
+[node name="Switch" type="CollisionShape3D" parent="APU BAT Switch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.256443, 3.7811549, -24.879673)
 shape = SubResource("BoxShape3D_nes6b")
 
 [editable path="AVRO_VULCAN"]
