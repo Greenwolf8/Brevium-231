@@ -298,7 +298,10 @@ transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.77
 script = ExtResource("6_eg1o6")
 
 [node name="Engineer Camera2" type="Camera3D" parent="."]
-transform = Transform3D(-1, -3.0473135e-08, 8.1939795e-08, 0, 0.93728197, 0.34857205, -8.742278e-08, 0.34857205, -0.93728197, 2.080417, 3.9352956, -25.121496)
+transform = Transform3D(-1, -3.0473135e-08, 8.1939795e-08, 0, 0.93728197, 0.34857205, -8.742278e-08, 0.34857205, -0.93728197, 2.065, 3.96, -25.2)
+fov = 50.0
+near = 0.001
+far = 200.0
 script = ExtResource("6_eg1o6")
 
 [node name="BAT 1 Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("switch_mesh")]
@@ -340,5 +343,13 @@ switch_mesh = NodePath("../AVRO_VULCAN/ELEC Panel/APU BAT")
 [node name="Switch" type="CollisionShape3D" parent="APU BAT Switch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.256443, 3.7811549, -24.879673)
 shape = SubResource("BoxShape3D_nes6b")
+
+[node name="FUEL,ELEC" type="StaticBody3D" parent="."]
+collision_layer = 32768
+collision_mask = 0
+
+[node name="Area" type="CollisionShape3D" parent="FUEL,ELEC"]
+transform = Transform3D(1, 0, 0, 0, 0.93728197, -0.34857205, 0, 0.34857205, 0.93728197, 2.0644362, 3.8211286, -24.8752)
+shape = SubResource("BoxShape3D_1jl21")
 
 [editable path="AVRO_VULCAN"]
