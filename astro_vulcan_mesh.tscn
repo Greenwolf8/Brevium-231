@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://c0ddv37isxdrk"]
+[gd_scene load_steps=6 format=3 uid="uid://c0ddv37isxdrk"]
 
 [ext_resource type="PackedScene" uid="uid://4b26odk7yy20" path="res://AVRO.VULCAN.glb" id="1_wyqec"]
 [ext_resource type="Material" uid="uid://bu5jukk52fwr6" path="res://Green.tres" id="2_pygwi"]
 [ext_resource type="Animation" uid="uid://bwv4uuph1bhqd" path="res://addons/Ladder Deploy 1.res" id="2_vm1si"]
+[ext_resource type="Material" uid="uid://c1ruib5pd5l2i" path="res://Switch Materials/button_off.tres" id="3_vhrev"]
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pygwi"]
 _data = {
@@ -16,9 +17,21 @@ libraries = {
 &"ladder": SubResource("AnimationLibrary_pygwi")
 }
 
-[node name="ELEC Markings" parent="ELEC Panel" index="32"]
-transform = Transform3D(1, 0, -7.1054274e-15, -4.2632564e-14, 1, 8.940695e-08, -7.1054274e-15, -9.750068e-15, 1.0000002, -0.07256806, 0, 0)
+[node name="APU 1 BLEED ON Label" parent="ELEC Panel" index="19"]
+surface_material_override/0 = ExtResource("3_vhrev")
+
+[node name="APU BAT ON Label" parent="ELEC Panel" index="26"]
+surface_material_override/0 = ExtResource("3_vhrev")
+
+[node name="BAT 2 ON Label" parent="ELEC Panel" index="31"]
+surface_material_override/0 = ExtResource("3_vhrev")
+
+[node name="ELEC Markings" parent="ELEC Panel" index="45"]
+transform = Transform3D(0.9999999, 4.6185278e-14, -2.842171e-14, -4.6185278e-14, 1, 8.940696e-08, 1.563194e-13, 5.9604638e-08, 1.0000001, -0.0022853613, 3.4332275e-05, -0.009601593)
 surface_material_override/0 = ExtResource("2_pygwi")
 
-[node name="FUEL Connect Lines" parent="FUEL Panel" index="15"]
+[node name="ESS BAT ON Label" parent="ELEC Panel" index="57"]
+surface_material_override/0 = ExtResource("3_vhrev")
+
+[node name="FUEL Connect Lines" parent="FUEL Panel" index="9"]
 surface_material_override/0 = ExtResource("2_pygwi")

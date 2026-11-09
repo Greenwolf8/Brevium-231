@@ -43,7 +43,6 @@ func cockpit_raycast():
 	query.collide_with_bodies = true
 	
 	var result = space_state.intersect_ray(query)
-	print(result)
 	if not result.is_empty():
 		var hit_object = result.collider
 		if zoomed_in:
