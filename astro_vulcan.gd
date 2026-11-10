@@ -9,14 +9,14 @@ var throttle: float = 0.0
 
 
 # Systems powered on
-var radar_engaged: bool = true
-var rwr_engaged: bool = true
-var r_gun_firing: bool = true
-var l_gun_firing: bool = true
-var targeting_pod_engaged: bool = true
-var radio_in_use: bool = true
-var lights_on: int = 25
-var hydraulics_usage: float = 100.0
+var radar_engaged: bool = false
+var rwr_engaged: bool = false
+var r_gun_firing: bool = false
+var l_gun_firing: bool = false
+var targeting_pod_engaged: bool = false
+var radio_in_use: bool = false
+var lights_on: int = 0
+var hydraulics_usage: float = 0.0
 
 func _ready() -> void:
 	# Make animations start with gear open and ladder deployed

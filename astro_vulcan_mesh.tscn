@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://c0ddv37isxdrk"]
 
 [ext_resource type="PackedScene" uid="uid://4b26odk7yy20" path="res://AVRO.VULCAN.glb" id="1_wyqec"]
-[ext_resource type="Material" uid="uid://bu5jukk52fwr6" path="res://Green.tres" id="2_pygwi"]
+[ext_resource type="Material" uid="uid://bu5jukk52fwr6" path="res://Switch Materials/Green.tres" id="2_pygwi"]
 [ext_resource type="Animation" uid="uid://bwv4uuph1bhqd" path="res://addons/Ladder Deploy 1.res" id="2_vm1si"]
 [ext_resource type="Material" uid="uid://c1ruib5pd5l2i" path="res://Switch Materials/button_off.tres" id="3_vhrev"]
 

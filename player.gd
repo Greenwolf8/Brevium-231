@@ -97,15 +97,11 @@ func ladder_movement(ladder: String):
 		var climb_input: float = Input.get_axis("move_back", "move_forward")
 		var climb_input_v3: Vector3 = Vector3(climb_input, climb_input, 0.0)
 		if position.y <= -6.33:
-			var tween = create_tween()
 			on_gear_ladder = false
 			reparent(main_scene)
-			tween.tween_property(self, "rotation_degrees", Vector3(0.0, rotation_degrees.y, rotation_degrees.z), tween_time)
 			return
 		elif position.y >= -0.69:
-			var tween = create_tween()
 			on_gear_ladder = false
-			tween.tween_property(self, "rotation_degrees", Vector3(0.0, rotation_degrees.y, rotation_degrees.z), tween_time)
 			return
 		else:
 			velocity = local_ladder_dir * climb_input_v3 * climb_speed
