@@ -161,3 +161,26 @@ func update_apu1_heat(delta: float):
 	apu1_tempgaugeneedle.rotation.y = deg_to_rad(remap(apu1_core_temp,0.0, 400.0, 1.5, -260.0))
 	apu1_turbinerpmneedle.rotation.y = deg_to_rad(remap(apu1_turbine_rpm,0.0, 5000.0, 0.0, -327.0))
 
+func update_apu1_rod_pos(delta: float):
+	# Find heat difference 
+	var heat_difference = APU_OPERATING_TEMP - apu1_core_temp
+	
+	var speed_effectiveness = 1.0
+	if apu1_core_temp >= 300:
+		clamp(remap(apu1_core_temp, 300.0, 400.0, 1.0, 0.1), 0.1, 1.0)
+	else:
+		speed_effectiveness = 1.0
+	
+	# Move rods in/out based on the heat difference
+	if heat_difference < 19.0 and heat_difference > -19.0:
+		pass
+	elif heat_difference >= 20.0:
+		apu1_rod_pos -= 0.03 * speed_effectiveness * delta
+	elif heat_difference <= -50.0:
+		apu1_rod_pos += 0.01 * speed_effectiveness * delta 
+
+func cause_apu1_meltdown():
+	apu1_melteddown = true
+	apu1_meltdown_label.set_surface_override_material(0, BUTTON_ORANGE)
+	apu1_warn_light.light_energy = 0.1
+	apu1_started = false
