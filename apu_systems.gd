@@ -103,3 +103,11 @@ func start_apu1(delta: float):
 	elif apu1_rod_pos <= 0.71 and !apu1_started and apu1_core_temp > 75:
 		apu1_started = true
 
+func update_apu1_reaction():
+	if apu1_rod_pos > 0.99:
+		apu1_neutron_flux = 0.0
+		return
+	
+	var reactivity = 1.0 - apu1_rod_pos
+	apu1_neutron_flux = APU_MAX_NEUTRON_FLUX * reactivity
+
