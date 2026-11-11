@@ -111,3 +111,53 @@ func update_apu1_reaction():
 	var reactivity = 1.0 - apu1_rod_pos
 	apu1_neutron_flux = APU_MAX_NEUTRON_FLUX * reactivity
 
+func update_apu1_heat(delta: float):
+	# Water pump
+	var target_flow_rate = 0.0
+	if apu1_core_temp <= 400:
+		target_flow_rate = clamp(remap(apu1_core_temp, 100.0, 400.0, 1.5, 14.0), 0.0, 100.0)
+	else:
+		target_flow_rate = 25.0
+	
+	if apu1_waterpump:
+		if apu1_water_flow_rate < target_flow_rate - 0.2: 
+			apu1_water_flow_rate += 2.0 * delta
+		elif apu1_water_flow_rate > target_flow_rate + 0.2:
+			apu1_water_flow_rate -= 2.0 * delta 
+	else:
+		apu1_water_flow_rate -= 0.3 * delta
+	
+	var water_effectiveness = 1.0
+	if apu1_core_temp <= 30.0:
+		# Water becoms more effective above 30 degrees, where 15 is the lowest it can cool the reactor
+		water_effectiveness = clamp(remap(apu1_core_temp, 15.0, 30.0, 0.0, 1.0), 0.0, 1.0)
+	elif apu1_core_temp >= 400.0: 
+		# Above 300 degrees, effectiveness drops dramatically to increase chance of accidental meltdown
+		water_effectiveness = clamp(remap(apu1_core_temp, 400.0, 550.0, 1.0, 0.2), 0.2, 1.0)
+	
+	var fuel_heat_effectiveness: float = remap(apu1_core_temp, 0.0, 1000.0, 500.0, 2000.0)
+	
+	# Heat Gained From Fission
+	var heat_generated = apu1_neutron_flux * fuel_heat_effectiveness * delta
+	# Heat Removed By Water
+	var heat_removed = apu1_water_flow_rate * water_heat_capacity * water_effectiveness * delta
+	# Total Heat Gain/Loss
+	var total_heat_energy = heat_generated - heat_removed
+	
+	var core_temp_change = total_heat_energy / APU_SPECIFIC_HEAT
+	apu1_core_temp += core_temp_change
+	
+	# Calculate the electrical output of apu
+	var turbine_target_rpm = apu1_water_flow_rate * heat_removed * 0.75
+	if apu1_core_temp >= 225.0:
+		if apu1_turbine_rpm < turbine_target_rpm:
+			apu1_turbine_rpm += (turbine_target_rpm - apu1_turbine_rpm) * delta * 0.05
+	if apu1_turbine_rpm > turbine_target_rpm: 
+		apu1_turbine_rpm += (turbine_target_rpm - apu1_turbine_rpm) * delta * 0.05
+	
+	apu1_output = apu1_turbine_rpm * (APU_MAX_OUTPUT / 25000)
+	
+	# Rotate the gauge needles
+	apu1_tempgaugeneedle.rotation.y = deg_to_rad(remap(apu1_core_temp,0.0, 400.0, 1.5, -260.0))
+	apu1_turbinerpmneedle.rotation.y = deg_to_rad(remap(apu1_turbine_rpm,0.0, 5000.0, 0.0, -327.0))
+
