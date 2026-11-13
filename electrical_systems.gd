@@ -70,9 +70,9 @@ func calculate_power_generation():
 			batt_1_current_charge += batt_charge_rate * left_over_power
 		if batt_ess_current_charge < 100.0:
 			batt_ess_current_charge += batt_charge_rate * left_over_power
-		if batt_2_current_charge > 100.0:
+		if batt_2_current_charge < 100.0:
 			batt_2_current_charge += batt_charge_rate * left_over_power
-		if batt_apu_current_charge > 100.0:
+		if batt_apu_current_charge < 100.0:
 			batt_apu_current_charge += batt_charge_rate * left_over_power
 	
 	else:
@@ -126,11 +126,19 @@ func give_output():
 		%"APU 1 START Switch".powered = true
 		%"APU 1 WTR PUMP Switch".powered = true
 		%"APU 1 CTRL RODS Switch".powered = true
+		%"APU 2 MASTER Switch".powered = true
+		%"APU 2 START Switch".powered = true
+		%"APU 2 WTR PUMP Switch".powered = true
+		%"APU 2 CTRL RODS Switch".powered = true
 	else:
 		%"APU 1 MASTER Switch".powered = false
 		%"APU 1 START Switch".powered = false
 		%"APU 1 WTR PUMP Switch".powered = false
 		%"APU 1 CTRL RODS Switch".powered = false
+		%"APU 2 MASTER Switch".powered = false
+		%"APU 2 START Switch".powered = false
+		%"APU 2 WTR PUMP Switch".powered = false
+		%"APU 2 CTRL RODS Switch".powered = false
 	
 	if bus_ac_1 or bus_ac_2 or bus_ac_ess:
 		pass
