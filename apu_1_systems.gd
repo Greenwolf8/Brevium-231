@@ -33,7 +33,7 @@ var water_heat_capacity: float = 2256.0 #J/Kg
 
 const APU_MELTDOWN_TEMP: float = 1841.0 # Kelvin
 const APU_SPECIFIC_HEAT: float = 1600.0 # Joules per Kelvin
-const APU_MAX_OUTPUT: float = 20.0
+const APU_MAX_OUTPUT: float = 17.5
 const APU_MAX_NEUTRON_FLUX: float = 25.0
 const APU_OPERATING_TEMP: float = 275.0
 
@@ -62,7 +62,6 @@ func _process(delta: float) -> void:
 		apu_water_flow_rate = clamp(apu_water_flow_rate, 0.0, 100.0)
 		apu_rod_pos = clamp(apu_rod_pos, 0.0, 1.0)
 		
-		print("RPM: ", round(apu_turbine_rpm), " Control Rods: ", snapped(apu_rod_pos, 0.01), " Neutron FLux: ", snapped(apu_neutron_flux, 0.1), " Temp: ", snapped(apu_core_temp, 0.1), " Water Flow Rate: ", snapped(apu_water_flow_rate, 0.01))
 	# Pass the output of the APU back to the "Electrical Systems" script
 	if apu_output > 0.0:
 		%"Electrical Systems".apu_1_output = apu_output
@@ -114,6 +113,9 @@ func update_apu_heat(delta: float):
 	if apu_shutdown:
 		if apu_water_flow_rate <= 25:
 			apu_water_flow_rate += 5.0 * delta
+	elif !apu_master:
+		if apu_water_flow_rate <= 3:
+			apu_water_flow_rate += 0.3 * delta
 	
 	var water_effectiveness = 1.0
 	if apu_core_temp <= 30.0:
@@ -143,21 +145,33 @@ func update_apu_heat(delta: float):
 	if apu_turbine_rpm > turbine_target_rpm: 
 		apu_turbine_rpm += (turbine_target_rpm - apu_turbine_rpm) * delta * 0.05
 	
-	apu_output = apu_turbine_rpm * (APU_MAX_OUTPUT / 25000)
+	if turbine_target_rpm <= 0.0 and apu_turbine_rpm > 0.0:
+		apu_turbine_rpm -= 750.0 * delta
+	
+	apu_output = apu_turbine_rpm * (APU_MAX_OUTPUT / 2500.0)
 	
 	# Rotate the gauge needles
 	apu_tempgaugeneedle.rotation.y = deg_to_rad(remap(apu_core_temp,0.0, 400.0, 1.5, -260.0))
 	apu_turbinerpmneedle.rotation.y = deg_to_rad(remap(apu_turbine_rpm,0.0, 5000.0, 0.0, -327.0))
 
 func update_apu_rod_pos(delta: float):
+	# If the apu_shutdown button was pressed, slam control rods fully in
 	if apu_shutdown:
-		if apu_rod_pos < 0.999:
+		if apu_rod_pos < 0.9:
 			apu_rod_pos += 0.5 * delta
+			return
+		else:
+			pass
+	# If master switch isn't  on, slowly put rods back all the way in
+	if !apu_master:
+		if apu_rod_pos < 0.9:
+			apu_rod_pos += 0.1 * delta
 			return
 		else:
 			pass
 	if !apu_ctrlrods and !apu_started:
 		return
+	
 	# Find heat difference 
 	var heat_difference = APU_OPERATING_TEMP - apu_core_temp
 	
