@@ -35,12 +35,12 @@ func _process(delta: float) -> void:
 func turn_off():
 	on = false
 	on_label.set_surface_override_material(0, BUTTON_OFF)
-	%"APU 1 Systems".apu1_start = false
+	%"APU 1 Systems".apu_start = false
 
 func turn_on():
 	on = true
 	on_label.set_surface_override_material(0, BUTTON_ON_ON)
-	%"APU 1 Systems".apu1_start = true
+	%"APU 1 Systems".apu_start = true
 
 func light_avail():
 	avail_label.set_surface_override_material(0, GREEN)

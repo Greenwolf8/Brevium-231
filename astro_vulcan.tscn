@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://cw5tbla37typy"]
+[gd_scene load_steps=59 format=3 uid="uid://cw5tbla37typy"]
 
 [ext_resource type="PackedScene" uid="uid://c0ddv37isxdrk" path="res://astro_vulcan_mesh.tscn" id="1_30her"]
 [ext_resource type="Script" uid="uid://mstiibqn70fk" path="res://astro_vulcan.gd" id="1_vu8vp"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://dbnin6euja55w" path="res://fuel_systems.gd" id="3_mqub3"]
 [ext_resource type="Script" uid="uid://dk2vga8rsq8bs" path="res://apu_1_systems.gd" id="4_i6doi"]
 [ext_resource type="Script" uid="uid://ci2o2j61x20tt" path="res://engines.gd" id="5_3rtg3"]
+[ext_resource type="Script" uid="uid://dnp1lk4mebgvw" path="res://apu_2_systems.gd" id="5_5rlg0"]
 [ext_resource type="Script" uid="uid://d0h4xrqcaxdht" path="res://engineer_camera.gd" id="6_eg1o6"]
 [ext_resource type="Script" uid="uid://r1xa4spg1v07" path="res://Switch Scripts/bat_1_switch.gd" id="8_kjloy"]
 [ext_resource type="Script" uid="uid://vnbrnopfabsm" path="res://Switch Scripts/ess_bat_switch.gd" id="9_yr5mi"]
@@ -17,6 +18,15 @@
 [ext_resource type="Script" uid="uid://dkeso0fqwlwvt" path="res://apu_1_start_switch.gd" id="14_05qsg"]
 [ext_resource type="Script" uid="uid://dr37cidll5dc5" path="res://apu_1_wtr_pump_switch.gd" id="14_urebn"]
 [ext_resource type="Script" uid="uid://bmi5g4mcxuh0s" path="res://apu_1_emergency_stop.gd" id="17_i6doi"]
+[ext_resource type="Script" uid="uid://c3hn3yentfj7u" path="res://apu_2_master_switch.gd" id="19_4a6mu"]
+[ext_resource type="Script" uid="uid://dnqc40liujpfm" path="res://apu_2_start_switch.gd" id="20_su8ip"]
+[ext_resource type="Script" uid="uid://dfhrrhjcws0xi" path="res://apu_2_wtr_pump_switch.gd" id="21_n7j08"]
+[ext_resource type="Script" uid="uid://bfc4xg5ryanmw" path="res://apu_2_ctrl_rods_switch.gd" id="22_x0x4c"]
+[ext_resource type="Script" uid="uid://b5x4ufqal7qki" path="res://apu_2_emergency_stop.gd" id="23_aa1ae"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5rlg0"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4a6mu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_aa1ae"]
 size = Vector3(0.43401337, 5.064728, 1.1061707)
@@ -139,8 +149,23 @@ transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.99999994, -0.05069208,
 [node name="APU 1 TURBINE STALL Label" parent="AVRO_VULCAN/APU Panel" index="25"]
 surface_material_override/0 = ExtResource("3_7x5dx")
 
+[node name="APU 2 MELTDOWN Label" parent="AVRO_VULCAN/APU Panel" index="41"]
+surface_material_override/0 = ExtResource("3_7x5dx")
+
+[node name="APU 2 TURBINE STALL Label" parent="AVRO_VULCAN/APU Panel" index="57"]
+surface_material_override/0 = ExtResource("3_7x5dx")
+
 [node name="BAT 1 ON Label" parent="AVRO_VULCAN/ELEC Panel" index="29"]
 surface_material_override/0 = ExtResource("3_7x5dx")
+
+[node name="FUEL Panel" parent="AVRO_VULCAN" index="64"]
+transform = Transform3D(-1.5735628e-07, -1.1243731, -0.46119466, 7.8678134e-08, 0.4192679, -1.2368104, 1.32, -1.5902603e-07, 1.8740955e-08, 30.447956, 5.8689137, -2.221527)
+
+[node name="FUEL Panel FEED TK Outlines" parent="AVRO_VULCAN/FUEL Panel" index="36"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5rlg0")
+
+[node name="FUEL Panel TK Outlines" parent="AVRO_VULCAN/FUEL Panel" index="37"]
+surface_material_override/0 = SubResource("StandardMaterial3D_4a6mu")
 
 [node name="Gear Ladder Interact" type="StaticBody3D" parent="."]
 collision_layer = 4
@@ -304,15 +329,25 @@ shape = SubResource("BoxShape3D_5rlg0")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.950487, -5.24755, 6.236058)
 shape = SubResource("BoxShape3D_n7j08")
 
-[node name="APU 1 Systems" type="Node" parent="." node_paths=PackedStringArray("apu1_turbinestall_label", "apu1_meltdown_label", "apu1_warn_light", "apu1_controlrods", "apu1_tempgaugeneedle", "apu1_turbinerpmneedle")]
+[node name="APU 1 Systems" type="Node" parent="." node_paths=PackedStringArray("apu_turbinestall_label", "apu_meltdown_label", "apu_warn_light", "apu_controlrods", "apu_tempgaugeneedle", "apu_turbinerpmneedle")]
 unique_name_in_owner = true
 script = ExtResource("4_i6doi")
-apu1_turbinestall_label = NodePath("../AVRO_VULCAN/APU Panel/APU 1 TURBINE STALL Label")
-apu1_meltdown_label = NodePath("../AVRO_VULCAN/APU Panel/APU 1 MELTDOWN Label")
-apu1_warn_light = NodePath("../apu1_warn_light")
-apu1_controlrods = NodePath("../AVRO_VULCAN/APU Panel/APU 1 Control Rods Indicator")
-apu1_tempgaugeneedle = NodePath("../AVRO_VULCAN/APU Panel/APU 1 TEMP Gauge Hand")
-apu1_turbinerpmneedle = NodePath("../AVRO_VULCAN/APU Panel/APU 1 RPM Gauge Hand")
+apu_turbinestall_label = NodePath("../AVRO_VULCAN/APU Panel/APU 1 TURBINE STALL Label")
+apu_meltdown_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 MELTDOWN Label")
+apu_warn_light = NodePath("../apu1_warn_light")
+apu_controlrods = NodePath("../AVRO_VULCAN/APU Panel/APU 1 Control Rods Indicator")
+apu_tempgaugeneedle = NodePath("../AVRO_VULCAN/APU Panel/APU 1 TEMP Gauge Hand")
+apu_turbinerpmneedle = NodePath("../AVRO_VULCAN/APU Panel/APU 1 RPM Gauge Hand")
+
+[node name="APU 2 Systems" type="Node" parent="." node_paths=PackedStringArray("apu_turbinestall_label", "apu_meltdown_label", "apu_warn_light", "apu_controlrods", "apu_tempgaugeneedle", "apu_turbinerpmneedle")]
+unique_name_in_owner = true
+script = ExtResource("5_5rlg0")
+apu_turbinestall_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 TURBINE STALL Label")
+apu_meltdown_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 MELTDOWN Label")
+apu_warn_light = NodePath("../apu2_warn_light")
+apu_controlrods = NodePath("../AVRO_VULCAN/APU Panel/APU 2 Control Rods Indicator")
+apu_tempgaugeneedle = NodePath("../AVRO_VULCAN/APU Panel/APU 2 TEMP Gauge Hand")
+apu_turbinerpmneedle = NodePath("../AVRO_VULCAN/APU Panel/APU 2 RPM Gauge Hand")
 
 [node name="Fuel Systems" type="Node" parent="."]
 unique_name_in_owner = true
@@ -438,6 +473,63 @@ script = ExtResource("17_i6doi")
 transform = Transform3D(1, 0, 0, 0, 0.348572, 0.937282, 0, -0.937282, 0.348572, 1.9711214, 3.7399192, -24.899612)
 shape = SubResource("CylinderShape3D_05qsg")
 
+[node name="APU 2 MASTER Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label")]
+unique_name_in_owner = true
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("19_4a6mu")
+on_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 MASTER ON Label")
+
+[node name="Switch" type="CollisionShape3D" parent="APU 2 MASTER Switch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7896192, 3.7888372, -24.881088)
+shape = SubResource("BoxShape3D_nes6b")
+
+[node name="APU 2 START Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label", "avail_label")]
+unique_name_in_owner = true
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("20_su8ip")
+on_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 START ON Label")
+avail_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 START AVAIL Label")
+
+[node name="Switch" type="CollisionShape3D" parent="APU 2 START Switch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7896192, 3.7612846, -24.890902)
+shape = SubResource("BoxShape3D_nes6b")
+
+[node name="APU 2 WTR PUMP Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
+unique_name_in_owner = true
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("21_n7j08")
+auto_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 WTR PUMP AUTO Label")
+off_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 WTR PUMP OFF Label")
+
+[node name="Switch" type="CollisionShape3D" parent="APU 2 WTR PUMP Switch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8129461, 3.7347498, -24.901392)
+shape = SubResource("BoxShape3D_nes6b")
+
+[node name="APU 2 CTRL RODS Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
+unique_name_in_owner = true
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("22_x0x4c")
+auto_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 CTRL RODS AUTO Label")
+off_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 CTRL RODS OFF Label")
+
+[node name="Switch" type="CollisionShape3D" parent="APU 2 CTRL RODS Switch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7895707, 3.7347498, -24.901392)
+shape = SubResource("BoxShape3D_nes6b")
+
+[node name="APU 2 Emergency Stop" type="StaticBody3D" parent="."]
+unique_name_in_owner = true
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("23_aa1ae")
+
+[node name="Switch" type="CollisionShape3D" parent="APU 2 Emergency Stop"]
+transform = Transform3D(1, 0, 0, 0, 0.348572, 0.937282, 0, -0.937282, 0.348572, 1.8483288, 3.7399192, -24.899612)
+shape = SubResource("CylinderShape3D_05qsg")
+
 [node name="FUEL,ELEC" type="StaticBody3D" parent="."]
 collision_layer = 32768
 collision_mask = 0
@@ -449,6 +541,12 @@ shape = SubResource("BoxShape3D_1jl21")
 [node name="apu1_warn_light" type="OmniLight3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.971019, 3.740458, -24.900883)
+light_color = Color(1, 0, 0, 1)
+light_energy = 0.0
+
+[node name="apu2_warn_light" type="OmniLight3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.848, 3.74, 24.901)
 light_color = Color(1, 0, 0, 1)
 light_energy = 0.0
 

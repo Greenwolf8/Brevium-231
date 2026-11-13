@@ -29,14 +29,14 @@ func _process(delta: float) -> void:
 func turn_off():
 	auto_label.set_surface_override_material(0, BUTTON_OFF)
 	off_label.set_surface_override_material(0, BUTTON_ON_OFF)
-	%"APU 1 Systems".apu1_waterpump = false
+	%"APU 1 Systems".apu_waterpump = false
 	on = false
 	off_off = false
 
 func turn_on():
 	auto_label.set_surface_override_material(0, BUTTON_ON_ON)
 	off_label.set_surface_override_material(0, BUTTON_OFF)
-	%"APU 1 Systems".apu1_waterpump = true
+	%"APU 1 Systems".apu_waterpump = true
 	on = true
 	off_off = false
 
