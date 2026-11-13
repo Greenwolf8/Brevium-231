@@ -24,9 +24,9 @@ func _process(delta: float) -> void:
 func turn_off():
 	on = false
 	on_label.set_surface_override_material(0, BUTTON_OFF)
-	%"APU Systems".apu1_master = false
+	%"APU 1 Systems".apu1_master = false
 
 func turn_on():
 	on = true
 	on_label.set_surface_override_material(0, BUTTON_ON_ON)
-	%"APU Systems".apu1_master = true
+	%"APU 1 Systems".apu1_master = true
