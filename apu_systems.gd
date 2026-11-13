@@ -31,6 +31,7 @@ var apu1_neutron_flux: float = 0.0
 var apu1_output: float = 0.0
 var apu1_pumps_on: bool = false
 var apu1_water_flow_rate: float = 0.0 #Kg/s
+var apu1_shutdown: bool = false
 
 var apu1_melteddown: bool = false
 
@@ -78,17 +79,18 @@ func _process(delta: float) -> void:
 		apu1_rod_pos = clamp(apu1_rod_pos, 0.0, 1.0)
 		
 		print("RPM: ", round(apu1_turbine_rpm), " Control Rods: ", snapped(apu1_rod_pos, 0.01), " Neutron FLux: ", snapped(apu1_neutron_flux, 0.1), " Temp: ", snapped(apu1_core_temp, 0.1), " Water Flow Rate: ", snapped(apu1_water_flow_rate, 0.01))
-	
 	# Pass the output of the APU back to the "Electrical Systems" script
 	if apu1_output > 0.0:
 		%"Electrical Systems".apu_1_output = apu1_output
-	
+	if (apu1_start or apu1_started) and apu1_turbine_rpm <= 1000:
+		apu1_turbinestall_label.set_surface_override_material(0, BUTTON_ORANGE)
+	else:
+		apu1_turbinestall_label.set_surface_override_material(0, BUTTON_OFF)
 	# If the master switch is on, but either one of the control rods or water pump switches are off, then the warning light turns on
 	if !apu1_melteddown and !apu1_shutdown and apu1_master and (!apu1_ctrlrods or !apu1_waterpump):
 		apu1_warn_light.light_energy = 0.1
 	else:
 		apu1_warn_light.light_energy = 0.0
-	
 	# If control rods switch is on, the indicators turn on
 	if apu1_ctrlrods:
 		apu1_controlrods.set_surface_override_material(1, GREEN)
@@ -119,9 +121,9 @@ func update_apu1_heat(delta: float):
 	
 	if apu1_waterpump:
 		if apu1_water_flow_rate < target_flow_rate - 0.2: 
-			apu1_water_flow_rate += 2.0 * delta
+			apu1_water_flow_rate += 0.2 * delta
 		elif apu1_water_flow_rate > target_flow_rate + 0.2:
-			apu1_water_flow_rate -= 2.0 * delta 
+			apu1_water_flow_rate -= 0.2 * delta 
 	else:
 		apu1_water_flow_rate -= 0.3 * delta
 	
@@ -151,7 +153,7 @@ func update_apu1_heat(delta: float):
 	
 	# Calculate the electrical output of apu
 	var turbine_target_rpm = apu1_water_flow_rate * heat_removed * 0.75
-	if apu1_core_temp >= 225.0:
+	if apu1_core_temp >= 150.0:
 		if apu1_turbine_rpm < turbine_target_rpm:
 			apu1_turbine_rpm += (turbine_target_rpm - apu1_turbine_rpm) * delta * 0.05
 	if apu1_turbine_rpm > turbine_target_rpm: 
