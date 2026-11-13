@@ -66,11 +66,9 @@ func _process(delta: float) -> void:
 		# Run all update functions to run the reactor
 		update_apu1_reaction()
 		update_apu1_heat(delta)
-		# Update control rod position only if the apu is running AND the control rod is flicked on
-		if apu1_started and apu1_ctrlrods:
-			update_apu1_rod_pos(delta)
+		update_apu1_rod_pos(delta)
 		# Start APU if start switch and master switch are flicked on, and it is not on already
-		if apu1_start and apu1_master and !apu1_started:
+		if apu1_start and apu1_master and !apu1_started and !apu1_shutdown:
 			start_apu1(delta)
 		# If heat ever gets too high, cause meltdown
 		if apu1_core_temp > 1000.0:
@@ -86,7 +84,7 @@ func _process(delta: float) -> void:
 		%"Electrical Systems".apu_1_output = apu1_output
 	
 	# If the master switch is on, but either one of the control rods or water pump switches are off, then the warning light turns on
-	if !apu1_melteddown and apu1_master and (!apu1_ctrlrods or !apu1_waterpump):
+	if !apu1_melteddown and !apu1_shutdown and apu1_master and (!apu1_ctrlrods or !apu1_waterpump):
 		apu1_warn_light.light_energy = 0.1
 	else:
 		apu1_warn_light.light_energy = 0.0
@@ -127,6 +125,10 @@ func update_apu1_heat(delta: float):
 	else:
 		apu1_water_flow_rate -= 0.3 * delta
 	
+	if apu1_shutdown:
+		if apu1_water_flow_rate <= 25:
+			apu1_water_flow_rate += 5.0 * delta
+	
 	var water_effectiveness = 1.0
 	if apu1_core_temp <= 30.0:
 		# Water becoms more effective above 30 degrees, where 15 is the lowest it can cool the reactor
@@ -162,6 +164,14 @@ func update_apu1_heat(delta: float):
 	apu1_turbinerpmneedle.rotation.y = deg_to_rad(remap(apu1_turbine_rpm,0.0, 5000.0, 0.0, -327.0))
 
 func update_apu1_rod_pos(delta: float):
+	if apu1_shutdown:
+		if apu1_rod_pos < 0.999:
+			apu1_rod_pos += 0.5 * delta
+			return
+		else:
+			pass
+	if !apu1_ctrlrods and !apu1_started:
+		return
 	# Find heat difference 
 	var heat_difference = APU_OPERATING_TEMP - apu1_core_temp
 	
@@ -184,3 +194,12 @@ func cause_apu1_meltdown():
 	apu1_meltdown_label.set_surface_override_material(0, BUTTON_ORANGE)
 	apu1_warn_light.light_energy = 0.1
 	apu1_started = false
+
+func apu1_emerg_stop():
+	apu1_started = false
+	apu1_shutdown = true
+	
+	%"APU 1 MASTER Switch".turn_off()
+	%"APU 1 START Switch".turn_off()
+	%"APU 1 WTR PUMP Switch".turn_off()
+	%"APU 1 CTRL RODS Switch".turn_off()
