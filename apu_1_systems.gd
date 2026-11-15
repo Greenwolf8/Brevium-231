@@ -16,7 +16,7 @@ extends Node
 const BUTTON_OFF = preload("uid://c1ruib5pd5l2i")
 const BUTTON_ORANGE = preload("uid://dos3fbyt150cv")
 
-# APU 1 Status
+# APU Status
 var apu_started: bool = false
 var apu_turbine_rpm: float = 0.0
 var apu_core_temp: float = 23.0
@@ -39,7 +39,7 @@ const APU_MAX_OUTPUT: float = 17.5
 const APU_MAX_NEUTRON_FLUX: float = 25.0
 const APU_OPERATING_TEMP: float = 275.0
 
-# APU 1 Switches
+# APU Switches
 var apu_master: bool = false
 var apu_start: bool = false
 var apu_waterpump: bool = false

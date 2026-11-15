@@ -16,7 +16,7 @@ extends Node
 const BUTTON_OFF = preload("uid://c1ruib5pd5l2i")
 const BUTTON_ORANGE = preload("uid://dos3fbyt150cv")
 
-# APU 1 Status
+# APU Status
 var apu_started: bool = false
 var apu_turbine_rpm: float = 0.0
 var apu_core_temp: float = 23.0
@@ -26,7 +26,9 @@ var apu_output: float = 0.0
 var apu_pumps_on: bool = false
 var apu_water_flow_rate: float = 0.0 #Kg/s
 var apu_shutdown: bool = false
+var apu_master_off: bool = false
 var apu_melteddown: bool = false
+var turbine_on : bool = false
 
 # APU Common Vars
 var water_heat_capacity: float = 2256.0 #J/Kg
@@ -37,7 +39,7 @@ const APU_MAX_OUTPUT: float = 17.5
 const APU_MAX_NEUTRON_FLUX: float = 25.0
 const APU_OPERATING_TEMP: float = 275.0
 
-# APU 1 Switches
+# APU Switches
 var apu_master: bool = false
 var apu_start: bool = false
 var apu_waterpump: bool = false
@@ -61,6 +63,7 @@ func _process(delta: float) -> void:
 		# clamp the water flow rate and control rod position to make sure they dont go negative
 		apu_water_flow_rate = clamp(apu_water_flow_rate, 0.0, 100.0)
 		apu_rod_pos = clamp(apu_rod_pos, 0.0, 1.0)
+		
 	# Pass the output of the APU back to the "Electrical Systems" script
 	if apu_output > 0.0:
 		%"Electrical Systems".apu_2_output = apu_output
@@ -84,6 +87,7 @@ func start_apu(delta: float):
 		apu_rod_pos -= 0.01 * delta
 	elif apu_rod_pos <= 0.71 and !apu_started and apu_core_temp > 75:
 		apu_started = true
+		%"APU 2 START Switch".turn_off()
 
 func update_apu_reaction():
 	if apu_rod_pos > 0.99:
@@ -112,7 +116,7 @@ func update_apu_heat(delta: float):
 	if apu_shutdown:
 		if apu_water_flow_rate <= 25:
 			apu_water_flow_rate += 5.0 * delta
-	elif !apu_master:
+	elif apu_master_off:
 		if apu_water_flow_rate <= 3:
 			apu_water_flow_rate += 0.3 * delta
 	
@@ -136,9 +140,12 @@ func update_apu_heat(delta: float):
 	var core_temp_change = total_heat_energy / APU_SPECIFIC_HEAT
 	apu_core_temp += core_temp_change
 	
+	if apu_core_temp >= 150.0 and !turbine_on:
+		%"APU 2 START Switch".avail = true
+	
 	# Calculate the electrical output of apu
 	var turbine_target_rpm = apu_water_flow_rate * heat_removed * 0.75
-	if apu_core_temp >= 150.0:
+	if turbine_on:
 		if apu_turbine_rpm < turbine_target_rpm:
 			apu_turbine_rpm += (turbine_target_rpm - apu_turbine_rpm) * delta * 0.05
 	if apu_turbine_rpm > turbine_target_rpm: 
@@ -162,12 +169,11 @@ func update_apu_rod_pos(delta: float):
 		else:
 			pass
 	# If master switch isn't  on, slowly put rods back all the way in
-	if !apu_master:
+	if apu_master_off:
 		if apu_rod_pos < 0.9:
 			apu_rod_pos += 0.1 * delta
 			return
-		else:
-			pass
+	
 	if !apu_ctrlrods and !apu_started:
 		return
 	
@@ -202,3 +208,15 @@ func apu_emerg_stop():
 	%"APU 2 START Switch".turn_off()
 	%"APU 2 WTR PUMP Switch".turn_off()
 	%"APU 2 CTRL RODS Switch".turn_off()
+
+func master_turned_off():
+	apu_started = false
+	apu_master_off = true
+	apu_master = false
+	
+	%"APU 2 START Switch".turn_off()
+	%"APU 2 WTR PUMP Switch".turn_off()
+	%"APU 2 CTRL RODS Switch".turn_off()
+
+func master_turned_on():
+	apu_master_off = false

@@ -473,12 +473,11 @@ script = ExtResource("17_i6doi")
 transform = Transform3D(1, 0, 0, 0, 0.348572, 0.937282, 0, -0.937282, 0.348572, 1.9711214, 3.7399192, -24.899612)
 shape = SubResource("CylinderShape3D_05qsg")
 
-[node name="APU 2 MASTER Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label")]
+[node name="APU 2 MASTER Switch" type="StaticBody3D" parent="."]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("19_4a6mu")
-on_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 MASTER ON Label")
 
 [node name="Switch" type="CollisionShape3D" parent="APU 2 MASTER Switch"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7896192, 3.7888372, -24.881088)

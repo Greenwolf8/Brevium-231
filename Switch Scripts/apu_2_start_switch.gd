@@ -20,8 +20,12 @@ func _ready() -> void:
 func interact() -> void:
 	if on:
 		turn_off()
-	elif !on and powered:
+	elif !on and powered and !%"APU 2 Systems".apu_started:
 		turn_on()
+	
+	if avail and !on:
+		%"APU 2 Systems".turbine_on = true
+		avail = false
 
 func _process(delta: float) -> void:
 	if !powered and on:
@@ -29,7 +33,7 @@ func _process(delta: float) -> void:
 	
 	if avail and !avail_lit:
 		light_avail()
-	if!avail and avail_lit:
+	elif !avail and avail_lit:
 		kill_avail()
 
 func turn_off():
