@@ -166,15 +166,13 @@ func update_apu_rod_pos(delta: float):
 		if apu_rod_pos < 0.9:
 			apu_rod_pos += 0.5 * delta
 			return
-		else:
-			pass
 	# If master switch isn't  on, slowly put rods back all the way in
-	if apu_master_off:
+	elif apu_master_off:
 		if apu_rod_pos < 0.9:
 			apu_rod_pos += 0.1 * delta
 			return
 	
-	if !apu_ctrlrods and !apu_started:
+	if !apu_ctrlrods or !apu_started:
 		return
 	
 	# Find heat difference 
@@ -220,3 +218,4 @@ func master_turned_off():
 
 func master_turned_on():
 	apu_master_off = false
+	apu_master = true
