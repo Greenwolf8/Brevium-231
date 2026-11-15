@@ -117,6 +117,8 @@ func calculate_power_draw():
 		demand += $"..".lights_on * 0.5
 	if $"..".hydraulics_usage > 0.0:
 		demand += $"..".hydraulics_usage * 0.5
+	if %"APU 1 Systems".apu_started or %"APU 1 Systems".apu_start:
+		demand += 5
 	
 	return(demand)
 
