@@ -13,6 +13,7 @@ extends CharacterBody3D
 @onready var main_scene = get_tree().root
 @onready var body_collision: CollisionShape3D = $Body_Collision
 @onready var engineer_camera: Camera3D = $"/root/Main/world container/Astro Vulcan/Engineer Camera"
+@onready var pilot_camera: Camera3D = $"/root/Main/world container/Astro Vulcan/Pilot Camera"
 
 var gravity_strength: float = 9.8
 var bobbing_up: bool = true
@@ -24,11 +25,14 @@ var tween_time: float = 0.25
 var on_gear_ladder: bool = false
 var on_interior_ladder: bool = false
 var in_engineer_terminal: bool = false
+var in_pilot_seat: bool = false
 
 # Positions of places to move
 var engineer_terminal_pos: Vector3 = Vector3(1.76, 2.6, -26.1)
 var engineer_terminal_rot: Vector3 = Vector3(0.0, -180.0, 0.0)
 var engineer_terminal_exit_pos: Vector3 = Vector3(1.75, 2.816, -26.49)
+var pilot_seat_pos: Vector3 = Vector3(0.771, 2.124, -35.223)
+var pilot_seat_exit_pos: Vector3 = Vector3(0.771, 2.825, -34.083)
 var current_ladder_pos: Vector3
 var gear_ladder_bottom_pos: Vector3 = Vector3(0.0, -6.3, -36.1)
 var gear_ladder_top_pos: Vector3 = Vector3(0.0, -2.44, -34.2)
@@ -55,6 +59,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	elif event.is_action_pressed("Interact") and in_engineer_terminal:
 		exit_engineer_terminal()
+	elif event.is_action_pressed("Interact") and in_pilot_seat:
+		exit_pilot_seat()
 	
 	elif event.is_action_pressed("Interact") and front_cast.is_colliding():
 		if front_cast.get_collider().name == "Gear Ladder Interact":
@@ -65,6 +71,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		
 		elif front_cast.get_collider().name == "Engineer Terminal Interact":
 			enter_engineer_terminal()
+		
+		elif front_cast.get_collider().name == "Pilot Seat Interact":
+			enter_pilot_seat()
 	
 	elif event.is_action_pressed("P"):
 		print("Position: ", position, "\nRotation: ", rotation_degrees)
@@ -253,4 +262,32 @@ func exit_engineer_terminal():
 	in_engineer_terminal = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	engineer_camera.reset_pos()
+	return
+
+func enter_pilot_seat():
+		var tween_pos = create_tween()
+		var tween_rot = create_tween()
+		var tween_cam_rot = create_tween()
+		tween_pos.set_trans(Tween.TRANS_SINE)
+		tween_rot.set_trans(Tween.TRANS_SINE)
+		tween_cam_rot.set_trans(Tween.TRANS_SINE)
+		tween_pos.tween_property(self, "position", pilot_seat_pos, tween_time)
+		tween_rot.tween_property(self, "rotation_degrees", Vector3.ZERO, tween_time)
+		tween_cam_rot.tween_property(camera,"rotation_degrees", Vector3.ZERO, tween_time)
+		await tween_rot.finished
+		in_pilot_seat = true
+		camera.clear_current()
+		pilot_camera.make_current()
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func exit_pilot_seat():
+	var tween = create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self, "position", pilot_seat_exit_pos, tween_time)
+	camera.make_current()
+	pilot_camera.clear_current()
+	await tween.finished
+	in_pilot_seat = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	#pilot_camera.reset_pos()
 	return

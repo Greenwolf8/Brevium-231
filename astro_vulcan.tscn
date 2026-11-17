@@ -199,6 +199,14 @@ collision_mask = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7224891, 3.7740536, -25.109226)
 shape = SubResource("BoxShape3D_tyaxh")
 
+[node name="Pilot Seat Interact" type="StaticBody3D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="Pilot Seat" type="CollisionShape3D" parent="Pilot Seat Interact"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7411957, 3.3452816, -35.657684)
+shape = SubResource("BoxShape3D_vwebn")
+
 [node name="Interior collisions" type="StaticBody3D" parent="."]
 collision_layer = 2
 collision_mask = 2
@@ -369,6 +377,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1872196, 0.060631752, 17.96
 
 [node name="eng_3_exit" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.041, 0, 16.586657)
+
+[node name="Pilot Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7747402, 3.7234426, -35.573402)
 
 [node name="Engineer Camera" type="Camera3D" parent="."]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.77, 4.16, -25.72)
