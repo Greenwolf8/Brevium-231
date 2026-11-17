@@ -1,9 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://c0ddv37isxdrk"]
+[gd_scene load_steps=7 format=3 uid="uid://c0ddv37isxdrk"]
 
 [ext_resource type="PackedScene" uid="uid://4b26odk7yy20" path="res://AVRO.VULCAN.glb" id="1_wyqec"]
 [ext_resource type="Material" uid="uid://bu5jukk52fwr6" path="res://Switch Materials/Green.tres" id="2_pygwi"]
 [ext_resource type="Animation" uid="uid://bwv4uuph1bhqd" path="res://addons/Ladder Deploy 1.res" id="2_vm1si"]
 [ext_resource type="Material" uid="uid://c1ruib5pd5l2i" path="res://Switch Materials/button_off.tres" id="3_vhrev"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vhrev"]
+albedo_color = Color(0.39308554, 0.3930855, 0.39308548, 1)
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pygwi"]
 _data = {
@@ -12,26 +15,44 @@ _data = {
 
 [node name="AVRO_VULCAN" instance=ExtResource("1_wyqec")]
 
-[node name="AnimationPlayer_ladder" type="AnimationPlayer" parent="." index="4"]
-libraries = {
-&"ladder": SubResource("AnimationLibrary_pygwi")
-}
+[node name="Docking Port Door L" parent="." index="10"]
+transform = Transform3D(1, -8.742278e-08, 0, 6.935715e-08, 0.7933533, 0.6087615, 5.321962e-08, 0.6087615, -0.7933533, 26.63875, 7.967577, 0.34620506)
 
-[node name="APU 1 BLEED ON Label" parent="ELEC Panel" index="19"]
+[node name="Docking arm L" parent="Docking Port Section 2/Docking Port Section 3/Docking Port External Frame" index="1"]
+transform = Transform3D(-0.43301275, -0.25000003, 0.8660254, -0.5, 0.8660254, 1.4901161e-08, -0.75, -0.4330127, -0.50000006, 0.15390968, 0.08755779, 0.2714101)
+
+[node name="Docking arm R" parent="Docking Port Section 2/Docking Port Section 3/Docking Port External Frame" index="2"]
+transform = Transform3D(-0.43301287, -0.24999997, -0.8660255, -0.5, 0.86602545, 4.470349e-08, 0.7500001, 0.4330127, -0.5000001, 0.15310287, 0.08755779, -0.30138952)
+
+[node name="APU BAT ON Label" parent="ELEC Panel" index="22"]
 surface_material_override/0 = ExtResource("3_vhrev")
 
-[node name="APU BAT ON Label" parent="ELEC Panel" index="26"]
+[node name="BAT 2 ON Label" parent="ELEC Panel" index="27"]
 surface_material_override/0 = ExtResource("3_vhrev")
 
-[node name="BAT 2 ON Label" parent="ELEC Panel" index="31"]
-surface_material_override/0 = ExtResource("3_vhrev")
-
-[node name="ELEC Markings" parent="ELEC Panel" index="45"]
+[node name="ELEC Markings" parent="ELEC Panel" index="39"]
 transform = Transform3D(0.9999999, 4.6185278e-14, -2.842171e-14, -4.6185278e-14, 1, 8.940696e-08, 1.563194e-13, 5.9604638e-08, 1.0000001, -0.0022853613, 3.4332275e-05, -0.009601593)
 surface_material_override/0 = ExtResource("2_pygwi")
 
-[node name="ESS BAT ON Label" parent="ELEC Panel" index="57"]
+[node name="ESS BAT ON Label" parent="ELEC Panel" index="51"]
 surface_material_override/0 = ExtResource("3_vhrev")
 
 [node name="FUEL Connect Lines" parent="FUEL Panel" index="9"]
 surface_material_override/0 = ExtResource("2_pygwi")
+
+[node name="ENG 2 Throttle" parent="Throttle Quadrant" index="5"]
+transform = Transform3D(0.9862856, -0.1650476, 0, 0.1650476, 0.9862856, 0, 0, 0, 1, -0.00045979023, -0.03421688, -0.040999457)
+
+[node name="Thrust Reversal Top L" parent="." index="120"]
+transform = Transform3D(1, 0, 0, 0, 0.8964864, -0.44307122, 0, 0.44307122, 0.8964864, 67.39659, 5.4403205, 1.3036287)
+
+[node name="Thrust Reversal Top R" parent="." index="121"]
+transform = Transform3D(1, 0, 0, 0, 0.8964864, 0.44307122, 0, -0.44307122, 0.8964864, 67.39658, 5.4200835, -1.3346621)
+
+[node name="Walkway Lines" parent="." index="127"]
+surface_material_override/0 = SubResource("StandardMaterial3D_vhrev")
+
+[node name="AnimationPlayer_ladder" type="AnimationPlayer" parent="." index="174"]
+libraries = {
+&"ladder": SubResource("AnimationLibrary_pygwi")
+}
