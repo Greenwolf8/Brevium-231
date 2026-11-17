@@ -97,6 +97,22 @@ func _physics_process(delta: float) -> void:
 		ground_movement(delta)
 		return
 
+func _process(delta: float) -> void:
+	if !is_multiplayer_authority():
+		return
+	
+	if in_pilot_seat:
+		if ship.throttle >= 0.0:
+			if Input.is_action_pressed("throttle_up"):
+				ship.throttle += 75 * delta
+			elif Input.is_action_pressed("throttle_down"):
+				ship.throttle -= 75 * delta
+		else:
+			if Input.is_action_pressed("throttle_up"):
+				ship.throttle += 40 * delta
+			elif Input.is_action_pressed("throttle_down"):
+				ship.throttle -= 40 * delta
+
 func ladder_movement(ladder: String):
 	if !tween_timer.is_stopped(): # Makes sure not moving during tween
 		return

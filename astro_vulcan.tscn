@@ -167,6 +167,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_5rlg0")
 [node name="FUEL Panel TK Outlines" parent="AVRO_VULCAN/FUEL Panel" index="37"]
 surface_material_override/0 = SubResource("StandardMaterial3D_4a6mu")
 
+[node name="ENG 1 Throttle" parent="AVRO_VULCAN/Throttle Quadrant" index="2"]
+transform = Transform3D(0.26723835, -0.96363044, 0, 0.96363044, 0.26723835, 0, 0, 0, 1, -0.00045979023, -0.03421688, 0.04033962)
+
 [node name="Gear Ladder Interact" type="StaticBody3D" parent="."]
 collision_layer = 4
 collision_mask = 0
