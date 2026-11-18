@@ -1,4 +1,4 @@
-extends StaticBody3D
+extends Area3D
 
 @export var auto_label: MeshInstance3D
 @export var off_label: MeshInstance3D

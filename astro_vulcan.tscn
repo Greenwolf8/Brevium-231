@@ -1,4 +1,4 @@
-[gd_scene load_steps=77 format=4 uid="uid://cw5tbla37typy"]
+[gd_scene load_steps=83 format=4 uid="uid://cw5tbla37typy"]
 
 [ext_resource type="PackedScene" uid="uid://c0ddv37isxdrk" path="res://astro_vulcan_mesh.tscn" id="1_30her"]
 [ext_resource type="Script" uid="uid://mstiibqn70fk" path="res://astro_vulcan.gd" id="1_vu8vp"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://dnp1lk4mebgvw" path="res://apu_2_systems.gd" id="5_5rlg0"]
 [ext_resource type="Script" uid="uid://d0h4xrqcaxdht" path="res://engineer_camera.gd" id="6_eg1o6"]
 [ext_resource type="Script" uid="uid://r1xa4spg1v07" path="res://Switch Scripts/bat_1_switch.gd" id="8_kjloy"]
+[ext_resource type="Script" uid="uid://b0tdmaaw2wk07" path="res://pilot_camera.gd" id="9_2j7jb"]
 [ext_resource type="Script" uid="uid://vnbrnopfabsm" path="res://Switch Scripts/ess_bat_switch.gd" id="9_yr5mi"]
 [ext_resource type="Script" uid="uid://7d8d3c1cg0xx" path="res://Switch Scripts/bat_2_switch.gd" id="10_iv01s"]
 [ext_resource type="Script" uid="uid://d2ppwpypubkwa" path="res://Switch Scripts/apu_1_ctrl_rods_switch.gd" id="11_iv01s"]
@@ -23,6 +24,10 @@
 [ext_resource type="Script" uid="uid://dfhrrhjcws0xi" path="res://Switch Scripts/apu_2_wtr_pump_switch.gd" id="21_n7j08"]
 [ext_resource type="Script" uid="uid://bfc4xg5ryanmw" path="res://Switch Scripts/apu_2_ctrl_rods_switch.gd" id="22_x0x4c"]
 [ext_resource type="Script" uid="uid://b5x4ufqal7qki" path="res://Switch Scripts/apu_2_emergency_stop.gd" id="23_aa1ae"]
+[ext_resource type="Script" uid="uid://iqdgetrjs11a" path="res://eng_2_master.gd" id="25_sj507"]
+[ext_resource type="Script" uid="uid://e0xxtw57mojr" path="res://eng_1_master.gd" id="26_tyaxh"]
+[ext_resource type="Script" uid="uid://cmggs54n65igv" path="res://eng_3_master.gd" id="27_yyrul"]
+[ext_resource type="Script" uid="uid://bukpx8x61ou7e" path="res://eng_ign.gd" id="28_tyaxh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sossa"]
 resource_name = "Button Blue"
@@ -362,6 +367,9 @@ radius = 0.008300781
 [sub_resource type="BoxShape3D" id="BoxShape3D_1jl21"]
 size = Vector3(0.5956282, 0.37071818, 0.013759613)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_sufbk"]
+size = Vector3(0.01625061, 0.01832962, 0.020523071)
+
 [node name="Astro Vulcan" type="RigidBody3D" groups=["player_ship"]]
 collision_layer = 2
 collision_mask = 2
@@ -626,14 +634,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.041, 0, 16.586657)
 
 [node name="Pilot Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7747402, 3.7234426, -35.573402)
+script = ExtResource("9_2j7jb")
 
 [node name="Engineer Camera" type="Camera3D" parent="."]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.77, 4.16, -25.72)
+current = true
 near = 0.001
 far = 200.0
 script = ExtResource("6_eg1o6")
 
-[node name="BAT 1 Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label")]
+[node name="BAT 1 Switch" type="Area3D" parent="." node_paths=PackedStringArray("on_label")]
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("8_kjloy")
@@ -643,7 +653,7 @@ on_label = NodePath("../AVRO_VULCAN/ELEC Panel/BAT 1 ON Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3367903, 3.7839258, -24.882786)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="ESS BAT Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label")]
+[node name="ESS BAT Switch" type="Area3D" parent="." node_paths=PackedStringArray("on_label")]
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("9_yr5mi")
@@ -653,7 +663,7 @@ on_label = NodePath("../AVRO_VULCAN/ELEC Panel/ESS BAT ON Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.311841, 3.783971, -24.882698)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="BAT 2 Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label")]
+[node name="BAT 2 Switch" type="Area3D" parent="." node_paths=PackedStringArray("on_label")]
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("10_iv01s")
@@ -663,7 +673,7 @@ on_label = NodePath("../AVRO_VULCAN/ELEC Panel/BAT 2 ON Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2818842, 3.7841036, -24.882948)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU BAT Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label")]
+[node name="APU BAT Switch" type="Area3D" parent="." node_paths=PackedStringArray("on_label")]
 collision_layer = 8
 collision_mask = 0
 script = ExtResource("11_kjloy")
@@ -673,7 +683,7 @@ on_label = NodePath("../AVRO_VULCAN/ELEC Panel/APU BAT ON Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.256443, 3.7840872, -24.88306)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU 1 MASTER Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label")]
+[node name="APU 1 MASTER Switch" type="Area3D" parent="." node_paths=PackedStringArray("on_label")]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -684,7 +694,7 @@ on_label = NodePath("../AVRO_VULCAN/APU Panel/APU 1 MASTER ON Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0294833, 3.7888372, -24.881088)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU 1 START Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label", "avail_label")]
+[node name="APU 1 START Switch" type="Area3D" parent="." node_paths=PackedStringArray("on_label", "avail_label")]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -696,7 +706,7 @@ avail_label = NodePath("../AVRO_VULCAN/APU Panel/APU 1 START AVAIL Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0294833, 3.7612846, -24.890902)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU 1 WTR PUMP Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
+[node name="APU 1 WTR PUMP Switch" type="Area3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -708,7 +718,7 @@ off_label = NodePath("../AVRO_VULCAN/APU Panel/APU 1 WTR PUMP OFF Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0294833, 3.7347498, -24.901392)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU 1 CTRL RODS Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
+[node name="APU 1 CTRL RODS Switch" type="Area3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -720,7 +730,7 @@ off_label = NodePath("../AVRO_VULCAN/APU Panel/APU 1 CTRL RODS OFF Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.005824, 3.7347498, -24.901392)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU 1 Emergency Stop" type="StaticBody3D" parent="."]
+[node name="APU 1 Emergency Stop" type="Area3D" parent="."]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -730,7 +740,7 @@ script = ExtResource("17_i6doi")
 transform = Transform3D(1, 0, 0, 0, 0.348572, 0.937282, 0, -0.937282, 0.348572, 1.9711214, 3.7399192, -24.899612)
 shape = SubResource("CylinderShape3D_05qsg")
 
-[node name="APU 2 MASTER Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label")]
+[node name="APU 2 MASTER Switch" type="Area3D" parent="." node_paths=PackedStringArray("on_label")]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -741,7 +751,7 @@ on_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 MASTER ON Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7896192, 3.7888372, -24.881088)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU 2 START Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("on_label", "avail_label")]
+[node name="APU 2 START Switch" type="Area3D" parent="." node_paths=PackedStringArray("on_label", "avail_label")]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -753,7 +763,7 @@ avail_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 START AVAIL Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7896192, 3.7612846, -24.890902)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU 2 WTR PUMP Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
+[node name="APU 2 WTR PUMP Switch" type="Area3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -765,7 +775,7 @@ off_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 WTR PUMP OFF Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.8129461, 3.7347498, -24.901392)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU 2 CTRL RODS Switch" type="StaticBody3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
+[node name="APU 2 CTRL RODS Switch" type="Area3D" parent="." node_paths=PackedStringArray("auto_label", "off_label")]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -777,7 +787,7 @@ off_label = NodePath("../AVRO_VULCAN/APU Panel/APU 2 CTRL RODS OFF Label")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7895707, 3.7347498, -24.901392)
 shape = SubResource("BoxShape3D_nes6b")
 
-[node name="APU 2 Emergency Stop" type="StaticBody3D" parent="."]
+[node name="APU 2 Emergency Stop" type="Area3D" parent="."]
 unique_name_in_owner = true
 collision_layer = 8
 collision_mask = 0
@@ -787,13 +797,41 @@ script = ExtResource("23_aa1ae")
 transform = Transform3D(1, 0, 0, 0, 0.348572, 0.937282, 0, -0.937282, 0.348572, 1.8483288, 3.7399192, -24.899612)
 shape = SubResource("CylinderShape3D_05qsg")
 
-[node name="FUEL,ELEC" type="StaticBody3D" parent="."]
+[node name="FUEL,ELEC" type="Area3D" parent="."]
 collision_layer = 32768
 collision_mask = 0
 
 [node name="Area" type="CollisionShape3D" parent="FUEL,ELEC"]
 transform = Transform3D(1, 0, 0, 0, 0.93728197, -0.34857205, 0, 0.34857205, 0.93728197, 2.0644362, 3.8211286, -24.8752)
 shape = SubResource("BoxShape3D_1jl21")
+
+[node name="ENG 2 Master" type="Area3D" parent="."]
+script = ExtResource("25_sj507")
+
+[node name="Switch" type="CollisionShape3D" parent="ENG 2 Master"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2673416, 3.302172, -36.042637)
+shape = SubResource("BoxShape3D_sufbk")
+
+[node name="ENG 1 Master" type="Area3D" parent="."]
+script = ExtResource("26_tyaxh")
+
+[node name="Switch" type="CollisionShape3D" parent="ENG 1 Master"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1817185, 3.302172, -36.042637)
+shape = SubResource("BoxShape3D_sufbk")
+
+[node name="ENG 3 Master" type="Area3D" parent="."]
+script = ExtResource("27_yyrul")
+
+[node name="Switch" type="CollisionShape3D" parent="ENG 3 Master"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22356871, 3.3179133, -36.053844)
+shape = SubResource("BoxShape3D_sufbk")
+
+[node name="ENG IGN" type="Area3D" parent="."]
+script = ExtResource("28_tyaxh")
+
+[node name="Switch" type="CollisionShape3D" parent="ENG IGN"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22483456, 3.2913682, -36.036617)
+shape = SubResource("BoxShape3D_sufbk")
 
 [node name="apu1_warn_light" type="OmniLight3D" parent="."]
 unique_name_in_owner = true
