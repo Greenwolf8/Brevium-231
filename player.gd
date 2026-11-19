@@ -294,7 +294,6 @@ func enter_pilot_seat():
 		in_pilot_seat = true
 		camera.clear_current()
 		pilot_camera.make_current()
-		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func exit_pilot_seat():
 	var tween = create_tween()
@@ -304,6 +303,5 @@ func exit_pilot_seat():
 	pilot_camera.clear_current()
 	await tween.finished
 	in_pilot_seat = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	#pilot_camera.reset_pos()
 	return

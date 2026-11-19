@@ -632,16 +632,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1872196, 0.060631752, 17.96
 [node name="eng_3_exit" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.041, 0, 16.586657)
 
+[node name="Engineer Camera" type="Camera3D" parent="."]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.77, 4.16, -25.72)
+near = 0.001
+far = 200.0
+script = ExtResource("6_eg1o6")
+
 [node name="Pilot Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7747402, 3.7234426, -35.573402)
 script = ExtResource("9_2j7jb")
 
-[node name="Engineer Camera" type="Camera3D" parent="."]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1.77, 4.16, -25.72)
-current = true
-near = 0.001
-far = 200.0
-script = ExtResource("6_eg1o6")
+[node name="Pilot Cast" type="RayCast3D" parent="Pilot Camera"]
+target_position = Vector3(0, 0, -1)
+collision_mask = 8
+collide_with_areas = true
 
 [node name="BAT 1 Switch" type="Area3D" parent="." node_paths=PackedStringArray("on_label")]
 collision_layer = 8
@@ -806,6 +810,8 @@ transform = Transform3D(1, 0, 0, 0, 0.93728197, -0.34857205, 0, 0.34857205, 0.93
 shape = SubResource("BoxShape3D_1jl21")
 
 [node name="ENG 2 Master" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
 script = ExtResource("25_sj507")
 
 [node name="Switch" type="CollisionShape3D" parent="ENG 2 Master"]
@@ -813,6 +819,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2673416, 3.302172, -36.0426
 shape = SubResource("BoxShape3D_sufbk")
 
 [node name="ENG 1 Master" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
 script = ExtResource("26_tyaxh")
 
 [node name="Switch" type="CollisionShape3D" parent="ENG 1 Master"]
@@ -820,6 +828,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1817185, 3.302172, -36.0426
 shape = SubResource("BoxShape3D_sufbk")
 
 [node name="ENG 3 Master" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
 script = ExtResource("27_yyrul")
 
 [node name="Switch" type="CollisionShape3D" parent="ENG 3 Master"]
@@ -827,6 +837,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22356871, 3.3179133, -36.05
 shape = SubResource("BoxShape3D_sufbk")
 
 [node name="ENG IGN" type="Area3D" parent="."]
+collision_layer = 8
+collision_mask = 0
 script = ExtResource("28_tyaxh")
 
 [node name="Switch" type="CollisionShape3D" parent="ENG IGN"]
