@@ -236,10 +236,11 @@ func enter_interior_ladder():
 		current_ladder_pos = interior_ladder_top_pos
 	else:
 		current_ladder_pos = interior_ladder_bottom_pos
-		body_collision.disabled = true
-		on_interior_ladder = true
-		tween.tween_property(self, "position", current_ladder_pos, tween_time)
-		tween_timer.start()
+	
+	body_collision.disabled = true
+	on_interior_ladder = true
+	tween.tween_property(self, "position", current_ladder_pos, tween_time)
+	tween_timer.start()
 
 func enter_gear_ladder():
 	var tween_pos = create_tween()
@@ -247,10 +248,11 @@ func enter_gear_ladder():
 		current_ladder_pos = gear_ladder_top_pos
 	else:
 		current_ladder_pos = gear_ladder_bottom_pos
-		on_gear_ladder = true
 		reparent(ship, true)
-		tween_pos.tween_property(self, "position", current_ladder_pos, tween_time)
-		tween_timer.start()
+		
+	on_gear_ladder = true
+	tween_pos.tween_property(self, "position", current_ladder_pos, tween_time)
+	tween_timer.start()
 
 func enter_engineer_terminal():
 		var tween_pos = create_tween()
