@@ -5,7 +5,7 @@ var on: bool = false
 func interact():
 	if !on:
 		on = true
-		%"Engines Systems".switch_eng_start_ign = true
+		%"Engines Systems".switch_eng_start_ign = 1
 	else:
 		on = false
-		%"Engines Systems".switch_eng_1_master = false
+		%"Engines Systems".switch_eng_start_ign = 0
