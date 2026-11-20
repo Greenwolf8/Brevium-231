@@ -39,59 +39,59 @@ func _process(delta: float) -> void:
 	if eng_1_running:
 		# If engine 1 is running and the player turns off engine 1, it kills it
 		if !switch_eng_1_master:
-			kill_eng_1()
+			kill_eng(1)
 			pass
 		else:
 			eng_1_thrust = clamp(engine_1_max_thrust * (get_parent().throttle / 100), engine_1_max_thrust * 0, engine_1_max_thrust)
 	else: 
 		# If both the engine 1 switch and the start switch are on, it starts engine 1
 		if switch_eng_1_master and switch_eng_start_ign == 1:
-			start_eng_1()
+			start_eng(1)
 		
 	if eng_2_running:
 		# If engine 2 is running and the player turns off engine 2, it kills it
 		if !switch_eng_2_master:
-			kill_eng_2()
+			kill_eng(2)
 			pass
 		else:
 			eng_2_thrust = clamp(engine_2_max_thrust * (get_parent().throttle / 100), engine_2_max_thrust * 0, engine_2_max_thrust)
 	else: 
 		# If both the engine 2 switch and the start switch are on, it starts engine 2
 		if switch_eng_2_master and switch_eng_start_ign == 1:
-			start_eng_2()
+			start_eng(2)
 		
 	if eng_3_running:
 		# If engine 3 is running and the player turns off engine 3, it kills it
 		if !switch_eng_3_master:
-			kill_eng_3()
+			kill_eng(3)
 			pass
 		else:
 			eng_3_thrust = clamp(engine_3_max_thrust * (get_parent().throttle / 100), engine_3_max_thrust * 0, engine_3_max_thrust)
 	else: 
 		# If both the engine 3 switch and the start switch are on, it starts engine 3
 		if switch_eng_3_master and switch_eng_start_ign == 1:
-			start_eng_3()
+			start_eng(3)
 
-func start_eng_1():
-	eng_1_running = true
-	print("Starting engine 1")
+func start_eng(engine: int):
+	
+	match engine:
+		1:
+			eng_1_running = true
+		
+		2:
+			eng_2_running = true
+		
+		3: 
+			eng_3_running = true
 
-func kill_eng_1():
-	eng_1_running = false
-	print("killing engine 1")
-
-func start_eng_2():
-	eng_2_running = true
-	print("Starting engine 2")
-
-func kill_eng_2():
-	eng_2_running = false
-	print("killing engine 2")
-
-func start_eng_3():
-	eng_3_running = true
-	print("Starting engine 3")
-
-func kill_eng_3():
-	eng_3_running = false
-	print("killing engine 3")
+func kill_eng(engine: int):
+	
+	match engine:
+		1:
+			eng_1_running = false
+		
+		2:
+			eng_2_running = false
+		
+		3: 
+			eng_3_running = false
