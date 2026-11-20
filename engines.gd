@@ -21,6 +21,9 @@ var eng_1_thrust: float = 0.0
 var eng_2_thrust: float = 0.0
 var eng_3_thrust: float = 0.0
 
+# Ship reference
+@onready var ship: RigidBody3D = $".."
+
 func _unhandled_input(event: InputEvent) -> void:
 	# Check if the engine starter is set to engine start, or norm
 	if event.is_action_pressed("1"):
@@ -71,6 +74,11 @@ func _process(delta: float) -> void:
 		# If both the engine 3 switch and the start switch are on, it starts engine 3
 		if switch_eng_3_master and switch_eng_start_ign == 1:
 			start_eng(3)
+	
+	# Pass on the thrust of each engine, multiply by 1000 to convert from Kilonewtons to Newtons
+	ship.eng_1_thrust = eng_1_thrust * 1000
+	ship.eng_2_thrust = eng_2_thrust * 1000
+	ship.eng_3_thrust = eng_3_thrust * 1000
 
 func start_eng(engine: int):
 	

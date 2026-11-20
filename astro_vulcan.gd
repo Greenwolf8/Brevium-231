@@ -7,6 +7,10 @@ extends RigidBody3D
 # Aircraft controls
 var throttle: float = 0.0
 
+# Engine thrust
+var eng_1_thrust: float = 0.0
+var eng_2_thrust: float = 0.0
+var eng_3_thrust: float = 0.0
 
 # Systems powered on
 var radar_engaged: bool = false
