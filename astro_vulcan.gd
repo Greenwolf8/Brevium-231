@@ -5,6 +5,7 @@ extends RigidBody3D
 @onready var elec: Node = $"Electrical Systems"
 
 # Aircraft controls
+var target_throttle: float = 0.0
 var throttle: float = 0.0
 
 # Engine thrust
@@ -30,7 +31,6 @@ var hydraulics_usage: float = 0.0
 @onready var eng_3_throttle: MeshInstance3D = $"AVRO_VULCAN/Throttle Quadrant/ENG 3 Throttle"
 @onready var eng_3_reverse_lever: MeshInstance3D = $"AVRO_VULCAN/Throttle Quadrant/ENG 3 Throttle/ENG 3 Reverse Lever"
 
-
 func _ready() -> void:
 	# Make animations start with gear open and ladder deployed
 	animation_player_gear.play("Landing Gear")
@@ -38,14 +38,20 @@ func _ready() -> void:
 	animation_player_ladder.play("ladder/Ladder Deploy")
 	animation_player_ladder.seek(7, true)
 
-func _unhandled_input(event: InputEvent) -> void:
-	pass
-
 func _physics_process(delta: float) -> void:
 	# Clamp throttle to make sure it stays between 100% and -25%
-	throttle = clamp(throttle,-25,100.0)
+	target_throttle = clamp(target_throttle,-25,100.0)
 	
 	# Move the throttles in cockpit
+	if target_throttle <= 10.0 and target_throttle >= -10.0:
+		throttle = 0.0
+	elif target_throttle >= 10.0 and target_throttle <= 20.0:
+		throttle = remap(target_throttle, 10.0, 20.0, 0.0, 20.0)
+	elif target_throttle <= -10.0 and target_throttle >= -20.0:
+		throttle = remap(target_throttle, -10.0, -20.0, 0.0, -20.0)
+	else:
+		throttle = target_throttle
+	
 	if throttle >= 0.0:
 		eng_1_throttle.rotation.z = deg_to_rad(clamp(remap(throttle,0.0,100.0,9.5,74.5),9.5,74.5))
 		eng_2_throttle.rotation.z = deg_to_rad(clamp(remap(throttle,0.0,100.0,9.5,74.5),9.5,74.5))
