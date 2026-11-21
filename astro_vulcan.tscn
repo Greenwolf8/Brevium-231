@@ -373,7 +373,7 @@ size = Vector3(0.01625061, 0.01832962, 0.020523071)
 [node name="Astro Vulcan" type="RigidBody3D" groups=["player_ship"]]
 collision_layer = 2
 collision_mask = 2
-mass = 600000.0
+mass = 700000.0
 center_of_mass_mode = 1
 script = ExtResource("1_vu8vp")
 
@@ -650,6 +650,7 @@ script = ExtResource("6_eg1o6")
 
 [node name="Pilot Camera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7747402, 3.7234426, -35.573402)
+current = true
 script = ExtResource("9_2j7jb")
 
 [node name="Pilot Cast" type="RayCast3D" parent="Pilot Camera"]

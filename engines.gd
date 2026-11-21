@@ -6,7 +6,7 @@ var switch_eng_1_master: bool = false
 var switch_eng_2_master: bool = false
 var switch_eng_3_master: bool = false
 
-# Engine power
+# Engine power in KN
 var engine_1_max_thrust: float = 3070 # Needs to be * 1000
 var engine_2_max_thrust: float = 3070 # Needs to be * 1000
 var engine_3_max_thrust: float = 1510 # Needs to be * 1000
@@ -21,22 +21,19 @@ var eng_1_thrust: float = 0.0
 var eng_2_thrust: float = 0.0
 var eng_3_thrust: float = 0.0
 
+# fuel flow rates in KG/s
+var eng_1_fuel_flow_rate: float = 0.001
+var eng_2_fuel_flow_rate: float = 0.001
+var eng_3_fuel_flow_rate: float = 0.001
+
+# Common vars
+var fuel_energy_density: float = 100000000000000 # J/Kg
+var fission_efficiency: float = 0.00371
+var energy_conversion_efficiency: float = 0.5
+var nozzle_efficiency: float = 0.9999999
+
 # Ship reference
 @onready var ship: RigidBody3D = $".."
-
-func _unhandled_input(event: InputEvent) -> void:
-	# Check if the engine starter is set to engine start, or norm
-	if event.is_action_pressed("1"):
-		if switch_eng_start_ign == 0: # If switch is set to normal, it sets it to start
-			switch_eng_start_ign = 1
-		elif switch_eng_start_ign == 1: # If switch is set to start, set to normal
-			switch_eng_start_ign = 0
-	# Check if each engine switch is set to on or off
-	elif event.is_action_pressed("2"):
-		if switch_eng_1_master == false: # If engine 1 switch is set in the off postion, flick it on
-			switch_eng_1_master = true
-		elif switch_eng_1_master == true: # If engine 1 switch is set in the on postion, flick it off
-			switch_eng_1_master = false
 
 func _process(delta: float) -> void:
 	if eng_1_running:
@@ -45,7 +42,7 @@ func _process(delta: float) -> void:
 			kill_eng(1)
 			pass
 		else:
-			eng_1_thrust = clamp(engine_1_max_thrust * (get_parent().throttle / 100), engine_1_max_thrust * 0, engine_1_max_thrust)
+			eng_1_thrust = calc_engine_thrust(1)
 	else: 
 		# If both the engine 1 switch and the start switch are on, it starts engine 1
 		if switch_eng_1_master and switch_eng_start_ign == 1:
@@ -57,7 +54,7 @@ func _process(delta: float) -> void:
 			kill_eng(2)
 			pass
 		else:
-			eng_2_thrust = clamp(engine_2_max_thrust * (get_parent().throttle / 100), engine_2_max_thrust * 0, engine_2_max_thrust)
+			eng_2_thrust = calc_engine_thrust(2)
 	else: 
 		# If both the engine 2 switch and the start switch are on, it starts engine 2
 		if switch_eng_2_master and switch_eng_start_ign == 1:
@@ -69,7 +66,7 @@ func _process(delta: float) -> void:
 			kill_eng(3)
 			pass
 		else:
-			eng_3_thrust = clamp(engine_3_max_thrust * (get_parent().throttle / 100), engine_3_max_thrust * 0, engine_3_max_thrust)
+			eng_3_thrust = calc_engine_thrust(3)
 	else: 
 		# If both the engine 3 switch and the start switch are on, it starts engine 3
 		if switch_eng_3_master and switch_eng_start_ign == 1:
@@ -103,3 +100,35 @@ func kill_eng(engine: int):
 		
 		3: 
 			eng_3_running = false
+
+func calc_engine_thrust(engine: int):
+	var thrust: float = 0.0
+	match engine:
+		1:
+			# First, find the fuel flow rate, and exhaust flow rate
+			var exhaust_flow_rate: float = eng_1_fuel_flow_rate * fission_efficiency
+			# Then find the available reactor power
+			var reactor_power_output: float = eng_1_fuel_flow_rate * fission_efficiency * fuel_energy_density * energy_conversion_efficiency * nozzle_efficiency
+			# Get the exhaust velocity
+			var exhaust_velocity: float = sqrt((2 * reactor_power_output) / exhaust_flow_rate)
+			# Finally, calc thrust based on the exhaust velocity * mass flow rate
+			thrust = exhaust_velocity * exhaust_flow_rate
+		2:
+			# First, find the fuel flow rate, and exhaust flow rate
+			var exhaust_flow_rate: float = eng_2_fuel_flow_rate * fission_efficiency
+			# Then find the available reactor power
+			var reactor_power_output: float = eng_2_fuel_flow_rate * fission_efficiency * fuel_energy_density * energy_conversion_efficiency * nozzle_efficiency
+			# Get the exhaust velocity
+			var exhaust_velocity: float = sqrt((2 * reactor_power_output) / exhaust_flow_rate)
+			# Finally, calc thrust based on the exhaust velocity * mass flow rate
+			thrust = exhaust_velocity * exhaust_flow_rate
+		3:
+			# First, find the fuel flow rate, and exhaust flow rate
+			var exhaust_flow_rate: float = eng_3_fuel_flow_rate * fission_efficiency
+			# Then find the available reactor power
+			var reactor_power_output: float = eng_3_fuel_flow_rate * fission_efficiency * fuel_energy_density * energy_conversion_efficiency * nozzle_efficiency
+			# Get the exhaust velocity
+			var exhaust_velocity: float = sqrt((2 * reactor_power_output) / exhaust_flow_rate)
+			# Finally, calc thrust based on the exhaust velocity * mass flow rate
+			thrust = exhaust_velocity * exhaust_flow_rate
+	return(thrust)
