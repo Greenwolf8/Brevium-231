@@ -60,7 +60,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1737000, 0)
 shape = SubResource("SphereShape3D_0xm2m")
 
 [node name="spawn point" type="Marker3D" parent="world container"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.738, 128.54025, -64.486)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.738, 122.10838, -64.486)
 gizmo_extents = 0.5
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="world container"]
@@ -68,7 +68,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1737000, 0)
 mesh = SubResource("SphereMesh_1bvp3")
 
 [node name="Astro Vulcan" parent="world container" instance=ExtResource("4_1bvp3")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15.832019, 127.776, 0)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 15.832019, 127.43742, 0)
 
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
 [connection signal="pressed" from="UI/host_button" to="." method="_on_host_button_pressed"]
