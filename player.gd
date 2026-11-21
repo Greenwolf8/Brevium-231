@@ -305,5 +305,5 @@ func exit_pilot_seat():
 	pilot_camera.clear_current()
 	await tween.finished
 	in_pilot_seat = false
-	#pilot_camera.reset_pos()
+	pilot_camera.reset()
 	return

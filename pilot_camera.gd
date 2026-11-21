@@ -1,6 +1,7 @@
 extends Camera3D
 
 var free_looking: bool = false
+var sensitivity: float = 0.1
 
 @onready var pilot_cast: RayCast3D = $"Pilot Cast"
 
@@ -16,19 +17,30 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("L Click") and pilot_cast.is_colliding():
 		cockpit_raycast()
 		
-	if event is InputEventMouseMotion:
-		if free_looking:
-			rotation_degrees.y -= event.relative.x * 0.1
+	if free_looking:
+		if event is InputEventMouseMotion:
+			rotation_degrees.y -= event.relative.x * sensitivity
 			rotation_degrees.y = clamp(rotation_degrees.y, -70.0, 70.0)
-			rotation_degrees.x -= event.relative.y * 0.1
+			rotation_degrees.x -= event.relative.y * sensitivity
 			rotation_degrees.x = clamp(rotation_degrees.x, -70.0, 70.0)
+		elif event.is_action_pressed("zoom_in") and fov > 15.0:
+			fov -= 5.0
+		elif event.is_action_pressed("zoom_out") and fov < 75.0:
+			fov += 5.0
+			pass
 
 func _process(delta: float) -> void:
 	if !self.is_current():
 		return
 	
+	sensitivity = remap(fov, 15.0, 75.0, 0.01, 0.1)
+	
 	if free_looking:
 		pass
+
+func reset():
+	fov = 75
+	lock_mouse()
 
 func cockpit_raycast():
 	var result = pilot_cast.get_collider()
