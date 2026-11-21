@@ -24,10 +24,10 @@
 [ext_resource type="Script" uid="uid://dfhrrhjcws0xi" path="res://Switch Scripts/apu_2_wtr_pump_switch.gd" id="21_n7j08"]
 [ext_resource type="Script" uid="uid://bfc4xg5ryanmw" path="res://Switch Scripts/apu_2_ctrl_rods_switch.gd" id="22_x0x4c"]
 [ext_resource type="Script" uid="uid://b5x4ufqal7qki" path="res://Switch Scripts/apu_2_emergency_stop.gd" id="23_aa1ae"]
-[ext_resource type="Script" uid="uid://iqdgetrjs11a" path="res://eng_2_master.gd" id="25_sj507"]
-[ext_resource type="Script" uid="uid://e0xxtw57mojr" path="res://eng_1_master.gd" id="26_tyaxh"]
-[ext_resource type="Script" uid="uid://cmggs54n65igv" path="res://eng_3_master.gd" id="27_yyrul"]
-[ext_resource type="Script" uid="uid://bukpx8x61ou7e" path="res://eng_ign.gd" id="28_tyaxh"]
+[ext_resource type="Script" uid="uid://iqdgetrjs11a" path="res://Switch Scripts/eng_2_master.gd" id="25_sj507"]
+[ext_resource type="Script" uid="uid://e0xxtw57mojr" path="res://Switch Scripts/eng_1_master.gd" id="26_tyaxh"]
+[ext_resource type="Script" uid="uid://cmggs54n65igv" path="res://Switch Scripts/eng_3_master.gd" id="27_yyrul"]
+[ext_resource type="Script" uid="uid://bukpx8x61ou7e" path="res://Switch Scripts/eng_ign.gd" id="28_tyaxh"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sossa"]
 resource_name = "Button Blue"
@@ -401,6 +401,9 @@ surface_material_override/0 = ExtResource("3_7x5dx")
 [node name="APU BAT ON Label" parent="AVRO_VULCAN/ELEC Panel" index="22"]
 mesh = SubResource("ArrayMesh_01lle")
 
+[node name="BAT 1 ON Label" parent="AVRO_VULCAN/ELEC Panel" index="25"]
+surface_material_override/0 = ExtResource("3_7x5dx")
+
 [node name="BAT 2 ON Label" parent="AVRO_VULCAN/ELEC Panel" index="27"]
 mesh = SubResource("ArrayMesh_rdpfr")
 
@@ -420,7 +423,10 @@ surface_material_override/0 = SubResource("StandardMaterial3D_5rlg0")
 surface_material_override/0 = SubResource("StandardMaterial3D_4a6mu")
 
 [node name="ENG 1 Throttle" parent="AVRO_VULCAN/Throttle Quadrant" index="2"]
-transform = Transform3D(0.26723835, -0.96363044, 0, 0.96363044, 0.26723835, 0, 0, 0, 1, -0.00045979023, -0.03421688, 0.04033962)
+transform = Transform3D(0.98628557, -0.16504759, 0, 0.16504759, 0.98628557, 0, 0, 0, 1, -0.00045979023, -0.03421688, 0.04033962)
+
+[node name="ENG IGN Switch" parent="AVRO_VULCAN/Throttle Quadrant" index="12"]
+transform = Transform3D(0.9862856, -0.16504757, 0, 0.1650476, 0.98628545, 0, 0, 0, 0.99999994, 0.08255166, -0.015884161, -0.0010164678)
 
 [node name="Gear Ladder Interact" type="StaticBody3D" parent="."]
 collision_layer = 4
@@ -625,12 +631,15 @@ unique_name_in_owner = true
 script = ExtResource("5_3rtg3")
 
 [node name="eng_1_exit" type="Marker3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.176491, 0.060631752, 17.960464)
 
 [node name="eng_2_exit" type="Marker3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.1872196, 0.060631752, 17.960464)
 
 [node name="eng_3_exit" type="Marker3D" parent="."]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.041, 0, 16.586657)
 
 [node name="Engineer Camera" type="Camera3D" parent="."]
@@ -854,7 +863,7 @@ light_energy = 0.0
 
 [node name="apu2_warn_light" type="OmniLight3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.848, 3.74, 24.901)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.848, 3.74, -24.901184)
 light_color = Color(1, 0, 0, 1)
 light_energy = 0.0
 

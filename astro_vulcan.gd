@@ -60,3 +60,17 @@ func _physics_process(delta: float) -> void:
 		eng_1_throttle.rotation.z = deg_to_rad(9.5)
 		eng_2_throttle.rotation.z = deg_to_rad(9.5)
 		eng_3_throttle.rotation.z = deg_to_rad(9.5)
+	
+	# Get the local force on each engine
+	var eng_1_global_force = -global_transform.basis.z * eng_1_thrust
+	var eng_2_global_force = -global_transform.basis.z * eng_2_thrust
+	var eng_3_global_force = -global_transform.basis.z * eng_3_thrust
+	
+	# Get the position difference between engine exits and ship centre
+	var eng_1_pos_offset = %eng_1_exit.global_position - global_position
+	var eng_2_pos_offset = %eng_2_exit.global_position - global_position
+	var eng_3_pos_offset = %eng_3_exit.global_position - global_position
+	
+	apply_force(eng_1_global_force, eng_1_pos_offset)
+	apply_force(eng_2_global_force, eng_2_pos_offset)
+	apply_force(eng_3_global_force, eng_3_pos_offset)
