@@ -361,3 +361,11 @@ func exit_pilot_seat():
 	in_pilot_seat = false
 	pilot_camera.reset()
 	return
+
+func apply_velocity(target: String):
+	match target:
+		"Ship":
+			velocity = ship.linear_velocity
+		
+		"World":
+			velocity = velocity

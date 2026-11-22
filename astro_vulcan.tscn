@@ -910,4 +910,18 @@ loop = false
 update_rotation = false
 update_scale = false
 
+[node name="Interior Ladder Path" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9084443, -0.8774284, -32.42881)
+curve = SubResource("Curve3D_tyaxh")
+
+[node name="Interior Path Follow" type="PathFollow3D" parent="Interior Ladder Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.047863826, 0)
+progress = 0.060524587
+rotation_mode = 0
+loop = false
+
+[node name="Player Remote Transform" type="RemoteTransform3D" parent="Interior Ladder Path/Interior Path Follow"]
+update_rotation = false
+update_scale = false
+
 [editable path="AVRO_VULCAN"]
