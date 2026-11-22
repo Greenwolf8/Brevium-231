@@ -16,6 +16,8 @@ extends CharacterBody3D
 @onready var pilot_camera: Camera3D = $"/root/Main/world container/Astro Vulcan/Pilot Camera"
 @onready var gear_ladder_path: PathFollow3D = $"/root/Main/world container/Astro Vulcan/Gear Ladder Path/Gear Path Follow"
 @onready var gear_ladder_remote_transform: RemoteTransform3D = $"/root/Main/world container/Astro Vulcan/Gear Ladder Path/Gear Path Follow/Player Remote Transform"
+@onready var interior_ladder_path: PathFollow3D = $"/root/Main/world container/Astro Vulcan/Interior Ladder Path/Interior Path Follow"
+@onready var interior_ladder_remote_transform: RemoteTransform3D = $"/root/Main/world container/Astro Vulcan/Interior Ladder Path/Interior Path Follow/Player Remote Transform"
 
 var gravity_strength: float = 9.8
 var bobbing_up: bool = true
@@ -37,9 +39,6 @@ var engineer_terminal_rot: Vector3 = Vector3(0.0, -180.0, 0.0)
 var engineer_terminal_exit_pos: Vector3 = Vector3(1.75, 2.816, -26.49)
 var pilot_seat_pos: Vector3 = Vector3(0.771, 2.124, -35.223)
 var pilot_seat_exit_pos: Vector3 = Vector3(0.771, 2.825, -34.083)
-var current_ladder_pos: Vector3
-var interior_ladder_bottom_pos: Vector3 = Vector3(-1.91, -0.8, -32.1)
-var interior_ladder_top_pos: Vector3 = Vector3(-1.91, 2.0, -32.1)
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
@@ -69,7 +68,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			on_gear_ladder = true
 		
 		elif front_cast.get_collider().name == "Interior Ladder Interact":
-			enter_interior_ladder()
+			on_interior_ladder = true
 		
 		elif front_cast.get_collider().name == "Engineer Terminal Interact":
 			enter_engineer_terminal()
@@ -89,13 +88,15 @@ func _physics_process(delta: float) -> void:
 		ladder_movement("Gear", delta)
 		return
 	elif on_interior_ladder:
-		ladder_movement("Interior Ladder")
+		ladder_movement("Interior", delta)
 		return
 	
-	if get_parent() == ship:
+	if on_ship:
+		apply_velocity("Ship")
 		ship_movement(ship, delta)
 		return
 	else:
+		apply_velocity("World")
 		ground_movement(delta)
 		return
 
@@ -199,12 +200,6 @@ func ground_movement(delta):
 	
 	move_and_slide()
 
-func enter_interior_ladder():
-	var tween = create_tween()
-	if position.y >= 0.0:
-		current_ladder_pos = interior_ladder_top_pos
-	else:
-		current_ladder_pos = interior_ladder_bottom_pos
 func ladder_movement(ladder: String, delta: float):
 	if !tween_timer.is_stopped(): # Makes sure not moving during tween
 		return
@@ -227,11 +222,23 @@ func ladder_movement(ladder: String, delta: float):
 				elif climb_input < 0.0:
 					gear_ladder_path.progress -= 1.5 * delta
 		
+		"Interior":
+			if !on_path:
+				enter_ladder("Interior","Bottom", delta)
+				return
+			else:
+				if gear_ladder_path.progress_ratio == 1.0:
+					exit_ladder("Interior", "Top")
+				elif gear_ladder_path.progress_ratio == 0.0:
+					exit_ladder("Interior", "Bottom")
+				
+				var climb_input: float = Input.get_axis("move_back", "move_forward")
+				
+				if climb_input > 0.0:
+					interior_ladder_path.progress += 1.5 * delta
+				elif climb_input < 0.0:
+					interior_ladder_path.progress -= 1.5 * delta
 	
-	body_collision.disabled = true
-	on_interior_ladder = true
-	tween.tween_property(self, "position", current_ladder_pos, tween_time)
-	tween_timer.start()
 	move_and_slide()
 
 func enter_ladder(ladder: String, enter_position: String, delta: float):
@@ -260,6 +267,24 @@ func enter_ladder(ladder: String, enter_position: String, delta: float):
 			var direction: Vector3 = (target_pos - global_position).normalized()
 			velocity = direction * move_speed * delta
 			move_and_slide()
+		"Interior":
+			if enter_position == "Top":
+				interior_ladder_path.progress_ratio = 0.99
+			elif enter_position == "Bottom":
+				interior_ladder_path.progress_ratio = 0.01
+			
+			target_pos = interior_ladder_path.global_position
+			distance = global_position.distance_to(target_pos)
+			
+			if distance <= snap_distance:
+				on_path = true
+				interior_ladder_remote_transform.remote_path = self.get_path()
+				return
+			
+			var direction: Vector3 = (target_pos - global_position).normalized()
+			velocity = direction * move_speed * delta
+			move_and_slide()
+
 func exit_ladder(ladder: String, exit_position: String):
 	match ladder:
 		"Gear":
@@ -273,6 +298,15 @@ func exit_ladder(ladder: String, exit_position: String):
 				gear_ladder_remote_transform.remote_path = ""
 				on_ship = false
 		
+		"Interior":
+			if exit_position == "Top":
+				on_interior_ladder = false
+				on_path = false
+				interior_ladder_remote_transform.remote_path = ""
+			elif exit_position == "Bottom":
+				on_interior_ladder = false
+				on_path = false
+				interior_ladder_remote_transform.remote_path = ""
 
 func enter_engineer_terminal():
 		var tween_pos = create_tween()
