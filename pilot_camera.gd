@@ -39,7 +39,6 @@ func _process(delta: float) -> void:
 		pass
 
 func reset():
-	fov = 75
 	lock_mouse()
 
 func cockpit_raycast():
@@ -52,6 +51,7 @@ func cockpit_raycast():
 
 func lock_mouse():
 	free_looking = false
+	fov = 75
 	var tween = create_tween()
 	tween.tween_property(self, "rotation_degrees", Vector3.ZERO, 0.25)
 

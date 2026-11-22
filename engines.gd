@@ -6,11 +6,6 @@ var switch_eng_1_master: bool = false
 var switch_eng_2_master: bool = false
 var switch_eng_3_master: bool = false
 
-# Engine power in KN
-var engine_1_max_thrust: float = 3070 # Needs to be * 1000
-var engine_2_max_thrust: float = 3070 # Needs to be * 1000
-var engine_3_max_thrust: float = 1510 # Needs to be * 1000
-
 # Engines currently on
 var eng_1_running: bool = false
 var eng_2_running: bool = false
@@ -73,9 +68,9 @@ func _process(delta: float) -> void:
 			start_eng(3)
 	
 	# Pass on the thrust of each engine, multiply by 1000 to convert from Kilonewtons to Newtons
-	ship.eng_1_thrust = eng_1_thrust * 1000
-	ship.eng_2_thrust = eng_2_thrust * 1000
-	ship.eng_3_thrust = eng_3_thrust * 1000
+	ship.eng_1_thrust = eng_1_thrust
+	ship.eng_2_thrust = eng_2_thrust
+	ship.eng_3_thrust = eng_3_thrust
 
 func start_eng(engine: int):
 	
@@ -101,34 +96,14 @@ func kill_eng(engine: int):
 		3: 
 			eng_3_running = false
 
-func calc_engine_thrust(engine: int):
+func calc_engine_thrust(flow_rate: float):
 	var thrust: float = 0.0
-	match engine:
-		1:
-			# First, find the fuel flow rate, and exhaust flow rate
-			var exhaust_flow_rate: float = eng_1_fuel_flow_rate * fission_efficiency
-			# Then find the available reactor power
-			var reactor_power_output: float = eng_1_fuel_flow_rate * fission_efficiency * fuel_energy_density * energy_conversion_efficiency * nozzle_efficiency
-			# Get the exhaust velocity
-			var exhaust_velocity: float = sqrt((2 * reactor_power_output) / exhaust_flow_rate)
-			# Finally, calc thrust based on the exhaust velocity * mass flow rate
-			thrust = exhaust_velocity * exhaust_flow_rate
-		2:
-			# First, find the fuel flow rate, and exhaust flow rate
-			var exhaust_flow_rate: float = eng_2_fuel_flow_rate * fission_efficiency
-			# Then find the available reactor power
-			var reactor_power_output: float = eng_2_fuel_flow_rate * fission_efficiency * fuel_energy_density * energy_conversion_efficiency * nozzle_efficiency
-			# Get the exhaust velocity
-			var exhaust_velocity: float = sqrt((2 * reactor_power_output) / exhaust_flow_rate)
-			# Finally, calc thrust based on the exhaust velocity * mass flow rate
-			thrust = exhaust_velocity * exhaust_flow_rate
-		3:
-			# First, find the fuel flow rate, and exhaust flow rate
-			var exhaust_flow_rate: float = eng_3_fuel_flow_rate * fission_efficiency
-			# Then find the available reactor power
-			var reactor_power_output: float = eng_3_fuel_flow_rate * fission_efficiency * fuel_energy_density * energy_conversion_efficiency * nozzle_efficiency
-			# Get the exhaust velocity
-			var exhaust_velocity: float = sqrt((2 * reactor_power_output) / exhaust_flow_rate)
-			# Finally, calc thrust based on the exhaust velocity * mass flow rate
-			thrust = exhaust_velocity * exhaust_flow_rate
+	# First, find the fuel flow rate, and exhaust flow rate
+	var exhaust_flow_rate: float = flow_rate * fission_efficiency
+	# Then find the available reactor power
+	var reactor_power_output: float = flow_rate * fission_efficiency * fuel_energy_density * energy_conversion_efficiency * nozzle_efficiency
+	# Get the exhaust velocity
+	var exhaust_velocity: float = sqrt((2 * reactor_power_output) / exhaust_flow_rate)
+	# Finally, calc thrust based on the exhaust velocity * mass flow rate
+	thrust = exhaust_velocity * exhaust_flow_rate
 	return(thrust)
