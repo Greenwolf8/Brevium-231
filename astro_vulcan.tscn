@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=4 uid="uid://cw5tbla37typy"]
+[gd_scene load_steps=86 format=4 uid="uid://cw5tbla37typy"]
 
 [ext_resource type="PackedScene" uid="uid://c0ddv37isxdrk" path="res://astro_vulcan_mesh.tscn" id="1_30her"]
 [ext_resource type="Script" uid="uid://mstiibqn70fk" path="res://astro_vulcan.gd" id="1_vu8vp"]
@@ -370,6 +370,28 @@ size = Vector3(0.5956282, 0.37071818, 0.013759613)
 [sub_resource type="BoxShape3D" id="BoxShape3D_sufbk"]
 size = Vector3(0.01625061, 0.01832962, 0.020523071)
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_tyaxh"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="Curve3D" id="Curve3D_yyrul"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5.4167094, 2.6322787),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_tyaxh"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.7, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
 [node name="Astro Vulcan" type="RigidBody3D" groups=["player_ship"]]
 collision_layer = 2
 collision_mask = 2
@@ -379,6 +401,9 @@ script = ExtResource("1_vu8vp")
 
 [node name="AVRO_VULCAN" parent="." instance=ExtResource("1_30her")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, -1.951, -55.28)
+
+[node name="APU 1 Control Rods Indicator" parent="AVRO_VULCAN/APU Panel" index="0"]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, -2.9802322e-08, 0, 0, 0.99999994, 1.909747, 6.5370674, 13.171956)
 
 [node name="APU 1 MELTDOWN Label" parent="AVRO_VULCAN/APU Panel" index="9"]
 surface_material_override/0 = ExtResource("3_7x5dx")
@@ -468,7 +493,7 @@ collision_mask = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7411957, 3.3452816, -35.657684)
 shape = SubResource("BoxShape3D_vwebn")
 
-[node name="Interior collisions" type="StaticBody3D" parent="."]
+[node name="Interior collisions" type="AnimatableBody3D" parent="."]
 collision_layer = 2
 collision_mask = 2
 
@@ -867,5 +892,22 @@ unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.848, 3.74, -24.901184)
 light_color = Color(1, 0, 0, 1)
 light_energy = 0.0
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_tyaxh")
+
+[node name="Gear Ladder Path" type="Path3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -6.365186, -35.64769)
+curve = SubResource("Curve3D_yyrul")
+
+[node name="Gear Path Follow" type="PathFollow3D" parent="Gear Ladder Path"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.049460612, 0.024035648)
+progress = 0.060524587
+rotation_mode = 0
+loop = false
+
+[node name="Player Remote Transform" type="RemoteTransform3D" parent="Gear Ladder Path/Gear Path Follow"]
+update_rotation = false
+update_scale = false
 
 [editable path="AVRO_VULCAN"]

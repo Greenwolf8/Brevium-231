@@ -14,14 +14,18 @@ extends CharacterBody3D
 @onready var body_collision: CollisionShape3D = $Body_Collision
 @onready var engineer_camera: Camera3D = $"/root/Main/world container/Astro Vulcan/Engineer Camera"
 @onready var pilot_camera: Camera3D = $"/root/Main/world container/Astro Vulcan/Pilot Camera"
+@onready var gear_ladder_path: PathFollow3D = $"/root/Main/world container/Astro Vulcan/Gear Ladder Path/Gear Path Follow"
+@onready var gear_ladder_remote_transform: RemoteTransform3D = $"/root/Main/world container/Astro Vulcan/Gear Ladder Path/Gear Path Follow/Player Remote Transform"
 
 var gravity_strength: float = 9.8
 var bobbing_up: bool = true
 var bob_height_down: Vector3 = Vector3(-0.05, 1.6, -0.35)
 var bob_height_up: Vector3 = Vector3(0.05, 1.6, -0.35)
 var tween_time: float = 0.25
+var on_path: bool = false
 
 # Vars for being in an interaction
+var on_ship: bool = false
 var on_gear_ladder: bool = false
 var on_interior_ladder: bool = false
 var in_engineer_terminal: bool = false
@@ -34,8 +38,6 @@ var engineer_terminal_exit_pos: Vector3 = Vector3(1.75, 2.816, -26.49)
 var pilot_seat_pos: Vector3 = Vector3(0.771, 2.124, -35.223)
 var pilot_seat_exit_pos: Vector3 = Vector3(0.771, 2.825, -34.083)
 var current_ladder_pos: Vector3
-var gear_ladder_bottom_pos: Vector3 = Vector3(0.0, -6.3, -36.1)
-var gear_ladder_top_pos: Vector3 = Vector3(0.0, -2.44, -34.2)
 var interior_ladder_bottom_pos: Vector3 = Vector3(-1.91, -0.8, -32.1)
 var interior_ladder_top_pos: Vector3 = Vector3(-1.91, 2.0, -32.1)
 
@@ -64,7 +66,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	elif event.is_action_pressed("Interact") and front_cast.is_colliding():
 		if front_cast.get_collider().name == "Gear Ladder Interact":
-			enter_gear_ladder()
+			on_gear_ladder = true
 		
 		elif front_cast.get_collider().name == "Interior Ladder Interact":
 			enter_interior_ladder()
@@ -84,7 +86,7 @@ func _physics_process(delta: float) -> void:
 	if in_engineer_terminal:
 		return
 	if on_gear_ladder:
-		ladder_movement("Gear Ladder")
+		ladder_movement("Gear", delta)
 		return
 	elif on_interior_ladder:
 		ladder_movement("Interior Ladder")
@@ -112,39 +114,6 @@ func _process(delta: float) -> void:
 				ship.target_throttle += 40 * delta
 			elif Input.is_action_pressed("throttle_down"):
 				ship.target_throttle -= 40 * delta
-
-func ladder_movement(ladder: String):
-	if !tween_timer.is_stopped(): # Makes sure not moving during tween
-		return
-	
-	if ladder == "Gear Ladder": # Handles climbing the landing gear ladder
-		var local_ladder_dir: Vector3 = ship.transform.basis * Vector3(0.0, 1.0, 0.4663)
-		var climb_input: float = Input.get_axis("move_back", "move_forward")
-		var climb_input_v3: Vector3 = Vector3(climb_input, climb_input, 0.0)
-		if position.y <= -6.33:
-			on_gear_ladder = false
-			reparent(main_scene)
-			return
-		elif position.y >= -0.69:
-			on_gear_ladder = false
-			return
-		else:
-			velocity = local_ladder_dir * climb_input_v3 * climb_speed
-	
-	elif ladder == "Interior Ladder":
-		var local_ladder_dir: Vector3 = Vector3(0.0, 1.0, 0.0).normalized()
-		var climb_input: float = Input.get_axis("move_back", "move_forward")
-		if position.y <= -0.9:
-			on_interior_ladder = false
-			body_collision.disabled = false
-			return
-		elif position.y >= 2.75:
-			on_interior_ladder = false
-			body_collision.disabled = false
-			return
-		else:
-			velocity = local_ladder_dir * climb_input * climb_speed
-	move_and_slide()
 
 func ship_movement(_ship: Node3D, delta):
 	# Sprint 
@@ -236,23 +205,74 @@ func enter_interior_ladder():
 		current_ladder_pos = interior_ladder_top_pos
 	else:
 		current_ladder_pos = interior_ladder_bottom_pos
+func ladder_movement(ladder: String, delta: float):
+	if !tween_timer.is_stopped(): # Makes sure not moving during tween
+		return
+	
+	match ladder:
+		"Gear": # Handles climbing the landing gear ladder
+			if !on_path:
+				enter_ladder("Gear","Bottom", delta)
+				return
+			else:
+				if gear_ladder_path.progress_ratio == 1.0:
+					exit_ladder("Gear", "Top")
+				elif gear_ladder_path.progress_ratio == 0.0:
+					exit_ladder("Gear", "Bottom")
+				
+				var climb_input: float = Input.get_axis("move_back", "move_forward")
+				
+				if climb_input > 0.0:
+					gear_ladder_path.progress += 1.5 * delta
+				elif climb_input < 0.0:
+					gear_ladder_path.progress -= 1.5 * delta
+		
 	
 	body_collision.disabled = true
 	on_interior_ladder = true
 	tween.tween_property(self, "position", current_ladder_pos, tween_time)
 	tween_timer.start()
+	move_and_slide()
 
-func enter_gear_ladder():
-	var tween_pos = create_tween()
-	if get_parent() == ship:
-		current_ladder_pos = gear_ladder_top_pos
-	else:
-		current_ladder_pos = gear_ladder_bottom_pos
-		reparent(ship, true)
+func enter_ladder(ladder: String, enter_position: String, delta: float):
+	var snap_distance: float = 0.2
+	var move_speed: float = 150.0
+	
+	var target_pos: Vector3 = Vector3.ZERO
+	var distance: float = 0.0
+	
+	match ladder:
+		"Gear":
+			if enter_position == "Top":
+				gear_ladder_path.progress_ratio = 0.99
+			elif enter_position == "Bottom":
+				gear_ladder_path.progress_ratio = 0.01
+			
+			target_pos = gear_ladder_path.global_position
+			distance = global_position.distance_to(target_pos)
+			
+			if distance <= snap_distance:
+				on_path = true
+				on_ship = true
+				gear_ladder_remote_transform.remote_path = self.get_path()
+				return
+			
+			var direction: Vector3 = (target_pos - global_position).normalized()
+			velocity = direction * move_speed * delta
+			move_and_slide()
+func exit_ladder(ladder: String, exit_position: String):
+	match ladder:
+		"Gear":
+			if exit_position == "Top":
+				on_gear_ladder = false
+				on_path = false
+				gear_ladder_remote_transform.remote_path = ""
+			elif exit_position == "Bottom":
+				on_gear_ladder = false
+				on_path = false
+				gear_ladder_remote_transform.remote_path = ""
+				on_ship = false
 		
-	on_gear_ladder = true
-	tween_pos.tween_property(self, "position", current_ladder_pos, tween_time)
-	tween_timer.start()
 
 func enter_engineer_terminal():
 		var tween_pos = create_tween()
