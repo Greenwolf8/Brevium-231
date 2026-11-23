@@ -28,6 +28,7 @@ var on_path: bool = false
 
 # Vars for being in an interaction
 var on_ship: bool = false
+var in_cockpit: bool = false
 var on_gear_ladder: bool = false
 var on_interior_ladder: bool = false
 var in_engineer_terminal: bool = false
@@ -206,8 +207,11 @@ func ladder_movement(ladder: String, delta: float):
 	
 	match ladder:
 		"Gear": # Handles climbing the landing gear ladder
-			if !on_path:
+			if !on_path and !on_ship:
 				enter_ladder("Gear","Bottom", delta)
+				return
+			elif !on_path and on_ship:
+				enter_ladder("Gear","Top", delta)
 				return
 			else:
 				if gear_ladder_path.progress_ratio == 1.0:
@@ -223,18 +227,23 @@ func ladder_movement(ladder: String, delta: float):
 					gear_ladder_path.progress -= 1.5 * delta
 		
 		"Interior":
-			if !on_path:
+			if !on_path and !in_cockpit:
 				enter_ladder("Interior","Bottom", delta)
 				return
+			elif !on_path and in_cockpit:
+				enter_ladder("Interior", "Top", delta)
 			else:
-				if gear_ladder_path.progress_ratio == 1.0:
+				if interior_ladder_path.progress_ratio == 1.0:
 					exit_ladder("Interior", "Top")
-				elif gear_ladder_path.progress_ratio == 0.0:
+				elif interior_ladder_path.progress_ratio == 0.0:
 					exit_ladder("Interior", "Bottom")
 				
 				var climb_input: float = Input.get_axis("move_back", "move_forward")
-				
-				if climb_input > 0.0:
+				if interior_ladder_path.progress_ratio > 0.75 and !in_cockpit:
+					interior_ladder_path.progress += 2.0 * delta
+				elif interior_ladder_path.progress_ratio > 0.75 and in_cockpit:
+					interior_ladder_path.progress -= 2.0 * delta
+				elif climb_input > 0.0:
 					interior_ladder_path.progress += 1.5 * delta
 				elif climb_input < 0.0:
 					interior_ladder_path.progress -= 1.5 * delta
@@ -242,7 +251,7 @@ func ladder_movement(ladder: String, delta: float):
 	move_and_slide()
 
 func enter_ladder(ladder: String, enter_position: String, delta: float):
-	var snap_distance: float = 0.2
+	var snap_distance: float = 0.05
 	var move_speed: float = 150.0
 	
 	var target_pos: Vector3 = Vector3.ZERO
@@ -273,6 +282,7 @@ func enter_ladder(ladder: String, enter_position: String, delta: float):
 			elif enter_position == "Bottom":
 				interior_ladder_path.progress_ratio = 0.01
 			
+			%"Body_Collision".disabled = true
 			target_pos = interior_ladder_path.global_position
 			distance = global_position.distance_to(target_pos)
 			
@@ -302,11 +312,14 @@ func exit_ladder(ladder: String, exit_position: String):
 			if exit_position == "Top":
 				on_interior_ladder = false
 				on_path = false
+				in_cockpit = true
 				interior_ladder_remote_transform.remote_path = ""
 			elif exit_position == "Bottom":
 				on_interior_ladder = false
 				on_path = false
+				in_cockpit = false
 				interior_ladder_remote_transform.remote_path = ""
+			%"Body_Collision".disabled = false
 
 func enter_engineer_terminal():
 		var tween_pos = create_tween()

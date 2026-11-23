@@ -386,11 +386,12 @@ _data = {
 point_count = 2
 
 [sub_resource type="Curve3D" id="Curve3D_tyaxh"]
+bake_interval = 5.0
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3.7, 0),
-"tilts": PackedFloat32Array(0, 0)
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0.14628953, 3.4374292, 0, 0, 0, 0, 0, 0, 0, 0.36584863, 3.6170528, 0, 0, 0, 0, 0, 0, 0, 1, 3.7, 0),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
 }
-point_count = 2
+point_count = 5
 
 [node name="Astro Vulcan" type="RigidBody3D" groups=["player_ship"]]
 collision_layer = 2
@@ -911,12 +912,12 @@ update_rotation = false
 update_scale = false
 
 [node name="Interior Ladder Path" type="Path3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9084443, -0.8774284, -32.42881)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9084443, -0.8774284, -32.149734)
 curve = SubResource("Curve3D_tyaxh")
 
 [node name="Interior Path Follow" type="PathFollow3D" parent="Interior Ladder Path"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.047863826, 0)
-progress = 0.060524587
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.079663135, 3.4048927, 0)
+progress = 3.288352
 rotation_mode = 0
 loop = false
 
