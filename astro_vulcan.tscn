@@ -494,7 +494,7 @@ collision_mask = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.7411957, 3.3452816, -35.657684)
 shape = SubResource("BoxShape3D_vwebn")
 
-[node name="Interior collisions" type="AnimatableBody3D" parent="."]
+[node name="Interior collisions" type="StaticBody3D" parent="."]
 collision_layer = 2
 collision_mask = 2
 
@@ -924,5 +924,17 @@ loop = false
 [node name="Player Remote Transform" type="RemoteTransform3D" parent="Interior Ladder Path/Interior Path Follow"]
 update_rotation = false
 update_scale = false
+
+[node name="Pilot Seat Exit Pos" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.771, 2.825, -34.083)
+
+[node name="Pilot Seat Pos" type="Marker3D" parent="."]
+transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0.771, 2.124, -35.223)
+
+[node name="Engineer Terminal Pos" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.76, 2.6, -26.1)
+
+[node name="Engineer Terminal Exit Pos" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.75, 2.816, -26.49)
 
 [editable path="AVRO_VULCAN"]

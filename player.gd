@@ -9,7 +9,7 @@ extends CharacterBody3D
 @export var front_cast: RayCast3D
 @export var tween_timer: Timer
 
-@onready var ship: Node3D = get_tree().get_first_node_in_group("player_ship")
+@onready var ship: Node3D = $"/root/Main/world container/Astro Vulcan"
 @onready var main_scene = get_tree().root
 @onready var body_collision: CollisionShape3D = $Body_Collision
 @onready var engineer_camera: Camera3D = $"/root/Main/world container/Astro Vulcan/Engineer Camera"
@@ -35,11 +35,10 @@ var in_engineer_terminal: bool = false
 var in_pilot_seat: bool = false
 
 # Positions of places to move
-var engineer_terminal_pos: Vector3 = Vector3(1.76, 2.6, -26.1)
-var engineer_terminal_rot: Vector3 = Vector3(0.0, -180.0, 0.0)
-var engineer_terminal_exit_pos: Vector3 = Vector3(1.75, 2.816, -26.49)
-var pilot_seat_pos: Vector3 = Vector3(0.771, 2.124, -35.223)
-var pilot_seat_exit_pos: Vector3 = Vector3(0.771, 2.825, -34.083)
+@onready var engineer_terminal_pos: Marker3D =  $"/root/Main/world container/Astro Vulcan/Engineer Terminal Pos"
+@onready var engineer_terminal_exit_pos: Marker3D =  $"/root/Main/world container/Astro Vulcan/Engineer Terminal Exit Pos"
+@onready var pilot_seat_pos: Marker3D =  $"/root/Main/world container/Astro Vulcan/Pilot Seat Pos"
+@onready var pilot_seat_exit_pos: Marker3D =  $"/root/Main/world container/Astro Vulcan/Pilot Seat Exit Pos"
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
@@ -54,7 +53,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if !is_multiplayer_authority():
 		return
 	# Camera turning
-	if event is InputEventMouseMotion and !in_engineer_terminal:
+	if event is InputEventMouseMotion and !in_engineer_terminal and !in_pilot_seat:
 		rotation_degrees.y -= event.relative.x * 0.5
 		camera.rotation_degrees.x -= event.relative.y * 0.5
 		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -70.0, 70.0)
@@ -83,7 +82,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _physics_process(delta: float) -> void:
 	if !is_multiplayer_authority():
 		return
-	if in_engineer_terminal:
+	if in_engineer_terminal or in_pilot_seat:
 		return
 	if on_gear_ladder:
 		ladder_movement("Gear", delta)
@@ -328,9 +327,10 @@ func enter_engineer_terminal():
 		tween_pos.set_trans(Tween.TRANS_SINE)
 		tween_rot.set_trans(Tween.TRANS_SINE)
 		tween_cam_rot.set_trans(Tween.TRANS_SINE)
-		tween_pos.tween_property(self, "position", engineer_terminal_pos, tween_time)
-		tween_rot.tween_property(self, "rotation_degrees", engineer_terminal_rot, tween_time)
-		tween_cam_rot.tween_property(camera,"rotation_degrees", Vector3.ZERO, tween_time)
+		tween_pos.tween_property(self, "position", engineer_terminal_pos.global_position, tween_time)
+		tween_rot.tween_property(self, "rotation", engineer_terminal_pos.global_rotation - Vector3(engineer_terminal_pos.global_rotation.x, deg_to_rad(180.0), 0.0), tween_time)
+		tween_cam_rot.tween_property(camera,"rotation", engineer_terminal_pos.global_rotation - Vector3(0.0, engineer_terminal_pos.global_rotation.y, engineer_terminal_pos.global_rotation.z), tween_time)
+		body_collision.disabled = true
 		await tween_rot.finished
 		in_engineer_terminal = true
 		camera.clear_current()
@@ -340,10 +340,11 @@ func enter_engineer_terminal():
 func exit_engineer_terminal():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE)
-	tween.tween_property(self, "position", engineer_terminal_exit_pos, tween_time)
+	tween.tween_property(self, "position", engineer_terminal_exit_pos.global_position, tween_time)
 	camera.make_current()
 	engineer_camera.clear_current()
 	await tween.finished
+	body_collision.disabled = false
 	in_engineer_terminal = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	engineer_camera.reset_pos()
@@ -356,22 +357,24 @@ func enter_pilot_seat():
 		tween_pos.set_trans(Tween.TRANS_SINE)
 		tween_rot.set_trans(Tween.TRANS_SINE)
 		tween_cam_rot.set_trans(Tween.TRANS_SINE)
-		tween_pos.tween_property(self, "position", pilot_seat_pos, tween_time)
-		tween_rot.tween_property(self, "rotation_degrees", Vector3.ZERO, tween_time)
-		tween_cam_rot.tween_property(camera,"rotation_degrees", Vector3.ZERO, tween_time)
-		await tween_rot.finished
-		in_pilot_seat = true
+		tween_pos.tween_property(self, "position", pilot_seat_pos.global_position, tween_time)
+		tween_rot.tween_property(self, "rotation", pilot_seat_pos.global_rotation - Vector3(pilot_seat_pos.global_rotation.x, 0.0, 0.0), tween_time)
+		tween_cam_rot.tween_property(camera,"rotation", pilot_seat_pos.global_rotation - Vector3(0.0, pilot_seat_pos.global_rotation.y, pilot_seat_pos.global_rotation.z), tween_time)
+		body_collision.disabled = true
+		await tween_pos.finished
+		in_pilot_seat = true 
 		camera.clear_current()
 		pilot_camera.make_current()
 
 func exit_pilot_seat():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE)
-	tween.tween_property(self, "position", pilot_seat_exit_pos, tween_time)
+	tween.tween_property(self, "position", pilot_seat_exit_pos.global_position, tween_time)
 	camera.make_current()
 	pilot_camera.clear_current()
 	await tween.finished
 	in_pilot_seat = false
+	body_collision.disabled = false
 	pilot_camera.reset()
 	return
 
