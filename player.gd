@@ -94,11 +94,9 @@ func _physics_process(delta: float) -> void:
 		return
 	
 	if on_ship:
-		apply_velocity("Ship")
-		ship_movement(ship, delta)
+		ship_movement(delta)
 		return
 	else:
-		apply_velocity("World")
 		ground_movement(delta)
 		return
 
@@ -118,7 +116,7 @@ func _process(delta: float) -> void:
 			elif Input.is_action_pressed("throttle_down"):
 				ship.target_throttle -= 40 * delta
 
-func ship_movement(_ship: Node3D, delta):
+func ship_movement(delta: float):
 	# Sprint 
 	var speed: float
 	if Input.is_action_pressed("Sprint"):
@@ -218,8 +216,8 @@ func ground_movement(delta):
 	else:
 		speed = walk_speed
 	# Movement
-	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
-	var direction: Vector3 = (transform.basis.x * input_dir.x * walk_speed + -transform.basis.z * input_dir.y * speed)
+	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var direction: Vector3 = (transform.basis.x * input_dir.x * walk_speed + transform.basis.z * input_dir.y * speed)
 	if direction:
 		velocity.x = move_toward(velocity.x, direction.x, delta * 40)
 		velocity.z = move_toward(velocity.z, direction.z, delta * 40)
@@ -429,11 +427,3 @@ func exit_pilot_seat():
 	body_collision.disabled = false
 	pilot_camera.reset()
 	return
-
-func apply_velocity(target: String):
-	match target:
-		"Ship":
-			velocity = ship.linear_velocity
-		
-		"World":
-			velocity = velocity
