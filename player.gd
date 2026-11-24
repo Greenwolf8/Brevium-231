@@ -25,6 +25,7 @@ var bob_height_down: Vector3 = Vector3(-0.05, 1.6, -0.35)
 var bob_height_up: Vector3 = Vector3(0.05, 1.6, -0.35)
 var tween_time: float = 0.25
 var on_path: bool = false
+var last_ship_transform: Transform3D
 
 # Vars for being in an interaction
 var on_ship: bool = false
@@ -48,6 +49,7 @@ func _ready() -> void:
 		return
 	camera.make_current()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	last_ship_transform = ship.global_transform
 
 func _unhandled_input(event: InputEvent) -> void:
 	if !is_multiplayer_authority():
@@ -155,8 +157,58 @@ func ship_movement(_ship: Node3D, delta):
 	# Jump
 	if Input.is_action_pressed("jump") and down_cast.is_colliding():
 		velocity.y = jump_speed
+
+func new_ship_movement(delta: float):
+	var current_transform: Transform3D = ship.global_transform
+	if last_ship_transform != Transform3D.IDENTITY:
+		var local_pos: Vector3 = last_ship_transform.affine_inverse() * global_position
+		var expected_world_pos: Vector3 = current_transform * local_pos
+		var ship_displacement: Vector3 = expected_world_pos - global_position
+		
+		global_position += ship_displacement
+		
+		var rot_delta: Quaternion = current_transform.basis.get_rotation_quaternion() * last_ship_transform.basis.get_rotation_quaternion().inverse()
+		global_basis = Basis(rot_delta) * global_basis
 	
+	last_ship_transform = current_transform
+	
+	# Gravity
+	var gravity_dir: Vector3 = -ship.global_basis.y.normalized()
+	up_direction = -gravity_dir
+	
+	align_to_up(up_direction, delta)
+	
+	if !is_on_floor():
+		velocity += gravity_dir * gravity_strength * delta
+	
+	# Jump
+	if Input.is_action_just_pressed("jump") and is_on_floor():
+		velocity += up_direction * jump_speed
+	
+	# Sprint 
+	var speed: float
+	if Input.is_action_pressed("Sprint"):
+		speed = sprint_speed
+	else:
+		speed = walk_speed
+	
+	# Movement
+	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var direction: Vector3 = (global_basis.x * input_dir.x * walk_speed + global_basis.z * input_dir.y * speed).normalized()
+	
+	var vertical_vel: Vector3 = velocity.project(up_direction)
+	var horizontal_vel: Vector3 = direction * speed if direction else Vector3.ZERO
+	
+	velocity = vertical_vel + horizontal_vel
 	move_and_slide()
+
+func align_to_up(target_up: Vector3, delta: float):
+	var current_up: Vector3 = global_basis.y
+	if current_up.is_equal_approx(target_up):
+		return
+	var rot_quaternion: Quaternion = Quaternion(current_up, target_up)
+	var target_basis: Basis = Basis(rot_quaternion,) * global_basis
+	global_basis = global_basis.orthonormalized().slerp(target_basis.orthonormalized(), 12.0 * delta)
 
 func ground_movement(delta):
 	# Sprint 
