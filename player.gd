@@ -125,14 +125,32 @@ func ship_movement(delta: float):
 	else:
 		speed = walk_speed
 	
-	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-	var direction: Vector3 = (transform.basis.x * input_dir.x + transform.basis.z * input_dir.y).normalized()
-	if direction:
-		horizontal_vel.x = move_toward(horizontal_vel.x, ship.linear_velocity.x + (direction.x * speed), delta * 40)
-		horizontal_vel.z = move_toward(horizontal_vel.z, ship.linear_velocity.z + (direction.z * speed), delta * 40)
+	var input_dir: Vector2 = Input.get_vector("move_back", "move_forward", "move_left", "move_right")
+	var move_dir: Vector3 = (basis.x * input_dir.x) + (basis.z * input_dir.y)
+	move_dir = move_dir.normalized()
+	
+	var direction: Vector3 = (ship.global_transform.basis.x * move_dir.x) + (ship.global_transform.basis.z * move_dir.z)
+	direction = direction.normalized() * speed
+	
+	var local_pos: Vector3 = ship.global_position - global_position
+	var rot_vel: Vector3 = ship.angular_velocity.cross(local_pos)
+	var target_ship_vel: Vector3 = ship.linear_velocity + rot_vel
+	
+	var target_vel_x: float = target_ship_vel.x
+	var target_vel_z: float = target_ship_vel.z
+	if input_dir:
+		target_vel_x = target_ship_vel.x + direction.x
+		target_vel_z = target_ship_vel.z + direction.z
+	else: 
+		target_vel_x = target_ship_vel.x
+		target_vel_z = target_ship_vel.z
+	
+	if input_dir:
+		horizontal_vel.x = move_toward(horizontal_vel.x, target_vel_x, delta * 40.0)
+		horizontal_vel.z = move_toward(horizontal_vel.z, target_vel_z, delta * 40.0)
 	else:
-		horizontal_vel.x = move_toward(horizontal_vel.x, ship.linear_velocity.x, delta * 100)
-		horizontal_vel.z = move_toward(horizontal_vel.z, ship.linear_velocity.z, delta * 100)
+		horizontal_vel.x = move_toward(horizontal_vel.x, target_vel_x, delta * 100)
+		horizontal_vel.z = move_toward(horizontal_vel.z, target_vel_z, delta * 100)
 	
 	# Head bobbing
 	if input_dir.y != 0.0:
@@ -159,8 +177,11 @@ func ship_movement(delta: float):
 	if Input.is_action_pressed("jump") and down_cast.is_colliding():
 		vertical_vel += up_direction * jump_speed
 	
-	global_rotation.x = ship.global_rotation.x
-	global_rotation.z = ship.global_rotation.z
+	# Match ship rotation
+	var right = -global_transform.basis.z.cross(up_direction).normalized()
+	var forward = up_direction.cross(right).normalized()
+	
+	global_transform.basis = Basis(right, up_direction, -forward)
 	
 	velocity = horizontal_vel + vertical_vel
 	move_and_slide()
