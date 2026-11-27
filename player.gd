@@ -158,45 +158,7 @@ func ship_movement(delta: float):
 	
 	# Jump
 	if Input.is_action_pressed("jump") and down_cast.is_colliding():
-		velocity.y = jump_speed
-
-func new_ship_movement(delta: float):
-	var current_transform: Transform3D = ship.global_transform
-	if last_ship_transform != Transform3D.IDENTITY:
-		var local_pos: Vector3 = last_ship_transform.affine_inverse() * global_position
-		var expected_world_pos: Vector3 = current_transform * local_pos
-		var ship_displacement: Vector3 = expected_world_pos - global_position
-		
-		global_position += ship_displacement
-		
-		var rot_delta: Quaternion = current_transform.basis.get_rotation_quaternion() * last_ship_transform.basis.get_rotation_quaternion().inverse()
-		global_basis = Basis(rot_delta) * global_basis
-	
-	last_ship_transform = current_transform
-	
-	# Gravity
-	var gravity_dir: Vector3 = -ship.global_basis.y.normalized()
-	up_direction = -gravity_dir
-	
-	align_to_up(up_direction, delta)
-	
-	if !is_on_floor():
-		velocity += gravity_dir * gravity_strength * delta
-	
-	# Jump
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity += up_direction * jump_speed
-	
-	# Sprint 
-	var speed: float
-	if Input.is_action_pressed("Sprint"):
-		speed = sprint_speed
-	else:
-		speed = walk_speed
-	
-	# Movement
-	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-	var direction: Vector3 = (global_basis.x * input_dir.x * walk_speed + global_basis.z * input_dir.y * speed).normalized()
+		vertical_vel += up_direction * jump_speed
 	
 	global_rotation.x = ship.global_rotation.x
 	global_rotation.z = ship.global_rotation.z
