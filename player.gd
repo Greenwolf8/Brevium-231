@@ -58,7 +58,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	# Camera turning
 	if event is InputEventMouseMotion and !in_engineer_terminal and !in_pilot_seat:
-		rotate_y(-event.relative.x * 0.003)
+		rotate_object_local(Vector3.UP, -event.relative.x * 0.003)
 		camera.rotate_x(-event.relative.y * 0.003)
 		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -70.0, 70.0)
 	
@@ -127,7 +127,6 @@ func ship_movement(delta: float):
 	
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction: Vector3 = (transform.basis.x * input_dir.x + transform.basis.z * input_dir.y).normalized()
-	print(direction)
 	if direction:
 		horizontal_vel.x = move_toward(horizontal_vel.x, ship.linear_velocity.x + (direction.x * speed), delta * 40)
 		horizontal_vel.z = move_toward(horizontal_vel.z, ship.linear_velocity.z + (direction.z * speed), delta * 40)
@@ -165,14 +164,6 @@ func ship_movement(delta: float):
 	
 	velocity = horizontal_vel + vertical_vel
 	move_and_slide()
-
-func align_to_up(target_up: Vector3, delta: float):
-	var current_up: Vector3 = global_basis.y
-	if current_up.is_equal_approx(target_up):
-		return
-	var rot_quaternion: Quaternion = Quaternion(current_up, target_up)
-	var target_basis: Basis = Basis(rot_quaternion,) * global_basis
-	global_basis = global_basis.orthonormalized().slerp(target_basis.orthonormalized(), 12.0 * delta)
 
 func ground_movement(delta):
 	# Sprint 
