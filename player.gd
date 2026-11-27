@@ -26,6 +26,8 @@ var bob_height_up: Vector3 = Vector3(0.05, 1.6, -0.35)
 var tween_time: float = 0.25
 var on_path: bool = false
 var last_ship_transform: Transform3D
+var horizontal_vel: Vector3
+var vertical_vel: Vector3
 
 # Vars for being in an interaction
 var on_ship: bool = false
@@ -56,8 +58,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	# Camera turning
 	if event is InputEventMouseMotion and !in_engineer_terminal and !in_pilot_seat:
-		rotation_degrees.y -= event.relative.x * 0.5
-		camera.rotation_degrees.x -= event.relative.y * 0.5
+		rotate_y(-event.relative.x * 0.003)
+		camera.rotate_x(-event.relative.y * 0.003)
 		camera.rotation_degrees.x = clamp(camera.rotation_degrees.x, -70.0, 70.0)
 	
 	elif event.is_action_pressed("Interact") and in_engineer_terminal:
@@ -82,10 +84,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		print("Position: ", position, "\nRotation: ", rotation_degrees)
 
 func _physics_process(delta: float) -> void:
-	if !is_multiplayer_authority():
+	if !is_multiplayer_authority() or in_engineer_terminal or in_pilot_seat:
 		return
-	if in_engineer_terminal or in_pilot_seat:
-		return
+	
 	if on_gear_ladder:
 		ladder_movement("Gear", delta)
 		return
@@ -124,20 +125,21 @@ func ship_movement(delta: float):
 	else:
 		speed = walk_speed
 	
-	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_back", "move_forward")
-	var direction: Vector3 = (-transform.basis.x * input_dir.y * speed + -transform.basis.z * input_dir.x * walk_speed)
+	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var direction: Vector3 = (transform.basis.x * input_dir.x + transform.basis.z * input_dir.y).normalized()
+	print(direction)
 	if direction:
-		velocity.x = move_toward(velocity.x, direction.x, delta * 40)
-		velocity.z = move_toward(velocity.z, direction.z, delta * 40)
+		horizontal_vel.x = move_toward(horizontal_vel.x, ship.linear_velocity.x + (direction.x * speed), delta * 40)
+		horizontal_vel.z = move_toward(horizontal_vel.z, ship.linear_velocity.z + (direction.z * speed), delta * 40)
 	else:
-		velocity.x = move_toward(velocity.x, 0, delta * 100)
-		velocity.z = move_toward(velocity.z, 0, delta * 100)
+		horizontal_vel.x = move_toward(horizontal_vel.x, ship.linear_velocity.x, delta * 100)
+		horizontal_vel.z = move_toward(horizontal_vel.z, ship.linear_velocity.z, delta * 100)
 	
 	# Head bobbing
 	if input_dir.y != 0.0:
 		if bobbing_up == true:
 			camera.position.x = move_toward(camera.position.x, bob_height_up.x, delta * 0.3)
-			if camera.position.x == bob_height_up.x:
+			if camera.position.x == bob_height_up.x:	
 				bobbing_up = false
 		elif bobbing_up == false:
 			camera.position.x = move_toward(camera.position.x, bob_height_down.x, delta * 0.3)
@@ -147,10 +149,12 @@ func ship_movement(delta: float):
 		camera.position = lerp(camera.position, Vector3(0.0,1.6,-0.35), delta * 10)
 	
 	# Gravity
+	var grav_dir: Vector3 = -ship.global_basis.y.normalized()
+	up_direction = -grav_dir
 	if down_cast.is_colliding():
-		velocity.y = 0.01
+		vertical_vel = up_direction * 0.01
 	else:
-		velocity.y -= gravity_strength * delta
+		vertical_vel -= up_direction * gravity_strength * delta
 	
 	# Jump
 	if Input.is_action_pressed("jump") and down_cast.is_colliding():
@@ -194,10 +198,10 @@ func new_ship_movement(delta: float):
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction: Vector3 = (global_basis.x * input_dir.x * walk_speed + global_basis.z * input_dir.y * speed).normalized()
 	
-	var vertical_vel: Vector3 = velocity.project(up_direction)
-	var horizontal_vel: Vector3 = direction * speed if direction else Vector3.ZERO
+	global_rotation.x = ship.global_rotation.x
+	global_rotation.z = ship.global_rotation.z
 	
-	velocity = vertical_vel + horizontal_vel
+	velocity = horizontal_vel + vertical_vel
 	move_and_slide()
 
 func align_to_up(target_up: Vector3, delta: float):
@@ -217,10 +221,10 @@ func ground_movement(delta):
 		speed = walk_speed
 	# Movement
 	var input_dir: Vector2 = Input.get_vector("move_left", "move_right", "move_forward", "move_back")
-	var direction: Vector3 = (transform.basis.x * input_dir.x * walk_speed + transform.basis.z * input_dir.y * speed)
+	var direction: Vector3 = (transform.basis.x * input_dir.x + transform.basis.z * input_dir.y).normalized()
 	if direction:
-		velocity.x = move_toward(velocity.x, direction.x, delta * 40)
-		velocity.z = move_toward(velocity.z, direction.z, delta * 40)
+		velocity.x = move_toward(velocity.x, direction.x * speed, delta * 40)
+		velocity.z = move_toward(velocity.z, direction.z * speed, delta * 40)
 	else:
 		velocity.x = move_toward(velocity.x, 0, delta * 100)
 		velocity.z = move_toward(velocity.z, 0, delta * 100)
