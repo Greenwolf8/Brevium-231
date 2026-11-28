@@ -378,30 +378,42 @@ func exit_engineer_terminal():
 	engineer_camera.reset_pos()
 	return
 
-func enter_pilot_seat():
-		var tween_pos = create_tween()
-		var tween_rot = create_tween()
-		var tween_cam_rot = create_tween()
-		tween_pos.set_trans(Tween.TRANS_SINE)
-		tween_rot.set_trans(Tween.TRANS_SINE)
-		tween_cam_rot.set_trans(Tween.TRANS_SINE)
-		tween_pos.tween_property(self, "position", pilot_seat_pos.global_position, tween_time)
-		tween_rot.tween_property(self, "rotation", pilot_seat_pos.global_rotation - Vector3(pilot_seat_pos.global_rotation.x, 0.0, 0.0), tween_time)
-		tween_cam_rot.tween_property(camera,"rotation", pilot_seat_pos.global_rotation - Vector3(0.0, pilot_seat_pos.global_rotation.y, pilot_seat_pos.global_rotation.z), tween_time)
-		body_collision.disabled = true
-		await tween_pos.finished
+func enter_pilot_seat(delta: float):
+	var distance: float = global_position.distance_to(pilot_seat_pos.global_position)
+	
+	global_position.x = move_toward(global_position.x, pilot_seat_pos.global_position.x, delta * 4.0 * abs(global_position.x - pilot_seat_pos.global_position.x))
+	global_position.y = move_toward(global_position.y, pilot_seat_pos.global_position.y, delta * 4.0 * abs(global_position.y - pilot_seat_pos.global_position.y))
+	global_position.z = move_toward(global_position.z, pilot_seat_pos.global_position.z, delta * 4.0 * abs(global_position.z - pilot_seat_pos.global_position.z))
+	
+	camera.global_rotation.x = move_toward(camera.global_rotation.x, pilot_seat_pos.global_rotation.x,  (delta * abs(camera.global_rotation.x - pilot_seat_pos.global_position.x) / 25.0))
+	global_rotation.y = move_toward(global_rotation.y, pilot_seat_pos.global_rotation.y, (delta * abs(global_rotation.y - pilot_seat_pos.global_position.y) / 25.0))
+	global_rotation.z = move_toward(global_rotation.z, pilot_seat_pos.global_rotation.z, (delta * abs(global_rotation.z - pilot_seat_pos.global_position.z) / 25.0))
+	
+	body_collision.disabled = true
+	
+	if distance <= 0.01:
+		entering_pilot_seat = false
 		in_pilot_seat = true 
 		camera.clear_current()
 		pilot_camera.make_current()
 
-func exit_pilot_seat():
-	var tween = create_tween()
-	tween.set_trans(Tween.TRANS_SINE)
-	tween.tween_property(self, "position", pilot_seat_exit_pos.global_position, tween_time)
+func exit_pilot_seat(delta: float):
+	var distance: float = global_position.distance_to(pilot_seat_exit_pos.global_position)
+	
+	global_position.x = move_toward(global_position.x, pilot_seat_exit_pos.global_position.x, delta * 4.0 * abs(global_position.x - pilot_seat_exit_pos.global_position.x))
+	global_position.y = move_toward(global_position.y, pilot_seat_exit_pos.global_position.y, delta * 4.0 * abs(global_position.y - pilot_seat_exit_pos.global_position.y))
+	global_position.z = move_toward(global_position.z, pilot_seat_exit_pos.global_position.z, delta * 4.0 * abs(global_position.z - pilot_seat_exit_pos.global_position.z))
+	
+	camera.global_rotation.x = move_toward(camera.global_rotation.x, pilot_seat_exit_pos.global_rotation.x,  (delta * abs(camera.global_rotation.x - pilot_seat_exit_pos.global_position.x) / 25.0))
+	global_rotation.y = move_toward(global_rotation.y, pilot_seat_exit_pos.global_rotation.y, (delta * abs(global_rotation.y - pilot_seat_exit_pos.global_position.y) / 25.0))
+	global_rotation.z = move_toward(global_rotation.z, pilot_seat_exit_pos.global_rotation.z, (delta * abs(global_rotation.z - pilot_seat_exit_pos.global_position.z) / 25.0))
+	
 	camera.make_current()
 	pilot_camera.clear_current()
-	await tween.finished
-	in_pilot_seat = false
-	body_collision.disabled = false
-	pilot_camera.reset()
-	return
+	if distance <= 0.1:
+		exiting_pilot_seat = false
+		in_pilot_seat = false
+		body_collision.disabled = false
+		pilot_camera.reset()
+		return
+
